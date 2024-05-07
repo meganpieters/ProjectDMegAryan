@@ -6,10 +6,11 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import type { ReactNode } from 'react';
 
 import {
+  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -27,47 +28,68 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import Auth from './Auth';
+import Homepage from './screens/Homepage';
+import Chargers from './screens/Chargers';
+import Users from './screens/Users';
 
-const Section = ({ children, title }: { children: ReactNode, title: string }): ReactNode => {
-  const isDarkMode = useColorScheme() === 'dark';
-  const textColor = isDarkMode ? Colors.white : Colors.black;
-  const backgroundColor = isDarkMode ? Colors.light : Colors.dark;
+
+
+const App = () => {
+  const [authenticated, setAuthenticated] = useState(false);
+  const [currentScreen, setCurrentScreen] = useState('Auth');
+
+  const navigateTo = (screen: React.SetStateAction<string>) => {
+    setCurrentScreen(screen);
+  };
+
+  const handleSignIn = () => {
+    setAuthenticated(true);
+    setCurrentScreen('Homepage');
+  };
+
+  const renderScreen = () => {
+    switch (currentScreen) {
+      case 'Homepage':
+        return <Homepage />;
+      case 'Chargers':
+        return <Chargers />;
+      case 'Users':
+        return <Users />;
+      default:
+        return <Auth />;
+    }
+  };
 
   return (
-    <View style={styles.sectionContainer}>
-      <Text style={[styles.sectionTitle, { color: textColor }]}>{title}</Text>
-      <Text style={[styles.sectionDescription, { color: backgroundColor }]}>{children}</Text>
+    <View style={styles.container}>
+      {renderScreen()}
+      {!authenticated && (
+        <View style={styles.bottomButtonsContainer}>
+          <Button title="Homepage" color="#007AFF" onPress={() => navigateTo('Homepage')} />
+          <Button title="Chargers" color="#007AFF" onPress={() => navigateTo('Chargers')} />
+          <Button title="Users" color="#007AFF" onPress={() => navigateTo('Users')} />
+        </View>
+      )}
     </View>
   );
 };
 
-const App: () => ReactNode = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-  const backgroundStyle = { backgroundColor: isDarkMode ? Colors.darker : Colors.lighter };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
-        <Header />
-        <View style={{ backgroundColor: isDarkMode ? Colors.black : Colors.white }}>
-          <Section title="Step Zero">Use <Text style={styles.highlight}>Okta</Text> for authentication.</Section>
-          <Auth />
-          <Section title="Step One">Edit <Text style={styles.highlight}>App.tsx</Text> to change this screen and then come back to see your edits.</Section>
-          <Section title="See Your Changes"><ReloadInstructions /></Section>
-          <Section title="Debug"><DebugInstructions /></Section>
-          <Section title="Learn More">Read the docs to discover what to do next:<LearnMoreLinks /></Section>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
 const styles = StyleSheet.create({
-  sectionContainer: { marginTop: 32, paddingHorizontal: 24 },
-  sectionTitle: { fontSize: 24, fontWeight: '600' },
-  sectionDescription: { marginTop: 8, fontSize: 18, fontWeight: '400' },
-  highlight: { fontWeight: '700' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  bottomButtonsContainer: {
+    position: 'absolute',
+    bottom: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: '100%',
+  },
+  buttonContainer: {
+    width: 120,
+  },
 });
-
 export default App;

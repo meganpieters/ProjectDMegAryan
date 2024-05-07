@@ -17,10 +17,12 @@ import {
     EventEmitter,
 } from '@okta/okta-react-native';
 import configFile from './auth.config';
+import Homepage from './screens/Homepage';
 
 interface AuthState {
     authenticated: boolean;
     context: string | null;
+    redirectToHome: boolean; // New state variable
 }
 
 export default class Auth extends Component<{}, AuthState> {
@@ -29,6 +31,7 @@ export default class Auth extends Component<{}, AuthState> {
         this.state = {
             authenticated: false,
             context: null,
+            redirectToHome: false, // Initialize redirectToHome to false
         };
     }
 
@@ -57,7 +60,6 @@ export default class Auth extends Component<{}, AuthState> {
         EventEmitter.removeAllListeners('onCancelled');
     }
 
-
     async componentDidUpdate() {
         await this.checkAuthentication();
     }
@@ -65,6 +67,7 @@ export default class Auth extends Component<{}, AuthState> {
     handleSignIn = () => {
         this.setState({ authenticated: true });
         this.setContext('Logged in!');
+        this.redirectToHome(); // Call redirectToHome after successful login
     };
 
     handleSignOut = () => {
@@ -112,6 +115,10 @@ export default class Auth extends Component<{}, AuthState> {
         });
     };
 
+    redirectToHome = () => {
+        this.setState({ redirectToHome: true });
+    };
+
     renderButtons() {
         if (this.state.authenticated) {
             return (
@@ -139,6 +146,10 @@ export default class Auth extends Component<{}, AuthState> {
     }
 
     render() {
+        if (this.state.redirectToHome) {
+            return <Homepage />; // Replace YourHomePageComponent with your actual component
+        }
+
         return (
             <Fragment>
                 <SafeAreaView style={styles.container}>
