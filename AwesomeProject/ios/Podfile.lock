@@ -7,15 +7,6 @@ PODS:
   - hermes-engine (0.74.1):
     - hermes-engine/Pre-built (= 0.74.1)
   - hermes-engine/Pre-built (0.74.1)
-  - OktaOidc (3.11.2):
-    - OktaOidc/AppAuth (= 3.11.2)
-    - OktaOidc/Okta (= 3.11.2)
-  - OktaOidc/AppAuth (3.11.2)
-  - OktaOidc/Okta (3.11.2):
-    - OktaOidc/AppAuth
-  - OktaSdkBridgeReactNative (2.12.0):
-    - OktaOidc (= 3.11.2)
-    - React
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1183,7 +1174,6 @@ DEPENDENCIES:
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
-  - "OktaSdkBridgeReactNative (from `../node_modules/@okta/okta-react-native`)"
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCT-Folly/Fabric (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
@@ -1237,7 +1227,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - OktaOidc
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1254,8 +1243,6 @@ EXTERNAL SOURCES:
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2024-04-25-RNv0.74.1-b54a3a01c531f4f5f1904cb0770033e8b7153dff
-  OktaSdkBridgeReactNative:
-    :path: "../node_modules/@okta/okta-react-native"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -1360,8 +1347,6 @@ SPEC CHECKSUMS:
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
   hermes-engine: 16b8530de1b383cdada1476cf52d1b52f0692cbc
-  OktaOidc: 15fb3d494103d4f07ba8a523b3347d02c4d30486
-  OktaSdkBridgeReactNative: f9c6a7c26f208f874af2a903bf4eaed547c9d2c4
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: efb313d8126259e9294dc4ee0002f44a6f676aba
   RCTRequired: f49ea29cece52aee20db633ae7edc4b271435562
@@ -1412,6 +1397,6 @@ SPEC CHECKSUMS:
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 348f8b538c3ed4423eb58a8e5730feec50bce372
 
-PODFILE CHECKSUM: f3e3fc19278c02979fcf90239f4c498b0edd1dc3
+PODFILE CHECKSUM: 614fdb6519729ed992ddb38ba50cd075866d3916
 
 COCOAPODS: 1.15.2
