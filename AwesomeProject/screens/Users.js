@@ -1,16 +1,10 @@
 import * as React from "react";
 import { Image, StyleSheet, View, Pressable, Text } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
 
 const Users = () => {
-  const handleNavigateHome = () => {
-    // Implement your navigation logic to the "Home" screen here
-    console.log("Navigate to Home");
-  };
-
-  const handleNavigateChargers = () => {
-    // Implement your navigation logic to the "Chargers" screen here
-    console.log("Navigate to Chargers");
-  };
+  const navigation = useNavigation();
 
   return (
     <View style={styles.users}>
@@ -22,7 +16,7 @@ const Users = () => {
       <View style={[styles.image2, styles.imageLayout]} />
       <Pressable
         style={[styles.image4, styles.imageLayout]}
-        onPress={handleNavigateHome}
+        onPress={() => navigation.navigate("Homepage")}
       >
         <Image
           style={styles.icon}
@@ -36,24 +30,18 @@ const Users = () => {
       <Text style={[styles.lastName, styles.nameTypo]}>Last Name:</Text>
       <Text style={[styles.licensePlate, styles.nameTypo]}>License Plate:</Text>
       <Text style={[styles.eMail, styles.nameTypo]}>E-mail:</Text>
-      <Pressable
-        style={[styles.rectangleParent, styles.rectangleLayout]}
-        onPress={() => console.log("Edit button pressed")}
-      >
+      <Pressable style={[styles.rectangleParent, styles.rectangleLayout]}>
         <View style={[styles.frameChild, styles.frameLayout]} />
         <Text style={[styles.edit, styles.editTypo]}>Edit</Text>
       </Pressable>
-      <Pressable
-        style={[styles.rectangleGroup, styles.rectangleLayout]}
-        onPress={() => console.log("Delete button pressed")}
-      >
+      <Pressable style={[styles.rectangleGroup, styles.rectangleLayout]}>
         <View style={[styles.frameItem, styles.frameLayout]} />
         <Text style={[styles.delete, styles.editTypo]}>Delete</Text>
       </Pressable>
       <View style={[styles.usersInner, styles.usersLayout]} />
       <Pressable
         style={styles.image21}
-        onPress={handleNavigateHome}
+        onPress={() => navigation.navigate("Homepage")}
       >
         <Image
           style={styles.icon}
@@ -63,7 +51,7 @@ const Users = () => {
       </Pressable>
       <Pressable
         style={[styles.image2, styles.imageLayout]}
-        onPress={handleNavigateChargers}
+        onPress={() => navigation.navigate("Chargers")}
       >
         <Image
           style={styles.icon}
@@ -93,9 +81,10 @@ const styles = StyleSheet.create({
   },
   nameTypo: {
     textAlign: "left",
-    color: "#ffffff",
+    color: Color.colorWhite,
+    fontFamily: FontFamily.inriaSansBold,
     fontWeight: "700",
-    fontSize: 14,
+    fontSize: FontSize.size_base,
     left: 72,
     position: "absolute",
   },
@@ -106,7 +95,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   frameLayout: {
-    borderRadius: 5,
+    borderRadius: Border.br_smi,
     top: 0,
     height: 28,
     width: 82,
@@ -116,9 +105,10 @@ const styles = StyleSheet.create({
   editTypo: {
     top: 4,
     textAlign: "left",
-    color: "#ffffff",
+    color: Color.colorWhite,
+    fontFamily: FontFamily.inriaSansBold,
     fontWeight: "700",
-    fontSize: 14,
+    fontSize: FontSize.size_base,
     position: "absolute",
   },
   usersChild: {
@@ -141,8 +131,8 @@ const styles = StyleSheet.create({
   usersItem: {
     top: 159,
     left: 39,
-    borderRadius: 11,
-    backgroundColor: "#4169e1",
+    borderRadius: Border.br_11xl,
+    backgroundColor: Color.colorRoyalblue,
     width: 354,
     height: 211,
     position: "absolute",
@@ -163,7 +153,7 @@ const styles = StyleSheet.create({
     top: 246,
   },
   frameChild: {
-    backgroundColor: "#32cd32",
+    backgroundColor: Color.colorLimegreen_100,
   },
   edit: {
     left: 26,
@@ -172,7 +162,7 @@ const styles = StyleSheet.create({
     left: 197,
   },
   frameItem: {
-    backgroundColor: "#b22222",
+    backgroundColor: Color.colorFirebrick,
   },
   delete: {
     left: 17,
@@ -182,7 +172,7 @@ const styles = StyleSheet.create({
   },
   usersInner: {
     top: 842,
-    backgroundColor: "#2f4f4f",
+    backgroundColor: Color.colorDarkslateblue,
   },
   image21: {
     left: 70,
@@ -199,7 +189,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   users: {
-    backgroundColor: "#ffffff",
+    backgroundColor: Color.colorWhite,
     flex: 1,
     height: 932,
     overflow: "hidden",

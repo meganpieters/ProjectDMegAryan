@@ -1,11 +1,10 @@
 import * as React from "react";
 import { StyleSheet, View, Pressable, Text, TextInput } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Color, Border, FontFamily, FontSize } from "../GlobalStyles";
 
 const RequestPopUp = () => {
-  const handleNavigate = () => {
-    // Implement your navigation logic here
-    console.log("Navigate to Home");
-  };
+  const navigation = useNavigation();
 
   return (
     <View style={styles.requestPopUp}>
@@ -15,7 +14,7 @@ const RequestPopUp = () => {
       <View style={[styles.rectangleView, styles.requestShadowBox]} />
       <Pressable
         style={[styles.rectangleParent, styles.frameChildLayout]}
-        onPress={handleNavigate}
+        onPress={() => navigation.navigate("Homepage")}
       >
         <View style={[styles.frameChild, styles.frameChildLayout]} />
         <Text style={styles.request}>Request</Text>
@@ -44,10 +43,10 @@ const styles = StyleSheet.create({
     height: 55,
     width: 311,
     borderWidth: 1,
-    borderColor: "#ffffff",
+    borderColor: Color.colorWhite,
     borderStyle: "solid",
-    backgroundColor: "#ffffff",
-    borderRadius: 16,
+    backgroundColor: Color.colorWhite,
+    borderRadius: Border.br_16xl,
     shadowOpacity: 1,
     elevation: 4,
     shadowRadius: 4,
@@ -66,19 +65,19 @@ const styles = StyleSheet.create({
   },
   percentageTypo: {
     left: 93,
-    fontFamily: "InriaSans-Bold",
+    fontFamily: FontFamily.inriaSansBold,
     fontWeight: "700",
-    fontSize: 14,
+    fontSize: FontSize.size_base,
     position: "absolute",
   },
   requestPopUpChild: {
     top: 57,
     width: 311,
     borderWidth: 1,
-    borderColor: "#ffffff",
+    borderColor: Color.colorWhite,
     borderStyle: "solid",
-    backgroundColor: "#ffffff",
-    borderRadius: 16,
+    backgroundColor: Color.colorWhite,
+    borderRadius: Border.br_16xl,
     shadowOpacity: 1,
     elevation: 4,
     shadowRadius: 4,
@@ -94,10 +93,10 @@ const styles = StyleSheet.create({
     top: 137,
     width: 311,
     borderWidth: 1,
-    borderColor: "#ffffff",
+    borderColor: Color.colorWhite,
     borderStyle: "solid",
-    backgroundColor: "#ffffff",
-    borderRadius: 16,
+    backgroundColor: Color.colorWhite,
+    borderRadius: Border.br_16xl,
     shadowOpacity: 1,
     elevation: 4,
     shadowRadius: 4,
@@ -113,10 +112,10 @@ const styles = StyleSheet.create({
     top: 217,
     width: 311,
     borderWidth: 1,
-    borderColor: "#ffffff",
+    borderColor: Color.colorWhite,
     borderStyle: "solid",
-    backgroundColor: "#ffffff",
-    borderRadius: 16,
+    backgroundColor: Color.colorWhite,
+    borderRadius: Border.br_16xl,
     shadowOpacity: 1,
     elevation: 4,
     shadowRadius: 4,
@@ -132,10 +131,10 @@ const styles = StyleSheet.create({
     top: 57,
     width: 311,
     borderWidth: 1,
-    borderColor: "#ffffff",
+    borderColor: Color.colorWhite,
     borderStyle: "solid",
-    backgroundColor: "#ffffff",
-    borderRadius: 16,
+    backgroundColor: Color.colorWhite,
+    borderRadius: Border.br_16xl,
     shadowOpacity: 1,
     elevation: 4,
     shadowRadius: 4,
@@ -150,17 +149,17 @@ const styles = StyleSheet.create({
   frameChild: {
     top: 0,
     left: 0,
-    borderRadius: 5,
-    backgroundColor: "#9acd32",
+    borderRadius: Border.br_5xs,
+    backgroundColor: Color.colorLimegreen_100,
   },
   request: {
     top: 21,
     left: 11,
-    color: "#ffffff",
+    color: Color.colorWhite,
     textAlign: "left",
-    fontFamily: "InriaSans-Bold",
+    fontFamily: FontFamily.inriaSansBold,
     fontWeight: "700",
-    fontSize: 14,
+    fontSize: FontSize.size_base,
     position: "absolute",
   },
   rectangleParent: {
@@ -177,7 +176,7 @@ const styles = StyleSheet.create({
     top: 239,
   },
   requestPopUp: {
-    backgroundColor: "#4169e1",
+    backgroundColor: Color.colorRoyalblue,
     width: 427,
     height: 419,
     overflow: "hidden",

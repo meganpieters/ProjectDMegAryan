@@ -151,37 +151,7 @@ export default class Auth extends Component<{}, AuthState> {
         }
 
         return (
-            <Fragment>
-                <SafeAreaView style={styles.container}>
-                    <View style={styles.buttonContainer}>
-                        <View style={styles.button}>
-                            {this.state.authenticated ? (
-                                <Button
-                                    testID="logoutButton"
-                                    onPress={async () => {
-                                        await this.logout();
-                                    }}
-                                    title="Logout"
-                                />
-                            ) : (
-                                <Button
-                                    testID="loginButton"
-                                    onPress={async () => {
-                                        await this.login();
-                                    }}
-                                    title="Login"
-                                />
-                            )}
-                        </View>
-                    </View>
-                    {this.renderButtons()}
-                    <ScrollView
-                        contentInsetAdjustmentBehavior="automatic"
-                        style={styles.infoBox}>
-                        <Text>{this.state.context}</Text>
-                    </ScrollView>
-                </SafeAreaView>
-            </Fragment>
+            <Homepage />
         );
     }
 }

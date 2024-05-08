@@ -1,8 +1,11 @@
 import * as React from "react";
 import { StyleSheet, View, Image, Text, Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
 
 const Chargers = () => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.chargers}>
       <View style={[styles.chargersChild, styles.chargersLayout1]} />
@@ -14,10 +17,10 @@ const Chargers = () => {
         source={require("../assets/image-2.png")}
       />
       <Text style={[styles.charger5, styles.chargerTypo1]}>Charger 5</Text>
-      <View style={[styles.rectangleParent, styles.rectangleLayout]}>
+      <Pressable style={[styles.rectangleParent, styles.rectangleLayout]}>
         <View style={[styles.frameChild, styles.frameChildLayout]} />
         <Text style={[styles.taken, styles.availableTypo]}>Taken</Text>
-      </View>
+      </Pressable>
       <Text style={[styles.availableChargers, styles.chargerTypo1]}>
         Available chargers
       </Text>
@@ -31,10 +34,10 @@ const Chargers = () => {
         source={require("../assets/image-2.png")}
       />
       <Text style={[styles.charger4, styles.chargerTypo1]}>Charger 4</Text>
-      <View style={[styles.rectangleGroup, styles.rectangleLayout]}>
+      <Pressable style={[styles.rectangleGroup, styles.rectangleLayout]}>
         <View style={[styles.frameChild, styles.frameChildLayout]} />
         <Text style={[styles.taken, styles.availableTypo]}>Taken</Text>
-      </View>
+      </Pressable>
       <View style={[styles.chargersChild1, styles.chargersLayout]} />
       <Image
         style={[styles.image20Icon, styles.imageIconLayout]}
@@ -42,10 +45,12 @@ const Chargers = () => {
         source={require("../assets/image-2.png")}
       />
       <Text style={[styles.charger6, styles.chargerTypo1]}>Charger 6</Text>
-      <View style={[styles.rectangleContainer, styles.framePressablePosition]}>
+      <Pressable
+        style={[styles.rectangleContainer, styles.framePressablePosition]}
+      >
         <View style={[styles.frameChild, styles.frameChildLayout]} />
         <Text style={[styles.taken, styles.availableTypo]}>Taken</Text>
-      </View>
+      </Pressable>
       <View style={[styles.chargersChild2, styles.chargersChildLayout]} />
       <Image
         style={[styles.image19Icon, styles.iconPosition]}
@@ -53,10 +58,10 @@ const Chargers = () => {
         source={require("../assets/image-2.png")}
       />
       <Text style={[styles.charger3, styles.chargerTypo]}>Charger 3</Text>
-      <View style={[styles.framePressable, styles.framePressablePosition]}>
+      <Pressable style={[styles.framePressable, styles.framePressablePosition]}>
         <View style={[styles.frameChild1, styles.frameChildLayout]} />
         <Text style={[styles.available, styles.availableTypo]}>Available</Text>
-      </View>
+      </Pressable>
       <View style={[styles.chargersChild3, styles.chargersChildLayout]} />
       <Image
         style={[styles.image18Icon, styles.iconPosition]}
@@ -64,10 +69,12 @@ const Chargers = () => {
         source={require("../assets/image-2.png")}
       />
       <Text style={[styles.charger2, styles.chargerTypo]}>Charger 2</Text>
-      <View style={[styles.rectangleParent1, styles.rectangleParentPosition]}>
+      <Pressable
+        style={[styles.rectangleParent1, styles.rectangleParentPosition]}
+      >
         <View style={[styles.frameChild1, styles.frameChildLayout]} />
         <Text style={[styles.available1, styles.availableTypo]}>Available</Text>
-      </View>
+      </Pressable>
       <View style={[styles.chargersChild4, styles.chargersChildLayout]} />
       <Image
         style={[styles.image17Icon, styles.iconPosition]}
@@ -75,32 +82,54 @@ const Chargers = () => {
         source={require("../assets/image-2.png")}
       />
       <Text style={[styles.charger1, styles.chargerTypo]}>Charger 1</Text>
-      <View style={[styles.rectangleParent2, styles.rectangleParentPosition]}>
+      <Pressable
+        style={[styles.rectangleParent2, styles.rectangleParentPosition]}
+      >
         <View style={[styles.frameChild1, styles.frameChildLayout]} />
         <Text style={[styles.available1, styles.availableTypo]}>Available</Text>
-      </View>
+      </Pressable>
       <View style={[styles.image24, styles.imageIconLayout]} />
       <View style={[styles.chargersChild5, styles.rectangleIconPosition]} />
-      <Image
+      <Pressable
         style={styles.image25}
-        resizeMode="cover"
-        source={require("../assets/image-1.png")}
-      />
+        onPress={() => navigation.navigate("Homepage")}
+      >
+        <Image
+          style={styles.icon}
+          resizeMode="cover"
+          source={require("../assets/image-1.png")}
+        />
+      </Pressable>
       <Image
+        style={[styles.image24, styles.imageIconLayout]}
+        resizeMode="cover"
+        source={require("../assets/image-2.png")}
+      />
+      <Pressable
         style={styles.image27}
-        resizeMode="cover"
-        source={require("../assets/image-3.png")}
-      />
+        onPress={() => navigation.navigate("Users")}
+      >
+        <Image
+          style={styles.icon}
+          resizeMode="cover"
+          source={require("../assets/image-3.png")}
+        />
+      </Pressable>
       <Image
-        style={styles.rectangleIcon}
+        style={[styles.rectangleIcon, styles.rectangleIconPosition]}
         resizeMode="cover"
         source={require("../assets/rectangle-55.png")}
       />
-      <Image
-        style={styles.image241}
-        resizeMode="cover"
-        source={require("../assets/image-4.png")}
-      />
+      <Pressable
+        style={[styles.image241, styles.imageIconLayout]}
+        onPress={() => navigation.navigate("Homepage")}
+      >
+        <Image
+          style={styles.icon}
+          resizeMode="cover"
+          source={require("../assets/image-4.png")}
+        />
+      </Pressable>
     </View>
   );
 };
@@ -334,6 +363,10 @@ const styles = StyleSheet.create({
     width: 431,
     height: 90,
     backgroundColor: Color.colorDarkslateblue,
+  },
+  icon: {
+    height: "100%",
+    width: "100%",
   },
   image25: {
     left: 71,
