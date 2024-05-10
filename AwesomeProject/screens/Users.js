@@ -37,6 +37,11 @@ const Users = () => {
       <Pressable style={[styles.rectangleGroup, styles.rectangleLayout]}>
         <View style={[styles.frameItem, styles.frameLayout]} />
         <Text style={[styles.delete, styles.editTypo]}>Delete</Text>
+        <Pressable style={[styles.rectangleParent, styles.rectangleLayout]} onPress={() => navigation.navigate("Homepage")}>
+          <View style={[styles.frameChild, styles.frameLayout]} />
+          <Text style={[styles.edit, styles.editTypo]}>Log Out</Text>
+
+        </Pressable>
       </Pressable>
       <View style={[styles.usersInner, styles.usersLayout]} />
       <Pressable
