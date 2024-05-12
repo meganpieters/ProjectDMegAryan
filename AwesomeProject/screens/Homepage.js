@@ -1,27 +1,10 @@
-import React, { useState, useCallback } from "react";
-import { StyleSheet, View, Pressable, Image, Text, Modal } from "react-native";
-import TwitterPost from "../components/TwitterPost";
-import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
+import * as React from "react";
+import { StyleSheet, View, Text, Image, Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 
 const Homepage = () => {
-  const [rectangle3Visible, setRectangle3Visible] = useState(false);
-  const [requestTextVisible, setRequestTextVisible] = useState(false);
-
-  const openRectangle3 = useCallback(() => {
-    setRectangle3Visible(true);
-  }, []);
-
-  const closeRectangle3 = useCallback(() => {
-    setRectangle3Visible(false);
-  }, []);
-
-  const openRequestText = useCallback(() => {
-    setRequestTextVisible(true);
-  }, []);
-
-  const closeRequestText = useCallback(() => {
-    setRequestTextVisible(false);
-  }, []);
+  const navigation = useNavigation();
 
   return (
     <View style={styles.home}>
