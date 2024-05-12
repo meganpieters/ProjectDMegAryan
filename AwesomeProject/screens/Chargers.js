@@ -2,6 +2,7 @@ import * as React from "react";
 import { StyleSheet, View, Image, Text, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
+import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
 
 const Chargers = () => {
   const navigation = useNavigation();
@@ -135,24 +136,24 @@ const Chargers = () => {
 };
 
 const styles = StyleSheet.create({
-  chargersLayout1: {
-    height: 211,
-    width: 354,
+  chargersLayout1: { //bovenste dnkerblauw box
+    height: verticalScale(211),
+    width: horizontalScale(345),
     borderRadius: Border.br_11xl,
-    left: 36,
+    left: horizontalScale(16),
     backgroundColor: Color.colorDarkslateblue,
     position: "absolute",
   },
-  chargersLayout: {
-    height: 134,
-    width: 100,
+  chargersLayout: { // onderste lichtblauwe vakjes
+    height: verticalScale(130),
+    width: horizontalScale(80),
     backgroundColor: Color.colorRoyalblue,
     borderRadius: Border.br_xl,
-    top: 488,
+    top: verticalScale(480), //change
     position: "absolute",
   },
-  imageIconLayout: {
-    height: 42,
+  imageIconLayout: { // bottum charge icons
+    height: verticalScale(42),
     position: "absolute",
   },
   chargerTypo1: {
@@ -163,22 +164,22 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_base,
     position: "absolute",
   },
-  rectangleLayout: {
-    height: 28,
-    width: 82,
+  rectangleLayout: { //idk
+    height: verticalScale(28),
+    width: horizontalScale(89),
     top: 586,
     position: "absolute",
   },
-  frameChildLayout: {
+  frameChildLayout: { //avaiable and taken boxes
     borderRadius: Border.br_smi,
     left: 0,
     top: 0,
-    height: 28,
-    width: 82,
+    height: verticalScale(28),
+    width: horizontalScale(75),
     position: "absolute",
   },
-  availableTypo: {
-    top: 4,
+  availableTypo: { //available text
+    top: verticalScale(3),
     textAlign: "left",
     color: Color.colorWhite,
     fontFamily: FontFamily.inriaSansBold,
@@ -186,216 +187,219 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_base,
     position: "absolute",
   },
-  framePressablePosition: {
-    left: 286,
-    height: 28,
-    width: 82,
+  framePressablePosition: { // meeste rechter buttons
+    left: horizontalScale(250),
+    height: verticalScale(28),
+    width: horizontalScale(82),
     position: "absolute",
   },
-  chargersChildLayout: {
-    top: 223,
-    height: 134,
-    width: 100,
+  chargersChildLayout: { //bovenste lichtablauwe boxes
+    top: verticalScale(200),
+    height: verticalScale(130),
+    width: horizontalScale(85),
     backgroundColor: Color.colorRoyalblue,
     borderRadius: Border.br_xl,
     position: "absolute",
   },
-  iconPosition: {
-    top: 266,
-    height: 42,
-    width: 45,
+  iconPosition: { // upper charger icons
+    top: verticalScale(240),
+    height: verticalScale(39),
+    width: horizontalScale(40),
     position: "absolute",
   },
-  chargerTypo: {
-    top: 233,
+  chargerTypo: { // upper charger text
+    top: verticalScale(210),
     textAlign: "left",
     color: Color.colorWhite,
     fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700",
+    fontWeight: "700", //change
     fontSize: FontSize.size_base,
     position: "absolute",
   },
-  rectangleParentPosition: {
-    top: 321,
-    height: 28,
-    width: 82,
+  rectangleParentPosition: { // secondupper available buttons
+    top: verticalScale(295),
+    height: verticalScale(28),
+    width: horizontalScale(82),
     position: "absolute",
   },
-  rectangleIconPosition: {
-    height: 90,
+  rectangleIconPosition: { // balken layour
+    height: verticalScale(90),
+    width: horizontalScale(600),
     left: 0,
     position: "absolute",
   },
-  chargersChild: {
-    top: 168,
+  chargersChild: { // upper blue boxs
+    top: verticalScale(148),
   },
-  chargersItem: {
-    top: 432,
+  chargersItem: { //bottom blue box
+    top: verticalScale(430),
   },
-  chargersInner: {
-    left: 165,
+  chargersInner: { // middel bottom lichtblauwe box
+    left: horizontalScale(145),
+    position: "absolute",
   },
-  image15Icon: {
-    width: 45,
-    height: 42,
-    left: 193,
-    top: 531,
+  image15Icon: { // bottom middle charger icon
+    width: horizontalScale(45),
+    height: verticalScale(42),
+    left: horizontalScale(170),
+    top: verticalScale(499),
   },
-  charger5: {
-    left: 182,
-    top: 498,
+  charger5: { //text
+    left: horizontalScale(159),
+    top: verticalScale(483),
     color: Color.colorWhite,
     fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700",
+    fontWeight: "700", //change
     fontSize: FontSize.size_base,
   },
   frameChild: {
     backgroundColor: Color.colorFirebrick,
   },
   taken: {
-    left: 18,
+    left: horizontalScale(18),
   },
-  rectangleParent: {
-    left: 174,
+  rectangleParent: { //middle taken button
+    left: horizontalScale(149),
+
   },
-  availableChargers: {
-    top: 179,
-    left: 148,
+  availableChargers: { //text
+    top: verticalScale(169),
+    left: horizontalScale(128),
   },
-  nonAvailableChargers: {
-    top: 447,
-    left: 131,
+  nonAvailableChargers: { //text
+    top: verticalScale(447),
+    left: horizontalScale(128),
   },
-  rectangleView: {
-    left: 48,
+  rectangleView: { //bottom left light blue box
+    left: horizontalScale(48),
   },
-  image9Icon: {
-    left: 76,
-    width: 45,
-    height: 42,
-    top: 531,
+  image9Icon: { //bottum left charger icon
+    left: horizontalScale(70),
+    width: horizontalScale(43),
+    height: verticalScale(42),
+    top: verticalScale(520),
   },
   charger4: {
-    left: 65,
-    top: 498,
+    left: horizontalScale(60),
+    top: verticalScale(490),
     color: Color.colorWhite,
     fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700",
+    fontWeight: "700", //change
     fontSize: FontSize.size_base,
   },
   rectangleGroup: {
-    left: 57,
+    left: horizontalScale(57),
   },
-  chargersChild1: {
-    left: 277,
+  chargersChild1: { // BOTTOM RIGHT LIGHT BLUE BOX
+    left: horizontalScale(257),
   },
-  image20Icon: {
-    left: 305,
-    width: 45,
-    height: 42,
-    top: 531,
+  image20Icon: { // bottom right icon
+    left: horizontalScale(280),
+    width: horizontalScale(43),
+    height: verticalScale(42),
+    top: verticalScale(520),
   },
   charger6: {
-    left: 294,
-    top: 498,
+    left: horizontalScale(268),
+    top: verticalScale(490),
     color: Color.colorWhite,
     fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700",
+    fontWeight: "700", //chNGE
     fontSize: FontSize.size_base,
   },
-  rectangleContainer: {
-    top: 586,
-    left: 286,
+  rectangleContainer: { // bottom right taken button psoition
+    top: verticalScale(576),
+    //left: horizontalScale(30),
   },
-  chargersChild2: {
-    left: 277,
+  chargersChild2: { //upper right light blue box
+    left: horizontalScale(257),
   },
-  image19Icon: {
-    left: 309,
+  image19Icon: { //upper right chaRGEE ICON
+    left: horizontalScale(282),
   },
   charger3: {
-    left: 299,
+    left: horizontalScale(269),
   },
   frameChild1: {
     backgroundColor: Color.colorLimegreen_100,
   },
   available: {
-    left: 11,
+    left: horizontalScale(10),
   },
-  framePressable: {
-    top: 322,
+  framePressable: { // upper right available button
+    top: verticalScale(295),
   },
-  chargersChild3: {
-    left: 163,
+  chargersChild3: { //upper middle light blue box
+    left: horizontalScale(150),
   },
-  image18Icon: {
-    left: 191,
+  image18Icon: { //middle upper chqrging icon
+    left: horizontalScale(191),
   },
   charger2: {
-    left: 180,
+    left: horizontalScale(163),
   },
   available1: {
-    left: 9,
+    left: horizontalScale(9),
   },
-  rectangleParent1: {
-    left: 172,
+  rectangleParent1: { //avalable upper middle button
+    left: horizontalScale(172),
   },
   chargersChild4: {
-    left: 48,
+    left: horizontalScale(48),
   },
   image17Icon: {
-    left: 76,
+    left: horizontalScale(76),
   },
   charger1: {
-    left: 65,
+    left: horizontalScale(65),
   },
-  rectangleParent2: {
-    left: 57,
+  rectangleParent2: { //left upper available button
+    left: horizontalScale(57),
   },
-  image24: {
-    top: 866,
-    width: 45,
-    height: 42,
-    left: 193,
+  image24: { // buttom charger icon
+    top: verticalScale(756),
+    width: horizontalScale(40),
+    height: verticalScale(42),
+    left: horizontalScale(176),
   },
-  chargersChild5: {
-    top: 842,
-    width: 431,
-    height: 90,
+  chargersChild5: { // bottom bar
+    top: verticalScale(732),
+    width: horizontalScale(431),
+    height: verticalScale(90),
     backgroundColor: Color.colorDarkslateblue,
   },
   icon: {
     height: "100%",
     width: "100%",
   },
-  image25: {
-    left: 71,
-    top: 867,
-    width: 44,
-    height: 39,
+  image25: { // home button
+    left: horizontalScale(71),
+    top: verticalScale(767),
+    width: horizontalScale(40),
+    height: verticalScale(39),
     position: "absolute",
   },
-  image27: {
-    left: 316,
-    top: 865,
-    width: 37,
-    height: 43,
+  image27: { //user icon
+    left: horizontalScale(306),
+    top: verticalScale(765),
+    width: horizontalScale(33),
+    height: verticalScale(39),
     position: "absolute",
   },
-  rectangleIcon: {
-    width: 430,
+  rectangleIcon: { //idk
+    width: horizontalScale(430),
     top: 0,
-    height: 90,
+    height: verticalScale(90),
   },
-  image241: {
-    left: 157,
-    top: 48,
-    width: 111,
+  image241: { //schuberg philis logo
+    left: horizontalScale(140),
+    top: verticalScale(30),
+    width: horizontalScale(111),
   },
-  chargers: {
+  chargers: { //idk
     backgroundColor: Color.colorWhite,
     flex: 1,
-    height: 932,
+    height: verticalScale(932),
     overflow: "hidden",
     width: "100%",
   },
