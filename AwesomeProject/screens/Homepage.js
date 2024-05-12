@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   homeChild: {
-    marginTop: verticalScale(-330),
+    //marginTop: verticalScale(-300),
     height: verticalScale(418),
   },
   homeItem: {
@@ -350,20 +350,24 @@ const styles = StyleSheet.create({
     left: "14.19%",
   },
   image24: { // charger icon
-    top: verticalScale(766),
-    left: horizontalScale(192),
+    top: verticalScale(760),
+    left: horizontalScale(70),
     width: horizontalScale(45),
+    height: verticalScale(60),
+
   },
   homeChild1: { // onderste balk
-    top: verticalScale(742),
+    height: verticalScale(180),
+    top: verticalScale(740),
     backgroundColor: Color.colorDarkslateblue,
-    height: verticalScale(101),
+
   },
   image25Icon: { // home icon
-    top: verticalScale(765),
-    width: horizontalScale(27),
-    height: verticalScale(39),
-    left: horizontalScale(70),
+    top: verticalScale(757),
+    left: horizontalScale(180),
+    width: verticalScale(50),
+    height: verticalScale(48),
+    position: "absolute",
     // position: "absolute",
   },
   icon: {
@@ -371,11 +375,10 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   image27: { //user icon
-    left: horizontalScale(307),
-    top: verticalScale(765),
-    width: horizontalScale(27),
-    height: verticalScale(37),
-    position: "absolute",
+    left: horizontalScale(286),
+    top: verticalScale(757),
+    width: horizontalScale(36),
+    height: verticalScale(48),
   },
   homeChild2: { // bovenste balk
     height: verticalScale(87),
@@ -389,7 +392,7 @@ const styles = StyleSheet.create({
   },
   home: {
     flex: 1,
-    height: verticalScale(932),
+    height: verticalScale(832),
     overflow: "hidden",
     width: "100%",
     backgroundColor: Color.colorWhite,

@@ -123,8 +123,9 @@ const styles = StyleSheet.create({
   },
   image2: { // charger icon
     top: verticalScale(760),
-    left: 192,
-    width: 45,
+    left: horizontalScale(70),
+    width: horizontalScale(45),
+    height: verticalScale(60),
   },
   icon: {
     height: "100%",
@@ -145,55 +146,57 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   id: {
-    top: 189,
+    top: verticalScale(189),
   },
   firstName: {
-    top: 208,
+    top: verticalScale(208),
   },
   lastName: {
-    top: 227,
+    top: verticalScale(227),
   },
   licensePlate: {
-    top: 265,
+    top: verticalScale(265),
   },
   eMail: {
-    top: 246,
+    top: verticalScale(246),
   },
   frameChild: {
     backgroundColor: Color.colorLimegreen_100,
   },
   edit: {
-    left: horizontalScale(26),
+    left: horizontalScale(23),
   },
   rectangleParent: { // edit knop
-    left: horizontalScale(197),
+    left: horizontalScale(159),
   },
   frameItem: {
     backgroundColor: Color.colorFirebrick,
   },
   delete: {
-    left: horizontalScale(17),
+    left: horizontalScale(15),
+    height: verticalScale(20),
   },
   rectangleGroup: {
-    left: horizontalScale(292),
+    left: horizontalScale(242),
+    height: verticalScale(23),
   },
   usersInner: { // bottom balk
-    top: verticalScale(742),
+    top: verticalScale(732),
     backgroundColor: Color.colorDarkslateblue,
+    height: verticalScale(131),
   },
   image21: { // home icon
-    left: horizontalScale(70),
-    top: 867,
-    width: 44,
-    height: 39,
+    top: verticalScale(757),
+    left: horizontalScale(180),
+    width: verticalScale(50),
+    height: verticalScale(48),
     position: "absolute",
   },
   image23Icon: { //user icon
-    top: verticalScale(765),
-    left: horizontalScale(315),
-    width: 37,
-    height: 43,
-    position: "absolute",
+    left: horizontalScale(286),
+    top: verticalScale(757),
+    width: horizontalScale(36),
+    height: verticalScale(48),
   },
   users: {
     backgroundColor: Color.colorWhite,

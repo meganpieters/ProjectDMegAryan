@@ -220,6 +220,7 @@ const styles = StyleSheet.create({
     top: verticalScale(295),
     height: verticalScale(28),
     width: horizontalScale(82),
+    //  left: horizontalScale(0),
     position: "absolute",
   },
   rectangleIconPosition: { // balken layour
@@ -242,11 +243,11 @@ const styles = StyleSheet.create({
     width: horizontalScale(45),
     height: verticalScale(42),
     left: horizontalScale(170),
-    top: verticalScale(499),
+    top: verticalScale(520),
   },
   charger5: { //text
-    left: horizontalScale(159),
-    top: verticalScale(483),
+    left: horizontalScale(152),
+    top: verticalScale(488),
     color: Color.colorWhite,
     fontFamily: FontFamily.inriaSansBold,
     fontWeight: "700", //change
@@ -260,6 +261,7 @@ const styles = StyleSheet.create({
   },
   rectangleParent: { //middle taken button
     left: horizontalScale(149),
+
 
   },
   availableChargers: { //text
@@ -280,7 +282,7 @@ const styles = StyleSheet.create({
     top: verticalScale(520),
   },
   charger4: {
-    left: horizontalScale(60),
+    left: horizontalScale(55),
     top: verticalScale(490),
     color: Color.colorWhite,
     fontFamily: FontFamily.inriaSansBold,
@@ -288,7 +290,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_base,
   },
   rectangleGroup: {
-    left: horizontalScale(57),
+    left: horizontalScale(55),
   },
   chargersChild1: { // BOTTOM RIGHT LIGHT BLUE BOX
     left: horizontalScale(257),
@@ -300,7 +302,7 @@ const styles = StyleSheet.create({
     top: verticalScale(520),
   },
   charger6: {
-    left: horizontalScale(268),
+    left: horizontalScale(265),
     top: verticalScale(490),
     color: Color.colorWhite,
     fontFamily: FontFamily.inriaSansBold,
@@ -308,7 +310,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_base,
   },
   rectangleContainer: { // bottom right taken button psoition
-    top: verticalScale(576),
+    top: verticalScale(573),
     //left: horizontalScale(30),
   },
   chargersChild2: { //upper right light blue box
@@ -333,7 +335,7 @@ const styles = StyleSheet.create({
     left: horizontalScale(150),
   },
   image18Icon: { //middle upper chqrging icon
-    left: horizontalScale(191),
+    left: horizontalScale(180),
   },
   charger2: {
     left: horizontalScale(163),
@@ -342,25 +344,25 @@ const styles = StyleSheet.create({
     left: horizontalScale(9),
   },
   rectangleParent1: { //avalable upper middle button
-    left: horizontalScale(172),
+    left: horizontalScale(155),
   },
-  chargersChild4: {
-    left: horizontalScale(48),
+  chargersChild4: { // upper left light blue box
+    left: horizontalScale(46),
   },
   image17Icon: {
-    left: horizontalScale(76),
+    left: horizontalScale(70),
   },
   charger1: {
-    left: horizontalScale(65),
+    left: horizontalScale(58),
   },
   rectangleParent2: { //left upper available button
-    left: horizontalScale(57),
+    left: horizontalScale(50),
   },
   image24: { // buttom charger icon
-    top: verticalScale(756),
-    width: horizontalScale(40),
-    height: verticalScale(42),
-    left: horizontalScale(176),
+    top: verticalScale(760),
+    left: horizontalScale(70),
+    width: horizontalScale(45),
+    height: verticalScale(60),
   },
   chargersChild5: { // bottom bar
     top: verticalScale(732),
@@ -373,18 +375,17 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   image25: { // home button
-    left: horizontalScale(71),
-    top: verticalScale(767),
-    width: horizontalScale(40),
-    height: verticalScale(39),
+    top: verticalScale(757),
+    left: horizontalScale(180),
+    width: verticalScale(50),
+    height: verticalScale(48),
     position: "absolute",
   },
   image27: { //user icon
-    left: horizontalScale(306),
-    top: verticalScale(765),
-    width: horizontalScale(33),
-    height: verticalScale(39),
-    position: "absolute",
+    left: horizontalScale(286),
+    top: verticalScale(757),
+    width: horizontalScale(36),
+    height: verticalScale(48),
   },
   rectangleIcon: { //idk
     width: horizontalScale(430),
