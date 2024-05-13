@@ -17,21 +17,24 @@ import {
     EventEmitter,
 } from '@okta/okta-react-native';
 import configFile from './auth.config';
+import { useNavigation } from "@react-navigation/native";
 import Homepage from './screens/Homepage';
+
+interface AuthProps {
+    navigation: any; // Define navigation prop
+}
 
 interface AuthState {
     authenticated: boolean;
     context: string | null;
-    redirectToHome: boolean; // New state variable
 }
 
-export default class Auth extends Component<{}, AuthState> {
-    constructor(props: {}) {
+export default class Auth extends Component<AuthProps, AuthState> {
+    constructor(props: AuthProps) {
         super(props);
         this.state = {
             authenticated: false,
             context: null,
-            redirectToHome: false, // Initialize redirectToHome to false
         };
     }
 
@@ -67,8 +70,9 @@ export default class Auth extends Component<{}, AuthState> {
     handleSignIn = () => {
         this.setState({ authenticated: true });
         this.setContext('Logged in!');
-        this.redirectToHome(); // Call redirectToHome after successful login
+        this.props.navigation.navigate('Homepage'); // Use navigation prop to navigate
     };
+
 
     handleSignOut = () => {
         this.setState({ authenticated: false });
@@ -115,9 +119,6 @@ export default class Auth extends Component<{}, AuthState> {
         });
     };
 
-    redirectToHome = () => {
-        this.setState({ redirectToHome: true });
-    };
 
     renderButtons() {
         if (this.state.authenticated) {
@@ -146,12 +147,40 @@ export default class Auth extends Component<{}, AuthState> {
     }
 
     render() {
-        if (this.state.redirectToHome) {
-            return <Homepage />; // Replace YourHomePageComponent with your actual component
-        }
+
 
         return (
-            <Homepage />
+            <Fragment>
+                <SafeAreaView style={styles.container}>
+                    <View style={styles.buttonContainer}>
+                        <View style={styles.button}>
+                            {this.state.authenticated ? (
+                                <Button
+                                    testID="logoutButton"
+                                    onPress={async () => {
+                                        await this.logout();
+                                    }}
+                                    title="Logout"
+                                />
+                            ) : (
+                                <Button
+                                    testID="loginButton"
+                                    onPress={async () => {
+                                        await this.login();
+                                    }}
+                                    title="Login"
+                                />
+                            )}
+                        </View>
+                    </View>
+                    {this.renderButtons()}
+                    <ScrollView
+                        contentInsetAdjustmentBehavior="automatic"
+                        style={styles.infoBox}>
+                        <Text>{this.state.context}</Text>
+                    </ScrollView>
+                </SafeAreaView>
+            </Fragment>
         );
     }
 }

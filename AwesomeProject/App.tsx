@@ -17,6 +17,8 @@ import Users from "./screens/Users";
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import Homepage from './screens/Homepage';
+import Auth from './Auth';
+import Login from './screens/Login';
 
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
@@ -44,6 +46,11 @@ const App = () => {
             <Stack.Screen
               name="RequestPopUp"
               component={RequestPopUp}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={Login} // Wrap Auth component with withNavigation
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

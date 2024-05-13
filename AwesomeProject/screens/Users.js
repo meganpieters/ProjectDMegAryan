@@ -2,6 +2,7 @@ import * as React from "react";
 import { Image, StyleSheet, View, Pressable, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
+import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
 
 const Users = () => {
   const navigation = useNavigation();
@@ -37,8 +38,13 @@ const Users = () => {
       <Pressable style={[styles.rectangleGroup, styles.rectangleLayout]}>
         <View style={[styles.frameItem, styles.frameLayout]} />
         <Text style={[styles.delete, styles.editTypo]}>Delete</Text>
+        <Pressable style={[styles.rectangleParent, styles.rectangleLayout]} onPress={() => navigation.navigate("Homepage")}>
+          <View style={[styles.frameChild, styles.frameLayout]} />
+          <Text style={[styles.edit, styles.editTypo]}>Log Out</Text>
+
+        </Pressable>
       </Pressable>
-      <View style={[styles.usersInner, styles.usersLayout]} />
+      <View style={[styles.usersInner, styles.usersLayout, { height: verticalScale(1000) }]} />
       <Pressable
         style={styles.image21}
         onPress={() => navigation.navigate("Homepage")}
@@ -69,41 +75,42 @@ const Users = () => {
 };
 
 const styles = StyleSheet.create({
-  usersLayout: {
-    height: 90,
-    width: 430,
+  usersLayout: { // upper and button balk
+    height: verticalScale(90),
+    width: horizontalScale(430),
     left: 0,
     position: "absolute",
   },
-  imageLayout: {
-    height: 42,
+  imageLayout: { //schuberg philis logo
+    height: verticalScale(40),
     position: "absolute",
   },
-  nameTypo: {
+  nameTypo: { //info text
     textAlign: "left",
     color: Color.colorWhite,
     fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700",
+    fontWeight: "700", ///change
     fontSize: FontSize.size_base,
-    left: 72,
+    left: horizontalScale(72),
     position: "absolute",
   },
   rectangleLayout: {
-    height: 28,
-    width: 82,
-    top: 319,
+    height: verticalScale(28),
+    width: horizontalScale(82),
+    top: verticalScale(310),
     position: "absolute",
   },
-  frameLayout: {
+  frameLayout: { //button layout
     borderRadius: Border.br_smi,
-    top: 0,
-    height: 28,
-    width: 82,
+    top: verticalScale(0),
+    height: verticalScale(28),
+    width: horizontalScale(72),
     left: 0,
     position: "absolute",
   },
   editTypo: {
-    top: 4,
+    top: verticalScale(4),
+
     textAlign: "left",
     color: Color.colorWhite,
     fontFamily: FontFamily.inriaSansBold,
@@ -112,86 +119,89 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   usersChild: {
-    top: -1,
+    top: verticalScale(-1),
   },
-  image2: {
-    top: 866,
-    left: 192,
-    width: 45,
+  image2: { // charger icon
+    top: verticalScale(760),
+    left: horizontalScale(70),
+    width: horizontalScale(45),
+    height: verticalScale(60),
   },
   icon: {
     height: "100%",
     width: "100%",
   },
-  image4: {
-    left: 157,
-    top: 47,
-    width: 111,
+  image4: { //schurberg logo
+    left: horizontalScale(143),
+    top: verticalScale(30),
+    width: horizontalScale(110),
   },
-  usersItem: {
-    top: 159,
-    left: 39,
+  usersItem: { // light blue box
+    top: verticalScale(159),
+    left: horizontalScale(39),
     borderRadius: Border.br_11xl,
     backgroundColor: Color.colorRoyalblue,
-    width: 354,
-    height: 211,
+    width: horizontalScale(294),
+    height: verticalScale(201),
     position: "absolute",
   },
   id: {
-    top: 189,
+    top: verticalScale(189),
   },
   firstName: {
-    top: 208,
+    top: verticalScale(208),
   },
   lastName: {
-    top: 227,
+    top: verticalScale(227),
   },
   licensePlate: {
-    top: 265,
+    top: verticalScale(265),
   },
   eMail: {
-    top: 246,
+    top: verticalScale(246),
   },
   frameChild: {
     backgroundColor: Color.colorLimegreen_100,
   },
   edit: {
-    left: 26,
+    left: horizontalScale(23),
   },
-  rectangleParent: {
-    left: 197,
+  rectangleParent: { // edit knop
+    left: horizontalScale(159),
   },
   frameItem: {
     backgroundColor: Color.colorFirebrick,
   },
   delete: {
-    left: 17,
+    left: horizontalScale(15),
+    height: verticalScale(20),
   },
   rectangleGroup: {
-    left: 292,
+    left: horizontalScale(242),
+    height: verticalScale(23),
   },
-  usersInner: {
-    top: 842,
+  usersInner: { // bottom balk
+    top: verticalScale(732),
     backgroundColor: Color.colorDarkslateblue,
+    height: verticalScale(131),
   },
-  image21: {
-    left: 70,
-    top: 867,
-    width: 44,
-    height: 39,
+  image21: { // home icon
+    top: verticalScale(757),
+    left: horizontalScale(180),
+    width: verticalScale(50),
+    height: verticalScale(48),
     position: "absolute",
   },
-  image23Icon: {
-    top: 865,
-    left: 315,
-    width: 37,
-    height: 43,
-    position: "absolute",
+  image23Icon: { //user icon
+    left: horizontalScale(286),
+    top: verticalScale(757),
+    width: horizontalScale(36),
+    height: verticalScale(48),
   },
   users: {
     backgroundColor: Color.colorWhite,
     flex: 1,
-    height: 932,
+    height: verticalScale(932),
     overflow: "hidden",
     width: "100%",
   },
