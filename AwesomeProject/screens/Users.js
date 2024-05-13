@@ -44,7 +44,7 @@ const Users = () => {
 
         </Pressable>
       </Pressable>
-      <View style={[styles.usersInner, styles.usersLayout]} />
+      <View style={[styles.usersInner, styles.usersLayout, { height: verticalScale(1000) }]} />
       <Pressable
         style={styles.image21}
         onPress={() => navigation.navigate("Homepage")}

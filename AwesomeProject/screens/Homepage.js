@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Image, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics'; // Import helper functions
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 
 
@@ -20,7 +21,7 @@ const Homepage = () => {
       <Image
         style={styles.image9Icon}
         resizeMode="cover"
-        source={require("../assets/image-9.png")}
+        source={require("../assets/55283.png")}
       />
       <Image
         style={[styles.homeInner, styles.homeInnerPosition]}
@@ -72,7 +73,7 @@ Schiphol Rijk ID #12345`}</Text>
         source={require("../assets/-icon-check.png")}
       />
       <View style={[styles.image24, styles.image24Layout]} />
-      <View style={[styles.homeChild1, styles.homeChildPosition]} />
+      <View style={[styles.homeChild1, styles.homeChildPosition, { height: verticalScale(1000) }]} />
       <Image
         style={styles.image25Icon}
         resizeMode="cover"
@@ -198,25 +199,26 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(149),
     height: verticalScale(78),
   },
-  charger4Activated: { // wat is dit 
+  charger4Activated: { // text
     fontSize: moderateScale(16),
     color: "white",
     // textAlign: "center",
-    position: "absolute",
+    // position: "absolute",
     top: verticalScale(580),
-    left: horizontalScale(50),
+    left: horizontalScale(80),
     marginLeft: horizontalScale(-80),
     fontFamily: FontFamily.inriaSansBold,
     fontWeight: "700",
     textAlign: "center",
-    fontSize: FontSize.size_5xl,
+    fontSize: moderateScale(35),
   },
   image9Icon: { //auto icon
     top: verticalScale(230),
-    left: horizontalScale(130),
-    width: horizontalScale(110),
-    height: verticalScale(108),
+    left: horizontalScale(115),
+    width: horizontalScale(140),
+    height: verticalScale(110),
     position: "absolute",
+
   },
   homeInner: { // witte deel battery
     width: horizontalScale(260),
@@ -232,10 +234,10 @@ const styles = StyleSheet.create({
   remainingForFull: { // text
     top: verticalScale(476),
     color: Color.colorBlack,
-    fontSize: FontSize.size_base,
+    fontSize: moderateScale(16),
     fontFamily: FontFamily.inriaSansBold, // font aanpassen
     fontWeight: "700",
-    left: horizontalScale(100),
+    left: horizontalScale(90),
     //textAlign: "left",
   },
   rectangleView: { // groene batterij deel HIERMEE KAN JE BATTERIJ PERCENTAGE GROTER LATEN LIJKEN
@@ -270,11 +272,11 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   request: {
-    top: verticalScale(21),
+    top: verticalScale(18),
     left: horizontalScale(66),
-    fontSize: FontSize.size_base,
+    fontSize: moderateScale(16),
     fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700", // font size aanpassen
+    fontWeight: "700",
     color: Color.colorWhite,
   },
   frameWrapper: {
@@ -302,6 +304,7 @@ const styles = StyleSheet.create({
     height: verticalScale(37),
     textAlign: "center",
     color: Color.colorWhite,
+    fontSize: moderateScale(16),
     position: "absolute",
   },
   frameInner: { // blokje
@@ -344,7 +347,7 @@ const styles = StyleSheet.create({
   iconCheck: {
     height: "2.58%",
     width: "7.91%",
-    top: "69.1%",
+    top: verticalScale(580),
     right: "77.91%",
     bottom: "28.33%",
     left: "14.19%",

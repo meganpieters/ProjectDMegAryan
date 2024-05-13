@@ -90,7 +90,7 @@ const Chargers = () => {
         <Text style={[styles.available1, styles.availableTypo]}>Available</Text>
       </Pressable>
       <View style={[styles.image24, styles.imageIconLayout]} />
-      <View style={[styles.chargersChild5, styles.rectangleIconPosition]} />
+      <View style={[styles.chargersChild5, styles.rectangleIconPosition, { height: verticalScale(1000) }]} />
       <Pressable
         style={styles.image25}
         onPress={() => navigation.navigate("Homepage")}
