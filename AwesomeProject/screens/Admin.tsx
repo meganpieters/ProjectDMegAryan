@@ -1,6 +1,6 @@
 import * as React from "react";
-import { StyleSheet, View, Pressable, Text } from "react-native";
-import { Image } from "expo-image";
+import { StyleSheet, View, Pressable, Text, Image } from "react-native";
+
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation, ParamListBase } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
@@ -13,7 +13,7 @@ const Admin = () => {
       <View style={[styles.image2, styles.imageLayout1]} />
       <Image
         style={[styles.adminChild, styles.adminLayout]}
-        contentFit="cover"
+        // contentFit="cover"
         source={require("../assets/rectangle-551.png")}
       />
       <View style={[styles.adminItem, styles.adminBg]} />
@@ -23,7 +23,7 @@ const Admin = () => {
       >
         <Image
           style={styles.icon}
-          contentFit="cover"
+          // contentFit="cover"
           source={require("../assets/image-1.png")}
         />
       </Pressable>
@@ -31,7 +31,7 @@ const Admin = () => {
       <Text style={[styles.userPanel, styles.panelTypo]}>User Panel</Text>
       <Image
         style={styles.afbeelding2Icon}
-        contentFit="cover"
+        //contentFit="cover"
         source={require("../assets/afbeelding-31.png")}
       />
       <Pressable
@@ -40,7 +40,7 @@ const Admin = () => {
       >
         <Image
           style={styles.icon}
-          contentFit="cover"
+          // contentFit="cover"
           source={require("../assets/image-3.png")}
         />
       </Pressable>
@@ -50,7 +50,7 @@ const Admin = () => {
       >
         <Image
           style={styles.icon}
-          contentFit="cover"
+          //  contentFit="cover"
           source={require("../assets/image-2.png")}
         />
       </Pressable>
@@ -61,7 +61,7 @@ const Admin = () => {
       >
         <Image
           style={styles.icon}
-          contentFit="cover"
+          // contentFit="cover"
           source={require("../assets/image-1.png")}
         />
       </Pressable>

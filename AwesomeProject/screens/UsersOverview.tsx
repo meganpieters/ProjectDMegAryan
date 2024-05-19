@@ -1,6 +1,6 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Pressable } from "react-native";
-import { Image } from "expo-image";
+import { StyleSheet, View, Text, Pressable, Image } from "react-native";
+//import { Image } from "expo-image";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation, ParamListBase } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
@@ -13,7 +13,7 @@ const UsersOverview = () => {
       <View style={[styles.image2, styles.imagePosition]} />
       <Image
         style={styles.usersoverviewChild}
-        contentFit="cover"
+        // contentFit="cover"
         source={require("../assets/rectangle-50.png")}
       />
       <View style={styles.usersoverviewItem} />
@@ -34,7 +34,7 @@ const UsersOverview = () => {
         <Text style={[styles.edit, styles.editTypo]}>Edit</Text>
         <Image
           style={styles.editProfileIcon}
-          contentFit="cover"
+          //  contentFit="cover"
           source={require("../assets/edit-profile.png")}
         />
       </Pressable>
@@ -53,7 +53,7 @@ const UsersOverview = () => {
         <Text style={[styles.edit, styles.editTypo]}>Edit</Text>
         <Image
           style={styles.editProfileIcon}
-          contentFit="cover"
+          // contentFit="cover"
           source={require("../assets/edit-profile.png")}
         />
       </Pressable>
@@ -64,7 +64,7 @@ const UsersOverview = () => {
       >
         <Image
           style={styles.icon}
-          contentFit="cover"
+          // contentFit="cover"
           source={require("../assets/image-1.png")}
         />
       </Pressable>
@@ -125,23 +125,23 @@ const UsersOverview = () => {
       <View style={styles.usersoverviewChild11} />
       <Image
         style={[styles.addMaleUserGroup, styles.rectangleGroupLayout]}
-        contentFit="cover"
+        // contentFit="cover"
         source={require("../assets/add-male-user-group.png")}
       />
       <Text style={[styles.addUser, styles.nameTypo]}>Add user</Text>
       <Image
         style={[styles.deniedIcon, styles.deniedIconLayout]}
-        contentFit="cover"
+        //  contentFit="cover"
         source={require("../assets/denied.png")}
       />
       <Image
         style={[styles.deniedIcon1, styles.deniedIconLayout]}
-        contentFit="cover"
+        // contentFit="cover"
         source={require("../assets/denied.png")}
       />
       <Image
         style={styles.afbeelding3Icon}
-        contentFit="cover"
+        //  contentFit="cover"
         source={require("../assets/afbeelding-31.png")}
       />
     </View>

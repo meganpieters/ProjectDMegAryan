@@ -27,17 +27,9 @@ import Signup from './screens/Signup';
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
 
-  const [fontsLoaded, error] = useFonts({
-    "InriaSans-Light": require("./assets/fonts/InriaSans-Light.ttf"),
-    "InriaSans-Regular": require("./assets/fonts/InriaSans-Regular.ttf"),
-    "InriaSans-Bold": require("./assets/fonts/InriaSans-Bold.ttf"),
-    "InriaSans-LightItalic": require("./assets/fonts/InriaSans-LightItalic.ttf"),
-    "Inder-Regular": require("./assets/fonts/Inder-Regular.ttf"),
-  });
 
-  if (!fontsLoaded && !error) {
-    return null;
-  }
+
+
 
   return (
     <>
@@ -97,6 +89,3 @@ const App = () => {
 };
 export default App;
 
-function useFonts(arg0: { "InriaSans-Light": any; "InriaSans-Regular": any; "InriaSans-Bold": any; "InriaSans-LightItalic": any; "Inder-Regular": any; }): [any, any] {
-  throw new Error('Function not implemented.');
-}

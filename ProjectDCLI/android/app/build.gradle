@@ -74,13 +74,15 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-namespace "com.ProjectDCLI.com" 
+    namespace "com.projectdcli"
     defaultConfig {
-        applicationId "com.ProjectDCLI.com" 
+        applicationId "com.projectdcli"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+         manifestPlaceholders = [
+    "appAuthRedirectScheme": "com.okta.dev-38831995"]
     }
     signingConfigs {
         debug {
@@ -107,7 +109,6 @@ namespace "com.ProjectDCLI.com"
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
-    implementation("com.facebook.react:flipper-integration")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

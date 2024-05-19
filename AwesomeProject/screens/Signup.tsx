@@ -1,6 +1,6 @@
 import * as React from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { Image } from "expo-image";
+import { StyleSheet, View, Text, Image } from "react-native";
+
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
 
 const Signup = () => {
@@ -34,23 +34,23 @@ const Signup = () => {
         <Text style={[styles.joinUs, styles.hereTypo]}>Join us!</Text>
         <Image
           style={[styles.maleUserIcon, styles.secureIconLayout]}
-          contentFit="cover"
+          // contentFit="cover"
           source={require("../assets/male-user.png")}
         />
         <Image
           style={[styles.secureIcon, styles.secureIconLayout]}
-          contentFit="cover"
+          // contentFit="cover"
           source={require("../assets/secure.png")}
         />
         <Image
           style={[styles.secureIcon1, styles.secureIconLayout]}
-          contentFit="cover"
+          //   contentFit="cover"
           source={require("../assets/secure1.png")}
         />
       </View>
       <Image
         style={styles.image30Icon}
-        contentFit="cover"
+        //   contentFit="cover"
         source={require("../assets/image-31.png")}
       />
     </View>

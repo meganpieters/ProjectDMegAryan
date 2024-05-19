@@ -1,6 +1,6 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Pressable } from "react-native";
-import { Image } from "expo-image";
+import { StyleSheet, View, Text, Pressable, Image } from "react-native";
+
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation, ParamListBase } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
@@ -13,17 +13,17 @@ const ChargerOverview = () => {
       <View style={[styles.image2, styles.imagePosition]} />
       <Image
         style={[styles.chargeroverviewChild, styles.chargeroverviewLayout]}
-        contentFit="cover"
+
         source={require("../assets/rectangle-501.png")}
       />
       <Image
         style={[styles.chargeroverviewItem, styles.chargeroverviewLayout]}
-        contentFit="cover"
+
         source={require("../assets/rectangle-501.png")}
       />
       <Image
         style={[styles.chargeroverviewInner, styles.chargeroverviewLayout]}
-        contentFit="cover"
+
         source={require("../assets/rectangle-501.png")}
       />
       <Text style={styles.location}>Location</Text>
@@ -36,13 +36,13 @@ const ChargerOverview = () => {
       >
         <Image
           style={styles.icon}
-          contentFit="cover"
+
           source={require("../assets/image-1.png")}
         />
       </Pressable>
       <Image
         style={styles.afbeelding2Icon}
-        contentFit="cover"
+
         source={require("../assets/afbeelding-31.png")}
       />
       <Text style={[styles.charger1, styles.chargerTypo]}>Charger 1</Text>
@@ -67,7 +67,7 @@ const ChargerOverview = () => {
         <Text style={[styles.delete, styles.editTypo]}>Delete</Text>
         <Image
           style={[styles.removeIcon, styles.removeIconLayout]}
-          contentFit="cover"
+
           source={require("../assets/remove.png")}
         />
       </Pressable>
@@ -76,7 +76,7 @@ const ChargerOverview = () => {
         <Text style={[styles.delete, styles.editTypo]}>Delete</Text>
         <Image
           style={[styles.removeIcon, styles.removeIconLayout]}
-          contentFit="cover"
+
           source={require("../assets/remove.png")}
         />
       </Pressable>
@@ -102,14 +102,14 @@ const ChargerOverview = () => {
       </Pressable>
       <Image
         style={[styles.removeIcon2, styles.removeIconLayout]}
-        contentFit="cover"
+
         source={require("../assets/remove.png")}
       />
       <Text style={[styles.addCharger, styles.chargerTypo]}>Add charger</Text>
       <View style={styles.chargeroverviewChild3} />
       <Image
         style={[styles.plusIcon, styles.plusIconPosition]}
-        contentFit="cover"
+
         source={require("../assets/plus.png")}
       />
       <Text style={[styles.addCharger1, styles.chargerTypo]}>Add charger</Text>

@@ -1,6 +1,6 @@
 import * as React from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { Image } from "expo-image";
+import { StyleSheet, View, Text, Image } from "react-native";
+
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 
 const Login = () => {
@@ -11,7 +11,7 @@ const Login = () => {
         <View style={[styles.groupItem, styles.groupChildShadowBox1]} />
         <Image
           style={[styles.image29Icon, styles.image29IconLayout]}
-          contentFit="cover"
+          //contentFit="cover"
           source={require("../assets/image-29.png")}
         />
         <View style={[styles.groupInner, styles.groupChildShadowBox1]} />
@@ -37,7 +37,7 @@ const Login = () => {
         </Text>
         <Image
           style={[styles.rectangleIcon, styles.groupChild7Layout]}
-          contentFit="cover"
+          //  contentFit="cover"
           source={require("../assets/rectangle-59.png")}
         />
       </View>
@@ -46,7 +46,7 @@ const Login = () => {
         <View style={[styles.groupChild3, styles.groupChildShadowBox1]} />
         <Image
           style={[styles.image29Icon1, styles.image29IconLayout]}
-          contentFit="cover"
+          // contentFit="cover"
           source={require("../assets/image-29.png")}
         />
         <View style={[styles.groupChild4, styles.groupChildShadowBox1]} />
@@ -72,13 +72,13 @@ const Login = () => {
         </Text>
         <Image
           style={[styles.groupChild7, styles.groupChild7Position]}
-          contentFit="cover"
+          //  contentFit="cover"
           source={require("../assets/rectangle-591.png")}
         />
       </View>
       <Image
         style={styles.image31Icon}
-        contentFit="cover"
+        //  contentFit="cover"
         source={require("../assets/image-31.png")}
       />
     </View>

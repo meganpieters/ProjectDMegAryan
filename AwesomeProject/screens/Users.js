@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Image, StyleSheet, View, Pressable, Text } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { Image, StyleSheet, View, Text, Pressable } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation, ParamListBase } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
-import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
 
 const Users = () => {
   const navigation = useNavigation();
@@ -10,21 +10,11 @@ const Users = () => {
   return (
     <View style={styles.users}>
       <Image
-        style={[styles.usersChild, styles.usersLayout]}
+        style={[styles.usersChild, styles.usersChildLayout]}
         resizeMode="cover"
         source={require("../assets/rectangle-55.png")}
       />
-      <View style={[styles.image2, styles.imageLayout]} />
-      <Pressable
-        style={[styles.image4, styles.imageLayout]}
-        onPress={() => navigation.navigate("Homepage")}
-      >
-        <Image
-          style={styles.icon}
-          resizeMode="cover"
-          source={require("../assets/image-4.png")}
-        />
-      </Pressable>
+      <View style={styles.image2} />
       <View style={styles.usersItem} />
       <Text style={[styles.id, styles.nameTypo]}>ID:</Text>
       <Text style={[styles.firstName, styles.nameTypo]}>First Name:</Text>
@@ -35,19 +25,16 @@ const Users = () => {
         <View style={[styles.frameChild, styles.frameLayout]} />
         <Text style={[styles.edit, styles.editTypo]}>Edit</Text>
       </Pressable>
-      <Pressable style={[styles.rectangleGroup, styles.rectangleLayout]}>
+      <View style={[styles.usersInner, styles.usersInnerLayout]} />
+      <View style={[styles.rectangleView, styles.rectanglePosition]} />
+      <Pressable style={[styles.rectangleGroup, styles.rectanglePosition]}>
         <View style={[styles.frameItem, styles.frameLayout]} />
         <Text style={[styles.delete, styles.editTypo]}>Delete</Text>
-        <Pressable style={[styles.rectangleParent, styles.rectangleLayout]} onPress={() => navigation.navigate("Homepage")}>
-          <View style={[styles.frameChild, styles.frameLayout]} />
-          <Text style={[styles.edit, styles.editTypo]}>Log Out</Text>
-
-        </Pressable>
       </Pressable>
-      <View style={[styles.usersInner, styles.usersLayout, { height: verticalScale(1000) }]} />
+      <View style={[styles.usersChild1, styles.usersChildLayout]} />
       <Pressable
-        style={styles.image21}
-        onPress={() => navigation.navigate("Homepage")}
+        style={[styles.image21, styles.imagePosition]}
+        onPress={() => navigation.navigate("Home")}
       >
         <Image
           style={styles.icon}
@@ -56,7 +43,7 @@ const Users = () => {
         />
       </Pressable>
       <Pressable
-        style={[styles.image2, styles.imageLayout]}
+        style={[styles.image22, styles.imagePosition]}
         onPress={() => navigation.navigate("Chargers")}
       >
         <Image
@@ -70,47 +57,108 @@ const Users = () => {
         resizeMode="cover"
         source={require("../assets/image-3.png")}
       />
+      <View style={[styles.usersChild2, styles.usersChildShadowBox1]} />
+      <View style={[styles.usersChild3, styles.usersChildShadowBox]} />
+      <View style={[styles.usersChild4, styles.usersChildShadowBox]} />
+      <View style={[styles.usersChild5, styles.usersChildShadowBox1]} />
+      <View style={[styles.usersChild6, styles.usersChildShadowBox1]} />
+      <Image
+        style={styles.image30Icon}
+        resizeMode="cover"
+        source={require("../assets/image-30.png")}
+      />
+      <Text style={[styles.logOut, styles.adminTypo]}>Log out</Text>
+      <Text style={[styles.admin, styles.adminTypo]}>Admin</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  usersLayout: { // upper and button balk
-    height: verticalScale(90),
-    width: horizontalScale(430),
+  usersChildLayout: {
+    height: 90,
+    width: 430,
     left: 0,
     position: "absolute",
   },
-  imageLayout: { //schuberg philis logo
-    height: verticalScale(40),
-    position: "absolute",
-  },
-  nameTypo: { //info text
+  nameTypo: {
     textAlign: "left",
     color: Color.colorWhite,
     fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700", ///change
+    fontWeight: "700",
     fontSize: FontSize.size_base,
-    left: horizontalScale(72),
+    left: 72,
     position: "absolute",
   },
   rectangleLayout: {
-    height: verticalScale(28),
-    width: horizontalScale(82),
-    top: verticalScale(310),
-    position: "absolute",
+    height: 28,
+    width: 82,
+    top: 319,
   },
-  frameLayout: { //button layout
+  frameLayout: {
     borderRadius: Border.br_smi,
-    top: verticalScale(0),
-    height: verticalScale(28),
-    width: horizontalScale(72),
+    top: 0,
+    height: 28,
+    width: 82,
     left: 0,
     position: "absolute",
   },
   editTypo: {
-    top: verticalScale(4),
-
+    top: 4,
+    textAlign: "left",
+    color: Color.colorWhite,
+    fontFamily: FontFamily.inriaSansBold,
+    fontWeight: "700",
+    fontSize: FontSize.size_base,
+    position: "absolute",
+  },
+  usersInnerLayout: {
+    height: 36,
+    width: 98,
+    top: 779,
+    borderRadius: Border.br_smi,
+    backgroundColor: Color.colorCornflowerblue,
+  },
+  rectanglePosition: {
+    left: 292,
+    position: "absolute",
+  },
+  imagePosition: {
+    top: 867,
+    position: "absolute",
+  },
+  usersChildShadowBox1: {
+    height: 12,
+    width: 140,
+    borderRadius: Border.br_6xs,
+    shadowOpacity: 1,
+    elevation: 4,
+    shadowRadius: 4,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowColor: "rgba(0, 0, 0, 0.25)",
+    position: "absolute",
+    backgroundColor: Color.colorWhite,
+  },
+  usersChildShadowBox: {
+    left: 161,
+    height: 12,
+    width: 140,
+    borderRadius: Border.br_6xs,
+    shadowOpacity: 1,
+    elevation: 4,
+    shadowRadius: 4,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowColor: "rgba(0, 0, 0, 0.25)",
+    position: "absolute",
+    backgroundColor: Color.colorWhite,
+  },
+  adminTypo: {
+    top: 787,
     textAlign: "left",
     color: Color.colorWhite,
     fontFamily: FontFamily.inriaSansBold,
@@ -119,91 +167,135 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   usersChild: {
-    top: verticalScale(-1),
+    top: -1,
   },
-  image2: { // charger icon
-    top: verticalScale(760),
-    left: horizontalScale(70),
-    width: horizontalScale(45),
-    height: verticalScale(60),
+  image2: {
+    top: 866,
+    height: 42,
+    width: 45,
+    left: 192,
+    position: "absolute",
   },
-  icon: {
-    height: "100%",
-    width: "100%",
-  },
-  image4: { //schurberg logo
-    left: horizontalScale(143),
-    top: verticalScale(30),
-    width: horizontalScale(110),
-  },
-  usersItem: { // light blue box
-    top: verticalScale(159),
-    left: horizontalScale(39),
+  usersItem: {
+    top: 159,
+    left: 39,
     borderRadius: Border.br_11xl,
-    backgroundColor: Color.colorRoyalblue,
-    width: horizontalScale(294),
-    height: verticalScale(201),
+    width: 354,
+    height: 211,
+    backgroundColor: Color.colorCornflowerblue,
     position: "absolute",
   },
   id: {
-    top: verticalScale(189),
+    top: 189,
   },
   firstName: {
-    top: verticalScale(208),
+    top: 208,
   },
   lastName: {
-    top: verticalScale(227),
+    top: 227,
   },
   licensePlate: {
-    top: verticalScale(265),
+    top: 265,
   },
   eMail: {
-    top: verticalScale(246),
+    top: 246,
   },
   frameChild: {
-    backgroundColor: Color.colorLimegreen_100,
+    backgroundColor: Color.colorLimegreen,
   },
   edit: {
-    left: horizontalScale(23),
+    left: 26,
   },
-  rectangleParent: { // edit knop
-    left: horizontalScale(159),
+  rectangleParent: {
+    left: 197,
+    position: "absolute",
+  },
+  usersInner: {
+    left: 29,
+    position: "absolute",
+  },
+  rectangleView: {
+    height: 36,
+    width: 98,
+    top: 779,
+    borderRadius: Border.br_smi,
+    backgroundColor: Color.colorCornflowerblue,
   },
   frameItem: {
     backgroundColor: Color.colorFirebrick,
   },
   delete: {
-    left: horizontalScale(15),
-    height: verticalScale(20),
+    left: 17,
   },
   rectangleGroup: {
-    left: horizontalScale(242),
-    height: verticalScale(23),
+    height: 28,
+    width: 82,
+    top: 319,
   },
-  usersInner: { // bottom balk
-    top: verticalScale(732),
-    backgroundColor: Color.colorDarkslateblue,
-    height: verticalScale(131),
+  usersChild1: {
+    top: 842,
+    backgroundColor: Color.colorDodgerblue,
   },
-  image21: { // home icon
-    top: verticalScale(757),
-    left: horizontalScale(180),
-    width: verticalScale(50),
-    height: verticalScale(48),
+  icon: {
+    height: "100%",
+    width: "100%",
+  },
+  image21: {
+    width: 44,
+    height: 39,
+    top: 867,
+    left: 192,
+  },
+  image22: {
+    left: 72,
+    top: 867,
+    height: 42,
+    width: 45,
+  },
+  image23Icon: {
+    top: 865,
+    left: 315,
+    width: 37,
+    height: 43,
     position: "absolute",
   },
-  image23Icon: { //user icon
-    left: horizontalScale(286),
-    top: verticalScale(757),
-    width: horizontalScale(36),
-    height: verticalScale(48),
+  usersChild2: {
+    top: 193,
+    left: 105,
+  },
+  usersChild3: {
+    top: 212,
+  },
+  usersChild4: {
+    top: 234,
+  },
+  usersChild5: {
+    top: 250,
+    left: 127,
+  },
+  usersChild6: {
+    top: 269,
+    left: 175,
+  },
+  image30Icon: {
+    top: 11,
+    left: 32,
+    width: 381,
+    height: 75,
+    position: "absolute",
+  },
+  logOut: {
+    left: 60,
+  },
+  admin: {
+    left: 328,
   },
   users: {
-    backgroundColor: Color.colorWhite,
     flex: 1,
-    height: verticalScale(932),
+    height: 932,
     overflow: "hidden",
     width: "100%",
+    backgroundColor: Color.colorWhite,
   },
 });
 
