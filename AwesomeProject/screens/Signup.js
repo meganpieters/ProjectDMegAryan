@@ -63,7 +63,7 @@ const Signup = () => {
         />
       </View>
       <View style={styles.inputContainer}>
-        <Image style={styles.icon} source={require("../assets/secure.png")} />
+        <Image style={styles.icon} source={require("../assets/email3.png")} />
         <TextInput
           style={styles.input}
           onChangeText={setEmail}

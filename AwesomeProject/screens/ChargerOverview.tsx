@@ -30,7 +30,7 @@ const ChargerOverview = () => {
       <Text style={[styles.location1, styles.locationTypo]}>Location</Text>
       <Text style={[styles.location2, styles.locationTypo]}>Location</Text>
       <View style={[styles.rectangleView, styles.frameWrapperPosition]} />
-      <Pressable style={styles.logoutButton} onPress={() => navigation.navigate("Home")}>
+      <Pressable style={styles.logoutButton} onPress={() => navigation.navigate("Admin")}>
         <Image
           style={styles.icon}
 

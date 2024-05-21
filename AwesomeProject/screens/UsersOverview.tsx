@@ -60,7 +60,7 @@ const UsersOverview = () => {
       <View style={styles.usersoverviewInner} />
       <Pressable
         style={[styles.image21, styles.imagePosition]}
-        onPress={() => navigation.navigate("Home")}
+        onPress={() => navigation.navigate("Admin")}
       >
         <Image
           style={styles.icon}

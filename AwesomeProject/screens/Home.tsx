@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   },
   // request knop
   framePressable: {
-    left: horizontalScale(40), // Use horizontalScale for left
+    left: horizontalScale(15), // Use horizontalScale for left
     width: horizontalScale(132), // Use horizontalScale for width
     height: verticalScale(62), // Use verticalScale for height
     top: verticalScale(650), // Use verticalScale for top
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   },
   // stop charging tekst
   stopCharging: {
-    top: verticalScale(20), // Use verticalScale for top
+    top: verticalScale(10), // Use verticalScale for top
     left: horizontalScale(54), // Use horizontalScale for left
     width: horizontalScale(63), // Use horizontalScale for width
     height: verticalScale(37), // Use verticalScale for height
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
   // Schuberg icoon
   image30Icon: {
     top: verticalScale(9), // Use verticalScale for top
-    left: horizontalScale(13), // Use horizontalScale for left
+    left: horizontalScale(5), // Use horizontalScale for left
     width: horizontalScale(381), // Use horizontalScale for width
     height: verticalScale(75), // Use verticalScale for height
     position: "absolute",
