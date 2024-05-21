@@ -1,11 +1,32 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Image, StyleSheet, View, Pressable, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
 
+
 const Users = () => {
   const navigation = useNavigation();
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    fetchUserData(); // Roep de functie aan om gebruikersgegevens op te halen
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch("http://10.0.2.2:8000/api/users/1/");
+      console.log(response);
+      const data = await response.json();
+      if (data.ok) {
+        setUserData(data.data); // Stel de gebruikersgegevens in als de oproep succesvol is
+      } else {
+        console.error("Failed to fetch user data:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   return (
     <View style={styles.users}>
@@ -17,20 +38,24 @@ const Users = () => {
       <View style={[styles.image2, styles.imageLayout]} />
       <Pressable
         style={[styles.image4, styles.imageLayout]}
-        onPress={() => navigation.navigate("Homepage")}
+        onPress={() => navigation.navigate("Home")}
       >
         <Image
           style={styles.icon}
           resizeMode="cover"
-          source={require("../assets/image-4.png")}
+          source={require("../assets/image-30.png")}
         />
       </Pressable>
       <View style={styles.usersItem} />
-      <Text style={[styles.id, styles.nameTypo]}>ID:</Text>
-      <Text style={[styles.firstName, styles.nameTypo]}>First Name:</Text>
-      <Text style={[styles.lastName, styles.nameTypo]}>Last Name:</Text>
-      <Text style={[styles.licensePlate, styles.nameTypo]}>License Plate:</Text>
-      <Text style={[styles.eMail, styles.nameTypo]}>E-mail:</Text>
+      {userData && (
+        <View style={styles.userDataContainer}>
+          <Text style={[styles.userDataText, styles.id]}>ID: {userData.id}</Text>
+          <Text style={[styles.userDataText, styles.firstName]}>First Name: {userData.first_name}</Text>
+          <Text style={[styles.userDataText, styles.lastName]}>Last Name: {userData.last_name}</Text>
+          <Text style={[styles.userDataText, styles.licensePlate]}>License Plate: {userData.kenteken}</Text>
+          <Text style={[styles.userDataText, styles.eMail]}>E-mail: {userData.email}</Text>
+        </View>
+      )}
       <Pressable style={[styles.rectangleParent, styles.rectangleLayout]}>
         <View style={[styles.frameChild, styles.frameLayout]} />
         <Text style={[styles.edit, styles.editTypo]}>Edit</Text>
@@ -38,16 +63,25 @@ const Users = () => {
       <Pressable style={[styles.rectangleGroup, styles.rectangleLayout]}>
         <View style={[styles.frameItem, styles.frameLayout]} />
         <Text style={[styles.delete, styles.editTypo]}>Delete</Text>
-        <Pressable style={[styles.rectangleParent, styles.rectangleLayout]} onPress={() => navigation.navigate("Homepage")}>
-          <View style={[styles.frameChild, styles.frameLayout]} />
-          <Text style={[styles.edit, styles.editTypo]}>Log Out</Text>
-
-        </Pressable>
+      </Pressable>
+      <Pressable
+        style={[styles.logoutButton]}
+        onPress={() => navigation.navigate("Login")}
+      >
+        <View style={[styles.frameChild, styles.frameLayout]} />
+        <Text style={[styles.logOut, styles.adminTypo]}>Log out</Text>
+      </Pressable>
+      <Pressable
+        style={[styles.adminButton, { color: Color.colorCornflowerblue }]}
+        onPress={() => navigation.navigate("Admin")}
+      >
+        <View style={[styles.frameChild, styles.frameLayout]} />
+        <Text style={[styles.admin, styles.adminTypo]}>Admin</Text>
       </Pressable>
       <View style={[styles.usersInner, styles.usersLayout, { height: verticalScale(1000) }]} />
       <Pressable
         style={styles.image21}
-        onPress={() => navigation.navigate("Homepage")}
+        onPress={() => navigation.navigate("Home")}
       >
         <Image
           style={styles.icon}
@@ -56,7 +90,7 @@ const Users = () => {
         />
       </Pressable>
       <Pressable
-        style={[styles.image2, styles.imageLayout]}
+        style={[styles.image2]}
         onPress={() => navigation.navigate("Chargers")}
       >
         <Image
@@ -71,6 +105,7 @@ const Users = () => {
         source={require("../assets/image-3.png")}
       />
     </View>
+
   );
 };
 
@@ -78,12 +113,25 @@ const styles = StyleSheet.create({
   usersLayout: { // upper and button balk
     height: verticalScale(90),
     width: horizontalScale(430),
-    left: 0,
+    left: horizontalScale(0),
     position: "absolute",
   },
   imageLayout: { //schuberg philis logo
-    height: verticalScale(40),
+    height: verticalScale(60),
     position: "absolute",
+  },
+  logoutButton:
+  {
+    left: horizontalScale(60),
+    top: verticalScale(680),
+    color: Color.colorCornflowerblue,
+  },
+  adminButton:
+  {
+    left: horizontalScale(250), // Adjust horizontal position
+    top: verticalScale(680),    // Adjust vertical position
+    backgroundColor: Color.colorCornflowerblue, // Add light blue background color
+
   },
   nameTypo: { //info text
     textAlign: "left",
@@ -94,6 +142,23 @@ const styles = StyleSheet.create({
     left: horizontalScale(72),
     position: "absolute",
   },
+  adminTypo: { // Text style for the admin and logout labels
+    // top: verticalScale(70),
+    textAlign: "left",
+    color: Color.colorWhite,
+    fontFamily: FontFamily.inriaSansBold,
+    fontWeight: "700",
+    fontSize: FontSize.size_base,
+    position: "absolute",
+  },
+  logOut: { // Log out text positioning
+    left: horizontalScale(14),
+    top: verticalScale(5),
+  },
+  admin: { // Admin text positioning
+    left: horizontalScale(14),
+    top: verticalScale(5),
+  },
   rectangleLayout: {
     height: verticalScale(28),
     width: horizontalScale(82),
@@ -101,7 +166,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   frameLayout: { //button layout
-    borderRadius: Border.br_smi,
+    borderRadius: Border.br_xl,
     top: verticalScale(0),
     height: verticalScale(28),
     width: horizontalScale(72),
@@ -121,11 +186,22 @@ const styles = StyleSheet.create({
   usersChild: {
     top: verticalScale(-1),
   },
+  userDataContainer: {
+    marginTop: verticalScale(1),
+    marginLeft: verticalScale(70),
+  },
+  userDataText: {
+    color: Color.colorWhite,
+    fontFamily: FontFamily.inriaSansBold,
+    fontWeight: "700",
+    fontSize: FontSize.size_base,
+    marginBottom: verticalScale(-20),
+  },
   image2: { // charger icon
     top: verticalScale(760),
     left: horizontalScale(70),
     width: horizontalScale(45),
-    height: verticalScale(60),
+    height: verticalScale(45),
   },
   icon: {
     height: "100%",
@@ -133,14 +209,15 @@ const styles = StyleSheet.create({
   },
   image4: { //schurberg logo
     left: horizontalScale(143),
-    top: verticalScale(30),
+    top: verticalScale(20),
+    // height: verticalScale(10),
     width: horizontalScale(110),
   },
   usersItem: { // light blue box
     top: verticalScale(159),
     left: horizontalScale(39),
     borderRadius: Border.br_11xl,
-    backgroundColor: Color.colorRoyalblue,
+    backgroundColor: Color.colorCornflowerblue,
     width: horizontalScale(294),
     height: verticalScale(201),
     position: "absolute",
@@ -161,7 +238,7 @@ const styles = StyleSheet.create({
     top: verticalScale(246),
   },
   frameChild: {
-    backgroundColor: Color.colorLimegreen_100,
+    backgroundColor: Color.colorLimegreen,
   },
   edit: {
     left: horizontalScale(23),
@@ -182,7 +259,7 @@ const styles = StyleSheet.create({
   },
   usersInner: { // bottom balk
     top: verticalScale(732),
-    backgroundColor: Color.colorDarkslateblue,
+    backgroundColor: Color.colorDodgerblue,
     height: verticalScale(131),
   },
   image21: { // home icon
@@ -194,7 +271,7 @@ const styles = StyleSheet.create({
   },
   image23Icon: { //user icon
     left: horizontalScale(286),
-    top: verticalScale(757),
+    top: verticalScale(715),
     width: horizontalScale(36),
     height: verticalScale(48),
   },

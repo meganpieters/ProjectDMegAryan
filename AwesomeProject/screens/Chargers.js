@@ -19,7 +19,7 @@ const Chargers = () => {
       />
       <Text style={[styles.charger5, styles.chargerTypo1]}>Charger 5</Text>
       <Pressable style={[styles.rectangleParent, styles.rectangleLayout]}>
-        <View style={[styles.frameChild, styles.frameChildLayout]} />
+        <View style={[styles.frameChild, styles.frameChildLayout,]} />
         <Text style={[styles.taken, styles.availableTypo]}>Taken</Text>
       </Pressable>
       <Text style={[styles.availableChargers, styles.chargerTypo1]}>
@@ -93,7 +93,7 @@ const Chargers = () => {
       <View style={[styles.chargersChild5, styles.rectangleIconPosition, { height: verticalScale(1000) }]} />
       <Pressable
         style={styles.image25}
-        onPress={() => navigation.navigate("Homepage")}
+        onPress={() => navigation.navigate("Home")}
       >
         <Image
           style={styles.icon}
@@ -123,12 +123,12 @@ const Chargers = () => {
       />
       <Pressable
         style={[styles.image241, styles.imageIconLayout]}
-        onPress={() => navigation.navigate("Homepage")}
+        onPress={() => navigation.navigate("Home")}
       >
         <Image
-          style={styles.icon}
+          style={styles.image30Icon}
           resizeMode="cover"
-          source={require("../assets/image-4.png")}
+          source={require("../assets/image-30.png")}
         />
       </Pressable>
     </View>
@@ -146,9 +146,9 @@ const styles = StyleSheet.create({
   },
   chargersLayout: { // onderste lichtblauwe vakjes
     height: verticalScale(130),
-    width: horizontalScale(80),
-    backgroundColor: Color.colorRoyalblue,
-    borderRadius: Border.br_xl,
+    width: horizontalScale(82),
+    backgroundColor: Color.colorDodgerblue,
+    borderRadius: Border.br_smi,
     top: verticalScale(480), //change
     position: "absolute",
   },
@@ -157,23 +157,23 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   chargerTypo1: {
-    textAlign: "left",
+    // textAlign: "left",
     color: Color.colorWhite,
     fontFamily: FontFamily.inriaSansBold,
     fontWeight: "700",
     fontSize: FontSize.size_base,
     position: "absolute",
   },
-  rectangleLayout: { //idk
+  rectangleLayout: { //bottom left and middle button
     height: verticalScale(28),
     width: horizontalScale(89),
-    top: 586,
+    top: verticalScale(574),
     position: "absolute",
   },
   frameChildLayout: { //avaiable and taken boxes
-    borderRadius: Border.br_smi,
-    left: 0,
-    top: 0,
+    borderRadius: Border.br_16xl,
+    left: horizontalScale(1),
+    top: verticalScale(1),
     height: verticalScale(28),
     width: horizontalScale(75),
     position: "absolute",
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   framePressablePosition: { // meeste rechter buttons
-    left: horizontalScale(250),
+    left: horizontalScale(260),
     height: verticalScale(28),
     width: horizontalScale(82),
     position: "absolute",
@@ -197,8 +197,8 @@ const styles = StyleSheet.create({
     top: verticalScale(200),
     height: verticalScale(130),
     width: horizontalScale(85),
-    backgroundColor: Color.colorRoyalblue,
-    borderRadius: Border.br_xl,
+    backgroundColor: Color.colorDodgerblue,
+    borderRadius: Border.br_smi,
     position: "absolute",
   },
   iconPosition: { // upper charger icons
@@ -236,17 +236,17 @@ const styles = StyleSheet.create({
     top: verticalScale(430),
   },
   chargersInner: { // middel bottom lichtblauwe box
-    left: horizontalScale(145),
+    left: horizontalScale(155),
     position: "absolute",
   },
   image15Icon: { // bottom middle charger icon
-    width: horizontalScale(45),
+    width: horizontalScale(43),
     height: verticalScale(42),
-    left: horizontalScale(170),
+    left: horizontalScale(177),
     top: verticalScale(520),
   },
   charger5: { //text
-    left: horizontalScale(152),
+    left: horizontalScale(165),
     top: verticalScale(488),
     color: Color.colorWhite,
     fontFamily: FontFamily.inriaSansBold,
@@ -257,10 +257,11 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorFirebrick,
   },
   taken: {
-    left: horizontalScale(18),
+    left: horizontalScale(19),
   },
   rectangleParent: { //middle taken button
-    left: horizontalScale(149),
+    left: horizontalScale(159),
+
 
 
   },
@@ -274,6 +275,7 @@ const styles = StyleSheet.create({
   },
   rectangleView: { //bottom left light blue box
     left: horizontalScale(48),
+    width: 90,
   },
   image9Icon: { //bottum left charger icon
     left: horizontalScale(70),
@@ -290,7 +292,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_base,
   },
   rectangleGroup: {
-    left: horizontalScale(55),
+    left: horizontalScale(50),
   },
   chargersChild1: { // BOTTOM RIGHT LIGHT BLUE BOX
     left: horizontalScale(257),
@@ -323,7 +325,7 @@ const styles = StyleSheet.create({
     left: horizontalScale(269),
   },
   frameChild1: {
-    backgroundColor: Color.colorLimegreen_100,
+    backgroundColor: Color.colorLimegreen,
   },
   available: {
     left: horizontalScale(10),
@@ -368,7 +370,7 @@ const styles = StyleSheet.create({
     top: verticalScale(732),
     width: horizontalScale(431),
     height: verticalScale(90),
-    backgroundColor: Color.colorDarkslateblue,
+    backgroundColor: Color.colorDodgerblue,
   },
   icon: {
     height: "100%",
@@ -393,8 +395,8 @@ const styles = StyleSheet.create({
     height: verticalScale(90),
   },
   image241: { //schuberg philis logo
-    left: horizontalScale(140),
-    top: verticalScale(30),
+    left: horizontalScale(20),
+    top: verticalScale(20),
     width: horizontalScale(111),
   },
   chargers: { //idk
