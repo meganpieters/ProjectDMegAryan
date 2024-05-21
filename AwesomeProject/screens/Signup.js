@@ -1,279 +1,149 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
-
-import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
-import { Pressable } from "react-native";
+import { StyleSheet, View, Text, Image, TextInput, TouchableOpacity, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Color, Border, FontFamily, FontSize } from "../GlobalStyles";
+import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
 
 const Signup = () => {
   const navigation = useNavigation();
+  const [username, setUsername] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [error, setError] = React.useState('');
+
+  const handleSignup = () => {
+    // Validate input fields
+    if (!username || !password || !email || !confirmPassword) {
+      setError('All fields are required');
+    } else if (password !== confirmPassword) {
+      setError('Passwords do not match');
+    } else {
+      // Implement your signup logic here
+    }
+  };
+
   return (
-    <View style={styles.signup}>
-      <View style={styles.rectangleParent}>
-        <View style={styles.groupChild} />
-        <View style={styles.groupItem} />
-        <View style={[styles.groupInner, styles.groupChildShadowBox]} />
-        <View style={styles.groupChild3ShadowBox} />
-        <View style={[styles.groupChild1, styles.groupChildShadowBox]} />
-        <View style={[styles.groupChild2, styles.groupChildShadowBox]} />
-        <View style={styles.groupChild3ShadowBox} />
-        <Text style={styles.signUp}>Sign up</Text>
-        <Text style={[styles.text, styles.textTypo]}>|</Text>
-        <Text style={[styles.text1, styles.textTypo]}>|</Text>
-        <Text style={[styles.text2, styles.textTypo]}>|</Text>
-        <Text style={[styles.text3, styles.textTypo]}>|</Text>
-        <Text style={[styles.username, styles.passwordTypo]}>Username</Text>
-        <Text style={[styles.password, styles.passwordTypo]}>Password</Text>
-        <Text style={[styles.email, styles.passwordTypo]}>Email</Text>
-        <Text style={[styles.confirmPassword, styles.passwordTypo]}>
-          Confirm Password
-        </Text>
-        <Text style={styles.alreadyHaveAnContainer}>
-          <Text style={styles.alreadyHaveAn}>
-            Already have an account? Log in
-          </Text>
-          <Pressable onPress={() => navigation.navigate("Login")}>
-            <Text style={styles.hereTypo}> here</Text>
-          </Pressable>
-        </Text>
-        <Text style={[styles.joinUs, styles.hereTypo]}>Join us!</Text>
-        <Image
-          style={[styles.maleUserIcon, styles.secureIconLayout]}
-          // contentFit="cover"
-          source={require("../assets/male-user.png")}
-        />
-        <Image
-          style={[styles.secureIcon, styles.secureIconLayout]}
-          // contentFit="cover"
-          source={require("../assets/secure.png")}
-        />
-        <Image
-          style={[styles.secureIcon1, styles.secureIconLayout]}
-          //   contentFit="cover"
-          source={require("../assets/secure1.png")}
-        />
-      </View>
+    <View style={styles.container}>
       <Image
-        style={styles.image30Icon}
-        //   contentFit="cover"
+        style={styles.logo}
         source={require("../assets/image-31.png")}
       />
+      <View style={styles.inputContainer}>
+        <Image style={styles.icon} source={require("../assets/male-user.png")} />
+        <TextInput
+          style={styles.input}
+          onChangeText={setUsername}
+          value={username}
+          placeholder="Username"
+          placeholderTextColor={Color.colorDimgray}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Image style={styles.icon} source={require("../assets/secure.png")} />
+        <TextInput
+          style={styles.input}
+          onChangeText={setPassword}
+          value={password}
+          placeholder="Password"
+          placeholderTextColor={Color.colorDimgray}
+          secureTextEntry
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Image style={styles.icon} source={require("../assets/secure1.png")} />
+        <TextInput
+          style={styles.input}
+          onChangeText={setConfirmPassword}
+          value={confirmPassword}
+          placeholder="Confirm Password"
+          placeholderTextColor={Color.colorDimgray}
+          secureTextEntry
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Image style={styles.icon} source={require("../assets/secure.png")} />
+        <TextInput
+          style={styles.input}
+          onChangeText={setEmail}
+          value={email}
+          placeholder="Email"
+          placeholderTextColor={Color.colorDimgray}
+          keyboardType="email-address"
+        />
+      </View>
+      {error !== '' && <Text style={styles.errorText}>{error}</Text>}
+      <TouchableOpacity style={styles.button} onPress={handleSignup}>
+        <Text style={styles.buttonText}>Sign up</Text>
+      </TouchableOpacity>
+      <View style={styles.alreadyHaveAnContainer}>
+        <Text style={styles.alreadyHaveAn}>Already have an account? </Text>
+        <Pressable onPress={() => navigation.navigate("Login")}>
+          <Text style={styles.hereTypo}>Log in here</Text>
+        </Pressable>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  groupChildShadowBox: {
-    height: 68,
-    width: 260,
-    borderRadius: Border.br_6xs,
-    left: 53,
-    backgroundColor: Color.colorWhite,
-    shadowOpacity: 1,
-    elevation: 4,
-    shadowRadius: 4,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    position: "absolute",
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Color.colorDodgerblue,
   },
-  textTypo: {
-    width: 12,
-    fontFamily: FontFamily.inriaSansLight,
-    fontWeight: "300",
-    height: 42,
-    textAlign: "left",
-    color: Color.colorBlack,
-    fontSize: FontSize.size_13xl,
-    position: "absolute",
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '80%',
+    marginBottom: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: 5,
   },
-  passwordTypo: {
-    height: 18,
-    color: Color.colorDimgray,
-    left: 134,
-    fontSize: FontSize.size_smi,
-    fontFamily: FontFamily.inriaSansLight,
-    fontWeight: "300",
-    textAlign: "left",
-    position: "absolute",
+  icon: {
+    width: 20, // Adjust icon size as needed
+    height: 20,
+    marginHorizontal: 10,
   },
-  hereTypo: {
-    fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700",
+  logo: {
+    width: horizontalScale(200),
+    height: verticalScale(150),
+    marginBottom: verticalScale(20),
   },
-  secureIconLayout: {
-    width: 43,
-    height: 42,
-    position: "absolute",
+  input: {
+    flex: 1,
+    height: 40,
+    paddingHorizontal: 10,
   },
-  groupChild: {
-    top: 0,
-    left: 0,
-    backgroundColor: Color.colorDarkslateblue,
-    width: 369,
-    borderRadius: Border.br_xl,
-    shadowOpacity: 1,
-    elevation: 4,
-    shadowRadius: 4,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    height: 615,
-    position: "absolute",
+  button: {
+    width: '80%',
+    backgroundColor: '#1c313a',
+    borderRadius: 5,
+    paddingVertical: 12,
+    marginTop: 20,
   },
-  groupItem: {
-    top: 497,
-    left: 73,
-    width: 206,
-    height: 60,
-    backgroundColor: Color.colorWhite,
-    borderRadius: Border.br_xl,
-    shadowOpacity: 1,
-    elevation: 4,
-    shadowRadius: 4,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    position: "absolute",
-  },
-  groupInner: {
-    top: 125,
-  },
-  groupChild3ShadowBox: {
-    top: 216,
-    height: 68,
-    width: 260,
-    borderRadius: Border.br_6xs,
-    left: 53,
-    backgroundColor: Color.colorWhite,
-    shadowOpacity: 1,
-    elevation: 4,
-    shadowRadius: 4,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    position: "absolute",
-  },
-  groupChild1: {
-    top: 308,
-  },
-  groupChild2: {
-    top: 392,
-  },
-  signUp: {
-    top: 503,
-    left: 118,
-    fontFamily: FontFamily.inriaSansRegular,
-    width: 118,
-    height: 42,
-    color: Color.colorBlack,
-    fontSize: FontSize.size_13xl,
-    textAlign: "left",
-    position: "absolute",
-  },
-  text: {
-    top: 138,
-    left: 110,
-    width: 12,
-  },
-  text1: {
-    top: 230,
-    left: 110,
-    width: 12,
-  },
-  text2: {
-    top: 321,
-    left: 110,
-    width: 12,
-  },
-  text3: {
-    top: 402,
-    left: 111,
-  },
-  username: {
-    top: 152,
-    width: 66,
-  },
-  password: {
-    top: 244,
-    width: 61,
-  },
-  email: {
-    top: 418,
-    width: 36,
-  },
-  confirmPassword: {
-    top: 334,
-    width: 115,
-  },
-  alreadyHaveAn: {
-    fontFamily: FontFamily.inriaSansLight,
-    fontWeight: "300",
+  buttonText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#ffffff',
+    textAlign: 'center',
   },
   alreadyHaveAnContainer: {
-    top: 88,
-    left: 81,
-    color: Color.colorGray,
-    width: 309,
-    height: 51,
-    fontSize: FontSize.size_smi,
-    textAlign: "left",
-    position: "absolute",
+    flexDirection: 'row',
+    marginTop: 20,
   },
-  joinUs: {
-    top: 33,
-    left: 116,
-    fontSize: FontSize.size_21xl,
-    color: Color.colorWhite,
-    width: 152,
-    height: 54,
-    textAlign: "left",
-    fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700",
-    position: "absolute",
+  alreadyHaveAn: {
+    color: '#ffffff',
   },
-  maleUserIcon: {
-    top: 139,
-    left: 67,
-    width: 43,
+  hereTypo: {
+    color: '#ffffff',
+    fontWeight: 'bold',
   },
-  secureIcon: {
-    top: 234,
-    left: 67,
-    width: 43,
-  },
-  secureIcon1: {
-    top: 324,
-    left: 63,
-  },
-  rectangleParent: {
-    top: 194,
-    left: 27,
-    width: 389,
-    height: 615,
-    position: "absolute",
-  },
-  image30Icon: {
-    top: 17,
-    left: -76,
-    width: 574,
-    height: 177,
-    position: "absolute",
-  },
-  signup: {
-    backgroundColor: Color.colorDodgerblue,
-    flex: 1,
-    width: "100%",
-    height: 932,
-    overflow: "hidden",
+  errorText: {
+    color: 'red',
+    marginTop: 10,
   },
 });
 

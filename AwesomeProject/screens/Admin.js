@@ -2,11 +2,11 @@ import * as React from "react";
 import { StyleSheet, View, Pressable, Text, Image } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useNavigation, ParamListBase } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
-
+import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
 const Admin = () => {
-  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const navigation = useNavigation();
 
   return (
     <View style={styles.admin}>
@@ -40,7 +40,7 @@ const Admin = () => {
       />
       <Pressable
         style={styles.image28}
-        onPress={() => navigation.navigate("Users")}
+        onPress={() => navigation.navigate("UsersOverview")}
       >
         <Image
           style={styles.icon}
@@ -50,7 +50,7 @@ const Admin = () => {
       </Pressable>
       <Pressable
         style={[styles.image24, styles.imageLayout1]}
-        onPress={() => navigation.navigate("Chargers")}
+        onPress={() => navigation.navigate("ChargerOverview")}
       >
         <Image
           style={styles.icon}
@@ -61,12 +61,21 @@ const Admin = () => {
       <View style={[styles.adminInner, styles.adminBg]} />
       <Pressable
         style={[styles.image22, styles.imageLayout]}
-        onPress={() => navigation.navigate("Home")}
+        onPress={() => navigation.navigate("Admin")}
       >
         <Image
           style={styles.icon}
           // contentFit="cover"
           source={require("../assets/image-1.png")}
+        />
+      </Pressable>
+      <Pressable
+        style={styles.logoutIcon}
+        onPress={() => navigation.navigate("Home")}
+      >
+        <Image
+          style={styles.icon}
+          source={require("../assets/logout.png")}
         />
       </Pressable>
     </View>
@@ -75,25 +84,33 @@ const Admin = () => {
 
 const styles = StyleSheet.create({
   imageLayout1: {
-    height: 42,
-    width: 45,
-    left: 192,
+    height: verticalScale(40),
+    width: horizontalScale(40),
+    left: horizontalScale(166),
     position: "absolute",
   },
-  adminLayout: {
-    height: 174,
-    width: 232,
+  logoutIcon: {
+    position: "absolute",
+    bottom: verticalScale(15),
+    left: horizontalScale(20),
+    width: horizontalScale(40),
+    height: verticalScale(40),
+  },
+
+  adminLayout: { // charger box
+    height: verticalScale(160),
+    width: horizontalScale(200),
     borderRadius: Border.br_11xl,
-    left: 99,
+    left: horizontalScale(82),
   },
   adminBg: {
     backgroundColor: Color.colorDeepskyblue,
     position: "absolute",
   },
   imageLayout: {
-    height: 39,
-    width: 44,
-    top: 866,
+    height: verticalScale(37),
+    width: horizontalScale(38),
+    bottom: verticalScale(15),
     position: "absolute",
   },
   panelTypo: {
@@ -105,62 +122,63 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   image2: {
-    top: 866,
-    height: 42,
-    width: 45,
+    top: verticalScale(866),
+    height: verticalScale(42),
+    width: horizontalScale(45),
     left: 192,
   },
   adminChild: {
-    top: 149,
+    top: verticalScale(140),
     position: "absolute",
   },
-  adminItem: {
-    top: 349,
-    height: 174,
-    width: 232,
+  adminItem: { // user panel box
+    top: verticalScale(325),
+    height: verticalScale(160),
+    width: horizontalScale(200),
     borderRadius: Border.br_11xl,
-    left: 99,
+    left: horizontalScale(82),
   },
   icon: {
     height: "100%",
     width: "100%",
   },
   image21: {
-    left: 201,
+    left: horizontalScale(201),
   },
-  chargerPanel: {
-    top: 249,
-    left: 166,
+  chargerPanel: { //text
+    top: verticalScale(230),
+    left: horizontalScale(140),
   },
-  userPanel: {
-    top: 447,
-    left: 177,
+  userPanel: { //text
+    top: verticalScale(417),
+    left: horizontalScale(150),
   },
-  afbeelding2Icon: {
-    top: -3,
-    left: 62,
-    width: 306,
-    height: 126,
+  afbeelding2Icon: { //schuberg logo
+    top: verticalScale(-3),
+    left: horizontalScale(55),
+    width: horizontalScale(260),
+    height: verticalScale(110),
     position: "absolute",
   },
-  image28: {
-    left: 196,
-    top: 393,
-    width: 37,
-    height: 43,
+  image28: { // user icon
+
+    top: verticalScale(368),
+    height: verticalScale(40),
+    width: horizontalScale(32),
+    left: horizontalScale(166),
     position: "absolute",
   },
   image24: {
-    top: 198,
+    top: verticalScale(182),
   },
-  adminInner: {
-    top: 841,
+  adminInner: { // bottom bar
+    top: verticalScale(761),
     left: 0,
-    width: 430,
-    height: 90,
+    width: horizontalScale(430),
+    height: verticalScale(90),
   },
   image22: {
-    left: 193,
+    left: horizontalScale(173),
   },
   admin: {
     backgroundColor: Color.colorWhite,
