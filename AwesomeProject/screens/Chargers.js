@@ -1,11 +1,27 @@
 import * as React from "react";
-import { StyleSheet, View, Image, Text, Pressable } from "react-native";
+import { StyleSheet, View, Image, Text, Pressable, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
 
 const Chargers = () => {
   const navigation = useNavigation();
+
+  const ChargingPoleAvailablePress = () => {
+    Alert.alert(
+      "Laadpaal aangevraagd!",
+      "Je hebt een laadpaal aangevraagd! Wacht op de bevestiging!",
+      [{ text: "OK" }]
+    );
+  };
+
+  const ChargingPoleTakenPress = () => {
+    Alert.alert(
+      "Laadpaal in beslag!",
+      "Deze laadpaal is al in beslag! Kies een andere laadpaal!",
+      [{ text: "OK" }]
+    );
+  };
 
   return (
     <View style={styles.chargers}>
@@ -18,8 +34,11 @@ const Chargers = () => {
         source={require("../assets/image-2.png")}
       />
       <Text style={[styles.charger5, styles.chargerTypo1]}>Charger 5</Text>
-      <Pressable style={[styles.rectangleParent, styles.rectangleLayout]}>
-        <View style={[styles.frameChild, styles.frameChildLayout,]} />
+      <Pressable
+        style={[styles.rectangleParent, styles.rectangleLayout]}
+        onPress={ChargingPoleTakenPress}
+      >
+        <View style={[styles.frameChild, styles.frameChildLayout]} />
         <Text style={[styles.taken, styles.availableTypo]}>Taken</Text>
       </Pressable>
       <Text style={[styles.availableChargers, styles.chargerTypo1]}>
@@ -35,7 +54,10 @@ const Chargers = () => {
         source={require("../assets/image-2.png")}
       />
       <Text style={[styles.charger4, styles.chargerTypo1]}>Charger 4</Text>
-      <Pressable style={[styles.rectangleGroup, styles.rectangleLayout]}>
+      <Pressable
+        style={[styles.rectangleGroup, styles.rectangleLayout]}
+        onPress={ChargingPoleTakenPress}
+      >
         <View style={[styles.frameChild, styles.frameChildLayout]} />
         <Text style={[styles.taken, styles.availableTypo]}>Taken</Text>
       </Pressable>
@@ -48,6 +70,7 @@ const Chargers = () => {
       <Text style={[styles.charger6, styles.chargerTypo1]}>Charger 6</Text>
       <Pressable
         style={[styles.rectangleContainer, styles.framePressablePosition]}
+        onPress={ChargingPoleTakenPress}
       >
         <View style={[styles.frameChild, styles.frameChildLayout]} />
         <Text style={[styles.taken, styles.availableTypo]}>Taken</Text>
@@ -59,7 +82,10 @@ const Chargers = () => {
         source={require("../assets/image-2.png")}
       />
       <Text style={[styles.charger3, styles.chargerTypo]}>Charger 3</Text>
-      <Pressable style={[styles.framePressable, styles.framePressablePosition]}>
+      <Pressable
+        style={[styles.framePressable, styles.framePressablePosition]}
+        onPress={ChargingPoleAvailablePress}
+      >
         <View style={[styles.frameChild1, styles.frameChildLayout]} />
         <Text style={[styles.available, styles.availableTypo]}>Available</Text>
       </Pressable>
@@ -72,6 +98,7 @@ const Chargers = () => {
       <Text style={[styles.charger2, styles.chargerTypo]}>Charger 2</Text>
       <Pressable
         style={[styles.rectangleParent1, styles.rectangleParentPosition]}
+        onPress={ChargingPoleAvailablePress}
       >
         <View style={[styles.frameChild1, styles.frameChildLayout]} />
         <Text style={[styles.available1, styles.availableTypo]}>Available</Text>
@@ -85,6 +112,7 @@ const Chargers = () => {
       <Text style={[styles.charger1, styles.chargerTypo]}>Charger 1</Text>
       <Pressable
         style={[styles.rectangleParent2, styles.rectangleParentPosition]}
+        onPress={ChargingPoleAvailablePress}
       >
         <View style={[styles.frameChild1, styles.frameChildLayout]} />
         <Text style={[styles.available1, styles.availableTypo]}>Available</Text>
@@ -261,9 +289,6 @@ const styles = StyleSheet.create({
   },
   rectangleParent: { //middle taken button
     left: horizontalScale(159),
-
-
-
   },
   availableChargers: { //text
     top: verticalScale(169),
