@@ -10,7 +10,7 @@ const Stack = createStackNavigator();
 import { NavigationContainer } from "@react-navigation/native";
 
 //import Home from "./screens/Homepage";
-import RequestPopUp from "./components/RequestPopUp";
+import RequestPopUp from "./screens/RequestPopUp";
 import Chargers from "./screens/Chargers";
 import Users from "./screens/Users";
 
@@ -24,13 +24,10 @@ import Admin from './screens/Admin';
 import ChargerOverview from './screens/ChargerOverview';
 import Signup from './screens/Signup';
 import Home from './screens/Home';
+import StopPopUp from './components/StopPopUp';
 
 const App = () => {
     const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
-
-
-
-
 
     return (
         <>
@@ -45,6 +42,11 @@ const App = () => {
                         <Stack.Screen
                             name="RequestPopUp"
                             component={RequestPopUp}
+                            options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                            name="StopPopUp"
+                            component={StopPopUp}
                             options={{ headerShown: false }}
                         />
                         <Stack.Screen

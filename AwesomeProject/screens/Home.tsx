@@ -4,20 +4,12 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation, ParamListBase } from "@react-navigation/native";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
-import { Alert } from "react-native";
+
 
 
 const Home = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-  const showRequestAlert = () => {
-    Alert.alert(
-      "Request",
-      "Je hebt op de request knop geklikt!",
-      [
-        { text: "OK" }
-      ]
-    );
-  };
+
 
 
   return (
@@ -37,7 +29,7 @@ const Home = () => {
       <Pressable
         style={[styles.framePressable, styles.frameLayout]}
         onPress={() => {
-          showRequestAlert();
+
           navigation.navigate("RequestPopUp");
         }}
       >
@@ -56,7 +48,7 @@ const Home = () => {
         </View>
       </Pressable>
 
-      <Pressable style={[styles.rectangleGroup, styles.frameChildLayout]}>
+      <Pressable onPress={() => navigation.navigate("StopPopUp")} style={[styles.rectangleGroup, styles.frameChildLayout]}>
         <View style={[styles.frameItem, styles.framePosition]} />
         <Text style={[styles.stopCharging, styles.requestTypo]}>Stop Charging</Text>
         <View style={styles.frameInner} />
