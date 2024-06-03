@@ -33,8 +33,8 @@ const App = () => {
                             options={{ headerShown: false }}
                         />
                         <Stack.Screen
-                            name="Chargers"
-                            component={Chargers}
+                            name="StopPopUp"
+                            component={StopPopUp}
                             options={{ headerShown: false }}
                         />
                         <Stack.Screen
