@@ -1,19 +1,26 @@
 import * as React from "react";
 import { StyleSheet, View, Text, Image, TextInput, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
-import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { Color } from "../GlobalStyles";
+import { horizontalScale, verticalScale } from '../Metrics';
 
 const Login = () => {
   const navigation = useNavigation();
+  const route = useRoute();
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState('');
 
   const handleLogin = () => {
-    if (username === 'example' && password === 'password') {
+    if (username === 'user' && password === 'password') {
+      route.params.setIsLoggedIn(true);
       navigation.navigate("Home");
-    } else {
+    }
+    if (username === 'admin' && password === 'password') {
+      route.params.setIsLoggedIn(true);
+      navigation.navigate("Admin");
+    }
+    else {
       setError('Invalid username or password');
     }
   };
@@ -27,7 +34,7 @@ const Login = () => {
       <View style={styles.inputContainer}>
         <Image
           style={styles.icon}
-          source={require("../assets/maleuser.png")} // Assuming "maleicon" is your username icon
+          source={require("../assets/maleuser.png")}
         />
         <TextInput
           style={styles.input}
@@ -40,7 +47,7 @@ const Login = () => {
       <View style={styles.inputContainer}>
         <Image
           style={styles.icon}
-          source={require("../assets/secure.png")} // Assuming "secure" is your password icon
+          source={require("../assets/secure.png")}
         />
         <TextInput
           style={styles.input}
@@ -86,7 +93,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   icon: {
-    width: 20, // Adjust icon size as needed
+    width: 20,
     height: 20,
     marginHorizontal: 10,
   },
