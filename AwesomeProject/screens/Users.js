@@ -66,6 +66,7 @@ const Users = () => {
       </Pressable>
       <Pressable
         style={[styles.logoutButton]}
+
         onPress={() => navigation.navigate("Login")}
       >
         <View style={[styles.frameChild, styles.frameLayout]} />

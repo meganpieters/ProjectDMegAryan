@@ -5,8 +5,12 @@ import { useNavigation, ParamListBase } from "@react-navigation/native";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
 
+
+
 const Home = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+
+
 
   return (
     <View style={styles.home}>
@@ -24,7 +28,10 @@ const Home = () => {
       <View style={[styles.rectangleView, styles.homeInnerPosition]} />
       <Pressable
         style={[styles.framePressable, styles.frameLayout]}
-        onPress={() => navigation.navigate("RequestPopUp")}
+        onPress={() => {
+
+          navigation.navigate("RequestPopUp");
+        }}
       >
         <View style={[styles.frameWrapper, styles.framePosition]}>
           <View style={[styles.frameWrapper, styles.framePosition]}>
@@ -40,7 +47,8 @@ const Home = () => {
           </View>
         </View>
       </Pressable>
-      <Pressable style={[styles.rectangleGroup, styles.frameChildLayout]}>
+
+      <Pressable onPress={() => navigation.navigate("StopPopUp")} style={[styles.rectangleGroup, styles.frameChildLayout]}>
         <View style={[styles.frameItem, styles.framePosition]} />
         <Text style={[styles.stopCharging, styles.requestTypo]}>Stop Charging</Text>
         <View style={styles.frameInner} />

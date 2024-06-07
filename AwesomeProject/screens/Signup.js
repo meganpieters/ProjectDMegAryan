@@ -10,18 +10,69 @@ const Signup = () => {
   const [password, setPassword] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [licensePlate, setLicensePlate] = React.useState('');
   const [error, setError] = React.useState('');
 
   const handleSignup = () => {
     // Validate input fields
-    if (!username || !password || !email || !confirmPassword) {
-      setError('All fields are required');
-    } else if (password !== confirmPassword) {
-      setError('Passwords do not match');
-    } else {
-      // Implement your signup logic here
+    if (username === '') {
+      setError('Username is required');
+      return;
     }
+    if (password === '') {
+      setError('Password is required');
+      return;
+    }
+    if (confirmPassword === '') {
+      setError('Confirm password is required');
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    if (email === '') {
+      setError('Email is required');
+      return;
+    }
+    if (licensePlate === '') {
+      setError('License plate is required');
+      return;
+    }
+
+    // Form data
+    const form_data = {
+      first_name: username,
+      last_name: username,
+      email,
+      kenteken: licensePlate,
+      admin: 0,
+    };
+
+    // Send data to the backend
+    fetch('http://127.0.0.1:8000/api/users/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(form_data)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        if (data.ok && data.last_id > 0) {
+          navigation.navigate("Login");
+        } else {
+          setError(data.message || 'An error occurred');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        setError('An error occurred');
+      });
   };
+
+
 
   return (
     <View style={styles.container}>
@@ -71,6 +122,16 @@ const Signup = () => {
           placeholder="Email"
           placeholderTextColor={Color.colorDimgray}
           keyboardType="email-address"
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Image style={styles.icon} source={require("../assets/license.png")} />
+        <TextInput
+          style={styles.input}
+          onChangeText={setLicensePlate}
+          value={licensePlate}
+          placeholder="License Plate"
+          placeholderTextColor={Color.colorDimgray}
         />
       </View>
       {error !== '' && <Text style={styles.errorText}>{error}</Text>}
