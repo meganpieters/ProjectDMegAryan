@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './screens/Home';
-import RequestPopUp from "./components/RequestPopUp";
+import RequestPopUp from "./screens/RequestPopUp";
 import Chargers from "./screens/Chargers";
 import Users from "./screens/Users";
 import Login from './screens/Login';
@@ -11,6 +11,7 @@ import UsersOverview from './screens/UsersOverview';
 import Admin from './screens/Admin';
 import ChargerOverview from './screens/ChargerOverview';
 import Signup from './screens/Signup';
+import StopPopUp from './components/StopPopUp';
 
 const Stack = createStackNavigator();
 
@@ -58,6 +59,11 @@ const App = () => {
                             options={{ headerShown: false }}
                         />
                         <Stack.Screen
+                            name="Chargers"
+                            component={Chargers}
+                            options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
                             name="Login"
                             component={Login}
                             options={{ headerShown: false }}
@@ -71,6 +77,11 @@ const App = () => {
                             component={Login}
                             options={{ headerShown: false }}
                             initialParams={{ setIsLoggedIn }}
+                        />
+                        <Stack.Screen
+                            name="Home"
+                            component={Home}
+                            options={{ headerShown: false }}
                         />
                         <Stack.Screen
                             name="Signup"
