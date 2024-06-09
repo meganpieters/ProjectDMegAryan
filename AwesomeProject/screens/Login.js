@@ -12,7 +12,7 @@ const Login = () => {
   const [error, setError] = React.useState('');
 
   const handleLogin = () => {
-    if (username === 'user' && password === 'password') {
+    if (username === 'User' && password === 'Password') {
       route.params.setIsLoggedIn(true);
       navigation.navigate("Home");
     }

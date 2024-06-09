@@ -4,11 +4,10 @@ import { useNavigation } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 import { horizontalScale, verticalScale } from '../Metrics';
-import { Picker } from "@react-native-picker/picker";
 
 const RequestPopUp = () => {
   const navigation = useNavigation();
-  const [selectedPercentage, setSelectedPercentage] = useState("1");
+  const [selectedPercentage, setSelectedPercentage] = useState("");
   const [distance, setDistance] = useState("");
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
@@ -26,10 +25,10 @@ const RequestPopUp = () => {
     setDate(currentDate);
   };
 
-  const showRequestAlert = () => {
+  const showRequestAlert = (message) => {
     Alert.alert(
       "Request",
-      "The request was made successfully",
+      message,
       [{ text: "OK" }]
     );
   };
@@ -38,8 +37,39 @@ const RequestPopUp = () => {
     if (!selectedPercentage || !distance || !date) {
       setError("Please fill in all fields");
     } else {
-      showRequestAlert();
-      navigation.navigate("Home");
+      const form_data = {
+        percentage: parseFloat(selectedPercentage),
+        distance: parseInt(distance),
+        eta: date.getHours() * 60 + date.getMinutes(),
+        timestamp: Math.floor(Date.now() / 1000),
+        user_id: 1, // Replace with actual user ID from your authentication method
+        is_done: false // Changed to boolean false
+      };
+
+      // Log the form_data to the console
+      console.log("Form data being sent:", form_data);
+
+      fetch('http://127.0.0.1:8000/api/queue', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(form_data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log("Response from server:", data); // Log the response data to the console
+          if (data.ok && data.last_id > 0) {
+            showRequestAlert(data.message);
+            navigation.navigate("Home");
+          } else {
+            showRequestAlert("Request failed, please try again.");
+          }
+        })
+        .catch(error => {
+          showRequestAlert("An error occurred: " + error.message);
+          console.error('Error:', error);
+        });
     }
   };
 
@@ -55,17 +85,13 @@ const RequestPopUp = () => {
 
       <View style={styles.dropdownContainer}>
         <Text style={styles.label}>Percentage</Text>
-        <View style={styles.pickerWrapper}>
-          <Picker
-            selectedValue={selectedPercentage}
-            style={styles.picker}
-            onValueChange={(itemValue) => setSelectedPercentage(itemValue)}
-          >
-            {Array.from({ length: 100 }, (_, i) => (
-              <Picker.Item key={i} label={`${i + 1}`} value={`${i + 1}`} />
-            ))}
-          </Picker>
-        </View>
+        <TextInput
+          style={styles.input}
+          onChangeText={setSelectedPercentage}
+          value={selectedPercentage}
+          placeholder="Enter percentage"
+          keyboardType="numeric"
+        />
       </View>
 
       <View style={styles.datetimeContainer}>
@@ -90,7 +116,7 @@ const RequestPopUp = () => {
       <View style={styles.distanceContainer}>
         <Text style={styles.label}>Distance</Text>
         <TextInput
-          style={styles.distanceInput}
+          style={styles.input}
           onChangeText={setDistance}
           value={distance}
           placeholder="Enter distance in KM"
@@ -145,14 +171,11 @@ const styles = StyleSheet.create({
     color: Color.colorWhite,
     marginBottom: verticalScale(10),
   },
-  pickerWrapper: {
+  input: {
+    height: verticalScale(55),
     backgroundColor: Color.colorWhite,
     borderRadius: Border.br_16xl,
-    overflow: "hidden",
-  },
-  picker: {
-    height: verticalScale(55),
-    width: "100%",
+    paddingHorizontal: horizontalScale(10),
   },
   dateTimeButton: {
     height: verticalScale(55),
@@ -164,12 +187,6 @@ const styles = StyleSheet.create({
   dateTimeText: {
     fontSize: FontSize.size_base,
     color: Color.colorBlack,
-  },
-  distanceInput: {
-    height: verticalScale(55),
-    backgroundColor: Color.colorWhite,
-    borderRadius: Border.br_16xl,
-    paddingHorizontal: horizontalScale(10),
   },
   requestButton: {
     marginTop: verticalScale(40),
