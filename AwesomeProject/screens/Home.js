@@ -4,13 +4,29 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation, ParamListBase } from "@react-navigation/native";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
-
+import { useState } from "react";
+import { useEffect } from "react";
 
 
 const Home = () => {
-  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const navigation = useNavigation();
+  const [chargers, setChargers] = useState([]);
 
-  const handleStopChargingPress = (chargerID: string) => {
+  useEffect(() => {
+    fetchChargers();
+  }, []);
+
+  const fetchChargers = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/chargers');
+      const data = await response.json();
+      setChargers(data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleStopChargingPress = (chargerID) => {
     navigation.navigate("StopPopUp", { chargerID });
   };
 
@@ -49,12 +65,17 @@ const Home = () => {
           </View>
         </View>
       </Pressable>
-
-      <Pressable onPress={() => handleStopChargingPress("charger1ID")} style={[styles.rectangleGroup, styles.frameChildLayout]}>
-        <View style={[styles.frameItem, styles.framePosition]} />
-        <Text style={[styles.stopCharging, styles.requestTypo]}>Stop Charging</Text>
-        <View style={styles.frameInner} />
-      </Pressable>
+      {chargers.map((charger) => (
+        <Pressable
+          key={charger.id}
+          onPress={() => handleStopChargingPress(charger.id)}
+          style={[styles.rectangleGroup, styles.frameChildLayout]}
+        >
+          <View style={[styles.frameItem, styles.framePosition]} />
+          <Text style={[styles.stopCharging, styles.requestTypo]}>Stop Charging</Text>
+          <View style={styles.frameInner} />
+        </Pressable>
+      ))}
       <Text style={[styles.text, styles.textFlexBox]}>40%</Text>
       <Text style={[styles.teslaModelX, styles.teslaModelXFlexBox]}>
         Tesla Model X Rotterdam ID #2005
