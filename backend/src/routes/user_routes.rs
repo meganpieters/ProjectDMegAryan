@@ -1,4 +1,3 @@
-use diesel::dsl::Update;
 use rocket::Route;
 use rocket::serde::json::Json;
 use crate::models::Users;

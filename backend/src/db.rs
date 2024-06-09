@@ -12,3 +12,7 @@ pub fn establish_connection() -> SqliteConnection {
     SqliteConnection::establish(&database_url)
                      .expect(&format!("Error met verbinden, {}", database_url))
 }
+
+pub fn establish_test_connection() -> SqliteConnection {
+    SqliteConnection::establish(":memory:").unwrap()
+}

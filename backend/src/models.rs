@@ -34,3 +34,21 @@ pub struct Queue {
     pub user_id: i32,
     pub route_request_id: i32,
 }
+
+#[derive(Serialize, Deserialize, Clone)]
+pub struct Car {
+    pub kenteken: String,
+    pub brand: String,
+    pub make: String,
+    pub max_watt: f32,
+}
+
+#[derive(Queryable, Selectable, Serialize, Deserialize, AsChangeset, Identifiable, Clone, Insertable)]
+#[diesel(table_name = crate::schema::ChargingStations)]
+#[serde(crate = "rocket::serde")]
+pub struct ChargingStations {
+    pub id: String,
+    pub status: String,
+    pub max_power: f32,
+    pub route_request_id: i32,
+}

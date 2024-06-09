@@ -1,0 +1,193 @@
+
+digraph structs {
+
+
+rankdir="LR"
+
+
+node [shape=none]
+
+ChargingStations [label=<
+            <TABLE BORDER="0" CELLSPACING="0" CELLBORDER="1">
+                <TR>
+                    <TD COLSPAN="2"><B>ChargingStations</B></TD>
+                </TR>
+            
+                <TR>
+                    <TD PORT="id_to">🔑</TD>
+                    <TD PORT="id_from">id</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="status_to">&nbsp;</TD>
+                    <TD PORT="status_from">status</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="max_power_to">&nbsp;</TD>
+                    <TD PORT="max_power_from">max_power</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="route_request_id_to">&nbsp;</TD>
+                    <TD PORT="route_request_id_from">route_request_id</TD>
+                </TR>
+            
+            </TABLE>
+        >];
+        
+Queue [label=<
+            <TABLE BORDER="0" CELLSPACING="0" CELLBORDER="1">
+                <TR>
+                    <TD COLSPAN="2"><B>Queue</B></TD>
+                </TR>
+            
+                <TR>
+                    <TD PORT="id_to">🔑</TD>
+                    <TD PORT="id_from">id</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="place_to">&nbsp;</TD>
+                    <TD PORT="place_from">place</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="user_id_to">&nbsp;</TD>
+                    <TD PORT="user_id_from">user_id</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="route_request_id_to">&nbsp;</TD>
+                    <TD PORT="route_request_id_from">route_request_id</TD>
+                </TR>
+            
+            </TABLE>
+        >];
+        
+RouteRequests [label=<
+            <TABLE BORDER="0" CELLSPACING="0" CELLBORDER="1">
+                <TR>
+                    <TD COLSPAN="2"><B>RouteRequests</B></TD>
+                </TR>
+            
+                <TR>
+                    <TD PORT="id_to">🔑</TD>
+                    <TD PORT="id_from">id</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="percentage_to">&nbsp;</TD>
+                    <TD PORT="percentage_from">percentage</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="distance_to">&nbsp;</TD>
+                    <TD PORT="distance_from">distance</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="eta_to">&nbsp;</TD>
+                    <TD PORT="eta_from">eta</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="timestamp_to">&nbsp;</TD>
+                    <TD PORT="timestamp_from">timestamp</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="is_done_to">&nbsp;</TD>
+                    <TD PORT="is_done_from">is_done</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="user_id_to">&nbsp;</TD>
+                    <TD PORT="user_id_from">user_id</TD>
+                </TR>
+            
+            </TABLE>
+        >];
+        
+Users [label=<
+            <TABLE BORDER="0" CELLSPACING="0" CELLBORDER="1">
+                <TR>
+                    <TD COLSPAN="2"><B>Users</B></TD>
+                </TR>
+            
+                <TR>
+                    <TD PORT="id_to">🔑</TD>
+                    <TD PORT="id_from">id</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="first_name_to">&nbsp;</TD>
+                    <TD PORT="first_name_from">first_name</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="last_name_to">&nbsp;</TD>
+                    <TD PORT="last_name_from">last_name</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="email_to">&nbsp;</TD>
+                    <TD PORT="email_from">email</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="kenteken_to">&nbsp;</TD>
+                    <TD PORT="kenteken_from">kenteken</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="admin_to">&nbsp;</TD>
+                    <TD PORT="admin_from">admin</TD>
+                </TR>
+            
+            </TABLE>
+        >];
+        
+__diesel_schema_migrations [label=<
+            <TABLE BORDER="0" CELLSPACING="0" CELLBORDER="1">
+                <TR>
+                    <TD COLSPAN="2"><B>__diesel_schema_migrations</B></TD>
+                </TR>
+            
+                <TR>
+                    <TD PORT="version_to">🔑</TD>
+                    <TD PORT="version_from">version</TD>
+                </TR>
+            
+
+                <TR>
+                    <TD PORT="run_on_to">&nbsp;</TD>
+                    <TD PORT="run_on_from">run_on</TD>
+                </TR>
+            
+            </TABLE>
+        >];
+        
+ChargingStations:route_request_id_from:e -> RouteRequests:id_to:w
+Queue:route_request_id_from:e -> RouteRequests:id_to:w
+Queue:user_id_from:e -> Users:id_to:w
+RouteRequests:user_id_from:e -> Users:id_to:w
+
+}
