@@ -57,7 +57,7 @@ pub fn update_user(conn: &mut SqliteConnection, id_to_update: i32, data: Json<Us
         Ok(updated_user) => {
             Ok((true, "User updated successfully".to_string(), updated_user.try_into().unwrap()))
         }
-        Err(err) => {
+        Err(_err) => {
             Err(diesel::result::Error::NotFound)
         }
     }
@@ -70,7 +70,7 @@ pub fn delete_user(conn: &mut SqliteConnection, id_to_delete: i32) -> DeleteRetu
         Ok(user_deleted) => {
             Ok((true, "User deleted successfully".to_string(), user_deleted.try_into().unwrap()))
         }
-        Err(err) => {
+        Err(_err) => {
             Err(diesel::result::Error::NotFound)
         }
     }
