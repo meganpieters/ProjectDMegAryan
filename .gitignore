@@ -3,3 +3,4 @@
 *.bin
 /backend/target/debug/deps
 /backend/target
+/backend/target
