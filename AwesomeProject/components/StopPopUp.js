@@ -7,12 +7,12 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 const StopPopUp = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { chargerID } = route.params;
+  const { charger } = route.params;
 
 
   const stopCharging = async () => {
     try {
-      const response = await fetch(`http://10.0.2.2:8000/api/chargers/${chargerID}/stop`, {
+      const response = await fetch(`http://10.0.2.2:8000/api/chargers/${charger.id}/stop`, {
         method: 'POST',
       });
 

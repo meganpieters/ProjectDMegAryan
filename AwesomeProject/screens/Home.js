@@ -26,8 +26,9 @@ const Home = () => {
     }
   };
 
-  const handleStopChargingPress = (chargerID) => {
-    navigation.navigate("StopPopUp", { chargerID });
+  const handleStopChargingPress = () => {
+    chargers.map((charger) => (
+      navigation.navigate("StopPopUp", { charger })))
   };
 
   return (
@@ -65,17 +66,17 @@ const Home = () => {
           </View>
         </View>
       </Pressable>
-      {chargers.map((charger) => (
-        <Pressable
-          key={charger.id}
-          onPress={() => handleStopChargingPress(charger.id)}
-          style={[styles.rectangleGroup, styles.frameChildLayout]}
-        >
-          <View style={[styles.frameItem, styles.framePosition]} />
-          <Text style={[styles.stopCharging, styles.requestTypo]}>Stop Charging</Text>
-          <View style={styles.frameInner} />
-        </Pressable>
-      ))}
+
+      <Pressable
+
+        onPress={() => handleStopChargingPress()}
+        style={[styles.rectangleGroup, styles.frameChildLayout]}
+      >
+        <View style={[styles.frameItem, styles.framePosition]} />
+        <Text style={[styles.stopCharging, styles.requestTypo]}>Stop Charging</Text>
+        <View style={styles.frameInner} />
+      </Pressable>
+
       <Text style={[styles.text, styles.textFlexBox]}>40%</Text>
       <Text style={[styles.teslaModelX, styles.teslaModelXFlexBox]}>
         Tesla Model X Rotterdam ID #2005
