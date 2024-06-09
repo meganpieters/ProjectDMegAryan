@@ -1,11 +1,45 @@
-import * as React from "react";
+import React from "react";
 import { Image, StyleSheet, View, Text, Pressable } from "react-native";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
-import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
-import { useNavigation } from "@react-navigation/native";
+import { horizontalScale, verticalScale } from '../Metrics';
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const StopPopUp = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { chargerID } = route.params;
+
+
+  const stopCharging = async () => {
+    try {
+      const response = await fetch(`http://10.0.2.2:8000/api/chargers/${chargerID}/stop`, {
+        method: 'POST',
+      });
+
+      const text = await response.text(); // Read the response as text
+      console.log("Response text:", text);
+
+      try {
+        const data = JSON.parse(text); // Attempt to parse the text as JSON
+
+        if (response.ok) {
+          console.log("Charging stopped successfully:", data);
+          Alert.alert("Success", "Charging stopped successfully.");
+          navigation.navigate("Home");
+        } else {
+          console.error("Failed to stop charging:", data.message);
+          Alert.alert("Error", "Failed to stop charging. Please try again.");
+        }
+      } catch (jsonError) {
+        console.error("Error parsing JSON:", jsonError);
+        Alert.alert("Error", "Received unexpected response from the server.");
+      }
+    } catch (error) {
+      console.error("Error stopping request:", error);
+      Alert.alert("Error", "An error occurred while stopping the charging. Please try again.");
+    }
+  };
+
   return (
     <View style={styles.stopPopUp}>
       <Image
@@ -19,8 +53,8 @@ const StopPopUp = () => {
         source={require("../assets/highpriority.png")}
       />
       <View style={[styles.stopPopUpItem, styles.stopLayout]} />
-      <Pressable onPress={() => navigation.navigate("Home")}>
-        <Text style={[styles.confirm, styles.cancelTypo]}>{`Confirm `}</Text>
+      <Pressable onPress={stopCharging}>
+        <Text style={[styles.confirm, styles.cancelTypo]}>Confirm</Text>
       </Pressable>
       <Pressable onPress={() => navigation.navigate("Home")}>
         <Text style={[styles.cancel, styles.cancelTypo]}>Cancel</Text>
@@ -40,7 +74,7 @@ const StopPopUp = () => {
 };
 
 const styles = StyleSheet.create({
-  stopLayout: { // button layouts
+  stopLayout: {
     height: verticalScale(51),
     width: horizontalScale(120),
     borderRadius: Border.br_9xs,
@@ -65,18 +99,10 @@ const styles = StyleSheet.create({
   confirm: {
     left: horizontalScale(98),
     top: verticalScale(500),
-    color: Color.colorWhite,
-    fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700",
-    fontSize: FontSize.size_base,
   },
   cancel: {
     left: horizontalScale(237),
     top: verticalScale(500),
-    color: Color.colorWhite,
-    fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700",
-    fontSize: FontSize.size_base,
   },
   closeIcon: {
     top: verticalScale(32),
@@ -89,8 +115,7 @@ const styles = StyleSheet.create({
     top: verticalScale(423),
     left: horizontalScale(67),
   },
-  priority:
-  {
+  priority: {
     top: verticalScale(303),
     left: horizontalScale(145),
   },

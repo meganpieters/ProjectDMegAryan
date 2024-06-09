@@ -10,7 +10,9 @@ import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
 const Home = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
-
+  const handleStopChargingPress = (chargerID: string) => {
+    navigation.navigate("StopPopUp", { chargerID });
+  };
 
   return (
     <View style={styles.home}>
@@ -48,7 +50,7 @@ const Home = () => {
         </View>
       </Pressable>
 
-      <Pressable onPress={() => navigation.navigate("StopPopUp")} style={[styles.rectangleGroup, styles.frameChildLayout]}>
+      <Pressable onPress={() => handleStopChargingPress("charger1ID")} style={[styles.rectangleGroup, styles.frameChildLayout]}>
         <View style={[styles.frameItem, styles.framePosition]} />
         <Text style={[styles.stopCharging, styles.requestTypo]}>Stop Charging</Text>
         <View style={styles.frameInner} />

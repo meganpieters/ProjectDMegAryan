@@ -8,3 +8,4 @@
 /backend/target/debug
 /backend/target/debug/deps
 *.d
+backend/target/.rustc_info.json
