@@ -1,9 +1,11 @@
 import * as React from "react";
-import { Image, StyleSheet, View, Text } from "react-native";
+import { Image, StyleSheet, View, Text, Pressable } from "react-native";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
+import { useNavigation } from "@react-navigation/native";
 
 const StopPopUp = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.stopPopUp}>
       <Image
@@ -17,13 +19,19 @@ const StopPopUp = () => {
         source={require("../assets/highpriority.png")}
       />
       <View style={[styles.stopPopUpItem, styles.stopLayout]} />
-      <Text style={[styles.confirm, styles.cancelTypo]}>{`Confirm `}</Text>
-      <Text style={[styles.cancel, styles.cancelTypo]}>Cancel</Text>
-      <Image
-        style={styles.closeIcon}
-        resizeMode="cover"
-        source={require("../assets/close.png")}
-      />
+      <Pressable onPress={() => navigation.navigate("Home")}>
+        <Text style={[styles.confirm, styles.cancelTypo]}>{`Confirm `}</Text>
+      </Pressable>
+      <Pressable onPress={() => navigation.navigate("Home")}>
+        <Text style={[styles.cancel, styles.cancelTypo]}>Cancel</Text>
+      </Pressable>
+      <Pressable onPress={() => navigation.navigate("Home")}>
+        <Image
+          style={styles.closeIcon}
+          resizeMode="cover"
+          source={require("../assets/close.png")}
+        />
+      </Pressable>
       <Text style={[styles.areYouSure, styles.cancelTypo]}>
         Are you sure you want to stop charging?
       </Text>

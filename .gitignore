@@ -5,3 +5,7 @@
 /backend/target
 /backend/target
 /backend/target/debug
+/backend/target
+/backend/target/debug
+/backend/target/debug/deps
+*.d
