@@ -18,7 +18,7 @@ const Home = () => {
 
   const fetchChargers = async () => {
     try {
-      const response = await fetch('http://10.0.2.2:8000/api/chargers');
+      const response = await fetch('http://127.0.0.1:8000/api/chargers');
       const data = await response.json();
       setChargers(data.data);
     } catch (error) {
