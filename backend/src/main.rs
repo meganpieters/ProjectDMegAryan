@@ -33,5 +33,6 @@ fn rocket() -> _ {
 #[cfg(test)]
 mod tests {
     mod user_handler_tests;
+    mod charger_handler_tests;
 }
 

@@ -92,29 +92,24 @@ pub fn stop_charging(conn: &mut SqliteConnection, route_request_id_to_update: i3
     use crate::schema::ChargingStations::dsl::{ChargingStations, id as charger_id};
 
     conn.transaction::<_, diesel::result::Error, _>(|conn| {
-        // Update the RouteRequests table to mark the route request as done
         diesel::update(RouteRequests.filter(route_id.eq(route_request_id_to_update)))
             .set(is_done.eq(true))
             .execute(conn)?;
 
-        // Find the charging station associated with this route request
         let charger = ChargingStations
             .filter(route_request_id.eq(route_request_id_to_update))
             .first::<crate::models::ChargingStations>(conn)
             .optional()?;
 
-        // If there's no associated charger, return an error
         let charger = match charger {
             Some(charger) => charger,
             None => return Err(diesel::result::Error::NotFound),
         };
 
-        // Update the charging station to set its status to "available" and set the route_request_id to 0
         diesel::update(ChargingStations.filter(charger_id.eq(charger.id.clone())))
             .set((status.eq("available"), route_request_id.eq(0)))
             .execute(conn)?;
 
-        // If everything succeeds, return a success message
         Ok((true, "Charging stopped successfully. Charger is now available.".to_string(), true))
     }).map_err(|err| err.into())
 }

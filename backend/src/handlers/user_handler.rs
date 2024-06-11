@@ -14,14 +14,20 @@ pub struct NewUser {
     pub email: String,
     pub kenteken: String,
     pub admin: i32,
+    pub password: String,
 }
 
 pub fn create_user(conn: &mut SqliteConnection, data: Json<NewUser>) -> PostReturn {
+    use sha256::digest;
     use crate::schema::Users;
     use crate::models::Users as UsersModel;
     use crate::schema::Users::dsl::*;
+    
+    // maak een mutable kopie van de user om de password te hashen
+    let mut new_user = data.into_inner();
+    new_user.password = digest(new_user.password);
 
-    diesel::insert_into(Users::table).values(&data.into_inner()).execute(conn)?;
+    diesel::insert_into(Users::table).values(&new_user).execute(conn)?;
     match Users.order(id.desc()).first::<UsersModel>(conn) {
         Ok(last_user) => {
             Ok((true, "User created successfully".to_string(), last_user.id))
@@ -50,10 +56,26 @@ pub fn get_user(conn: &mut SqliteConnection, id_to_find: i32) -> GetReturn<Users
     }
 }
 
-pub fn update_user(conn: &mut SqliteConnection, id_to_update: i32, data: Json<Users>) -> UpdateReturn<i32> {
+pub fn get_user_by_email(conn: &mut SqliteConnection, email_to_find: String) -> GetReturn<Users> {
     use crate::schema::Users::dsl::*;
 
-    match diesel::update(Users.filter(id.eq(id_to_update))).set(&data.into_inner()).execute(conn) {
+    if let Some(found_user) = Users.filter(email.eq(email_to_find)).first(conn).optional()? {
+        Ok((true, "User found successfully".to_string(), found_user))
+    } else {
+        Err(diesel::result::Error::NotFound)
+    }
+}
+
+pub fn update_user(conn: &mut SqliteConnection, id_to_update: i32, data: Json<Users>) -> UpdateReturn<i32> {
+    use sha256::digest;
+    use crate::schema::Users::dsl::*;
+
+    // moet dit hier helaas ook nog een keer hashen
+    // maak een mutable kopie van de user om de password te hashen
+    let mut new_user = data.into_inner();
+    new_user.password = digest(new_user.password);
+
+    match diesel::update(Users.filter(id.eq(id_to_update))).set(new_user).execute(conn) {
         Ok(updated_user) => {
             Ok((true, "User updated successfully".to_string(), updated_user.try_into().unwrap()))
         }

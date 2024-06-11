@@ -38,6 +38,7 @@ diesel::table! {
         email -> Text,
         kenteken -> Text,
         admin -> Integer,
+        password -> Text,
     }
 }
 

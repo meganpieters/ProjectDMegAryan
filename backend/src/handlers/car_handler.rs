@@ -12,15 +12,21 @@ pub fn calculate_charge(user_car: &Car, request_info: &RouteRequests) -> f32 {
 
     let now = chrono::Local::now();
     let time_passed = (now.timestamp() - request_info.timestamp as i64) as f32 / 3600.0;
-    let watt_hour = user_car.max_watt * 1000.0;
-    let charged = (watt_hour / VOLTAGE) * (AMPERE / 1000.0) * time_passed;
-    return charged;
+    let charging_power = VOLTAGE * AMPERE;
+    let energy_added = charging_power * time_passed;
+    let charged_kwh = energy_added / 1000.0;
+
+    return charged_kwh;
 }
 
 pub fn calculate_charge_percentage(car: &Car, request_info: &RouteRequests) -> f32 {
-    let current_charge = calculate_charge(car, request_info);
-    let current_watt = request_info.percentage * car.max_watt;
-    (current_watt / current_charge) * 100.0
+    let energy_added = calculate_charge(car, request_info);
+    let initial_energy = request_info.percentage * car.max_watt;
+
+    let new_total_energy = initial_energy + energy_added;
+    let new_percentage = (new_total_energy / car.max_watt) * 100.0;
+
+    return new_percentage;
 }
 
 pub async fn get_user_car_data(user: &Users) -> Result<Car, Box<dyn Error>> {
