@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 import { horizontalScale, verticalScale } from '../Metrics';
+import { getIPAddress } from "./IPAddress";
 
 const RequestPopUp = () => {
   const navigation = useNavigation();
@@ -48,8 +49,8 @@ const RequestPopUp = () => {
 
       // Log the form_data to the console
       console.log("Form data being sent:", form_data);
-
-      fetch('http://127.0.0.1:8000/api/queue', {
+      const url = getIPAddress();
+      fetch(url + "/queue", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'

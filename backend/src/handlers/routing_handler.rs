@@ -1,5 +1,7 @@
 use diesel::SqliteConnection;
 use diesel::prelude::*;
+use diesel::dsl::exists;
+use diesel::select;
 use crate::{models::RouteRequests, routes::GetReturn, models::Queue, models::ChargingStations};
 use rocket::serde::json::Json;
 use rocket::serde::{Deserialize, Serialize};
@@ -219,6 +221,51 @@ pub fn get_latest_route_request(conn: &mut SqliteConnection, id_to_find: i32) ->
                 is_done: false,
                 user_id: 0,
             }))
+        }
+    }
+}
+
+pub fn get_latest_route_charged_request(conn: &mut SqliteConnection, id_to_find: i32) -> GetReturn<(RouteRequests, bool)> {
+    use chrono::{Local, Duration};
+    use crate::schema::RouteRequests::dsl::*;
+    use crate::schema::ChargingStations::dsl as charging_dsl;
+    use crate::models::{RouteRequests as RouteRequestsModel, ChargingStations};
+
+    let now = Local::now().naive_local();
+    let start_of_today = now.date().and_hms_opt(0, 0, 0).unwrap();
+    let start_of_tomorrow = (now.date() + Duration::days(1)).and_hms_opt(0, 0, 0).unwrap();
+
+    let today_timestamp: i32 = start_of_today.and_utc().timestamp() as i32;
+    let tomorrow_timestamp: i32 = start_of_tomorrow.and_utc().timestamp() as i32;
+
+    let found_route = RouteRequests
+        .filter(user_id.eq(id_to_find))
+        .filter(timestamp.ge(today_timestamp))
+        .filter(timestamp.lt(tomorrow_timestamp))
+        .order(timestamp.desc())
+        .first::<RouteRequestsModel>(conn)
+        .optional()?;
+
+    match found_route {
+        Some(route) => {
+            let in_charger = select(exists(
+                charging_dsl::ChargingStations.filter(charging_dsl::route_request_id.eq(route.id))
+            )).get_result::<bool>(conn)?;
+
+            Ok((true, "Opgevraagde aanvraag van de gebruiker gevonden die in een laadpaal zit".to_string(), (route, in_charger)))
+        },
+        None => {
+            Ok((false, "Geen aanvragingen gevonden van de gebruiker vandaag".to_string(), (
+                RouteRequestsModel {
+                    id: 0,
+                    percentage: 0.0,
+                    distance: 0,
+                    eta: 0,
+                    timestamp: 0,
+                    is_done: false,
+                    user_id: 0,
+                }, false
+            )))
         }
     }
 }

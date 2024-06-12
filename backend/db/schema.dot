@@ -162,6 +162,12 @@ Users [label=<
                     <TD PORT="admin_from">admin</TD>
                 </TR>
             
+
+                <TR>
+                    <TD PORT="password_to">&nbsp;</TD>
+                    <TD PORT="password_from">password</TD>
+                </TR>
+            
             </TABLE>
         >];
         

@@ -1,24 +1,35 @@
-import * as React from "react";
+
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Image, Pressable } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation, ParamListBase } from "@react-navigation/native";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
-import { useState } from "react";
-import { useEffect } from "react";
+import UserProfileData from './UserProfileData';
+import { getIPAddress } from "./IPAddress";
+
 
 
 const Home = () => {
   const navigation = useNavigation();
+  const [userCarData, setUserCarData] = useState(null);
+  const [latestRequestData, setLatestRequestData] = useState(null);
+  const [chargeRequest, setChargeRequest] = useState(null);
+  const [userCarPercentage, setUserCarPercentage] = useState(0);
   const [chargers, setChargers] = useState([]);
+  const [isCharging, setIsCharging] = useState(false);
+
 
   useEffect(() => {
     fetchChargers();
+    fetchLatestChargeRequest();
   }, []);
+
 
   const fetchChargers = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/chargers');
+      const url = getIPAddress();
+      const response = await fetch(url + "/chargers");
       const data = await response.json();
       setChargers(data.data);
     } catch (error) {
@@ -29,6 +40,85 @@ const Home = () => {
   const handleStopChargingPress = () => {
     chargers.map((charger) => (
       navigation.navigate("StopPopUp", { charger })))
+  };
+
+  useEffect(() => {
+    fetchUserData(); // Roep de functie aan om gebruikersgegevens op te halen
+    fetchLatestRequest();
+    if (latestRequestData != null) {
+      fetchCarPercentage();
+    }
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const url = getIPAddress();
+      let user_id = UserProfileData.getUserID();
+      const response = await fetch(url + "/users/car/" + user_id + "/");
+      const data = await response.json();
+      if (data.ok) {
+        setUserCarData(data.data); // Stel de gebruikersgegevens in als de oproep succesvol is
+      } else {
+        console.error("Failed to fetch user data:", data.message);
+        setUserCarData(null);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      setUserCarData(null);
+    }
+  };
+
+  const fetchLatestRequest = async () => {
+    try {
+      const url = getIPAddress();
+      let user_id = UserProfileData.getUserID();
+      const response = await fetch(url + "/queue/routes/users/" + user_id + "/latest/");
+      const data = await response.json();
+      if (data.ok) {
+        setLatestRequestData(data.data); // Stel de gebruikersgegevens in als de oproep succesvol is
+      } else {
+        console.error("Failed to fetch user data:", data.message);
+        setLatestRequestData(null);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      setLatestRequestData(null);
+    }
+  };
+  const fetchLatestChargeRequest = async () => {
+    try {
+      const url = getIPAddress();
+      let user_id = UserProfileData.getUserID();
+      const response = await fetch(url + "queue/routes/users/" + user_id + "/latest/charged");
+      const chargeData = response.data;
+      if (chargeData.ok) {
+        setChargeRequest(chargeData.data[0]);
+        setIsCharging(true); // set isCharging to true if ok is true
+      } else {
+        setChargeRequest(null);
+        setIsCharging(false); // set isCharging to false if ok is false
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchCarPercentage = async () => {
+    try {
+      const url = getIPAddress();
+      let user_id = UserProfileData.getUserID();
+      const response = await fetch(url + "/users/car/percentage/" + user_id);
+      const data = await response.json();
+      if (data.ok) {
+        setUserCarPercentage(parseFloat(data.data.toFixed(1))); // Stel de gebruikersgegevens in als de oproep succesvol is
+      } else {
+        console.error("Failed to fetch user data:", data.message);
+        setUserCarPercentage(0);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      setUserCarPercentage(0);
+    }
   };
 
   return (
@@ -43,8 +133,15 @@ const Home = () => {
         resizeMode="cover"
         source={require("../assets/rectangle-7.png")}
       />
-      <Text style={[styles.hoursLeft, styles.textFlexBox]}>2,5 hours left</Text>
-      <View style={[styles.rectangleView, styles.homeInnerPosition]} />
+      <View style={{
+        backgroundColor: "#d3b934",
+        width: horizontalScale(parseInt(userCarPercentage, 10) * 3),
+        height: verticalScale(56),
+        left: horizontalScale(50),
+        top: verticalScale(435),
+        position: "absolute",
+        borderRadius: Border.br_11xl,
+      }} />
       <Pressable
         style={[styles.framePressable, styles.frameLayout]}
         onPress={() => {
@@ -68,18 +165,21 @@ const Home = () => {
       </Pressable>
 
       <Pressable
-
         onPress={() => handleStopChargingPress()}
-        style={[styles.rectangleGroup, styles.frameChildLayout]}
+        style={[
+          styles.rectangleGroup,
+          styles.frameChildLayout,
+          !isCharging && styles.disabledButton
+        ]}
+        disabled={!isCharging}
       >
         <View style={[styles.frameItem, styles.framePosition]} />
         <Text style={[styles.stopCharging, styles.requestTypo]}>Stop Charging</Text>
         <View style={styles.frameInner} />
       </Pressable>
-
-      <Text style={[styles.text, styles.textFlexBox]}>40%</Text>
+      <Text style={[styles.text, styles.textFlexBox]}>{userCarPercentage}%</Text>
       <Text style={[styles.teslaModelX, styles.teslaModelXFlexBox]}>
-        Tesla Model X Rotterdam ID #2005
+        {userCarData != null ? `${userCarData.brand} ${userCarData.make}` : 'No data found'}
       </Text>
       <Image
         style={[styles.iconCheck, styles.iconLayout]}
@@ -186,6 +286,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     overflow: "hidden",
   },
+  disabledButton: {
+    backgroundColor: Color.gray_400, // Grijze achtergrond voor uitgeschakelde knop
+  },
   requestTypo: {
     fontSize: FontSize.size_base,
     fontFamily: FontFamily.inriaSansBold,
@@ -242,7 +345,6 @@ const styles = StyleSheet.create({
   },
   rectangleView: {
     backgroundColor: "#d3b934",
-    width: horizontalScale(143), // Use horizontalScale for width
   },
   frameChild: {
     borderRadius: Border.br_9xs,

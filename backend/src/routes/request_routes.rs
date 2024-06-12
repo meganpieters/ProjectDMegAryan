@@ -82,6 +82,32 @@ fn get_latest_request(user_id: i32) -> Json<GetStatus<RouteRequests>> {
     Json(get_result)
 }
 
+#[get("/queue/routes/users/<user_id>/latest/charged")]
+fn get_latest_charged_request(user_id: i32) -> Json<GetStatus<(RouteRequests, bool)>> {
+    let res: GetReturn<(RouteRequests, bool)> = handle_get_id::<(RouteRequests, bool)>(&routing_handler::get_latest_route_charged_request, user_id);
+    let get_result = match res {
+        Ok((true, message, data)) => GetStatus { ok: true, message, data },
+        Ok((false, message, _)) => GetStatus { ok: false, message, data: (RouteRequests {
+            id: 0,
+            percentage: 0.0,
+            eta: 0,
+            distance: 0,
+            timestamp: 0,
+            is_done: false,
+            user_id: 0
+        }, false)},
+        Err(err) => GetStatus { ok: false, message: format!("Error: {}", err), data: (RouteRequests {
+            id: 0,
+            percentage: 0.0,
+            eta: 0,
+            distance: 0,
+            timestamp: 0,
+            is_done: false,
+            user_id: 0
+        }, false)}
+    };
+    Json(get_result)
+}
 
 #[get("/queue")]
 fn get_whole_queue() -> Json<GetStatus<Vec<Queue>>> {
@@ -127,6 +153,7 @@ pub fn routes() -> Vec<Route> {
         get_all_requests,
         get_request,
         get_latest_request,
+        get_latest_charged_request,
         get_whole_queue,
         get_route_on_place,
     ]

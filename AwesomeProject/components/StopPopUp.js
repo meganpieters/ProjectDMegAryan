@@ -3,6 +3,8 @@ import { Image, StyleSheet, View, Text, Pressable } from "react-native";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
 import { horizontalScale, verticalScale } from '../Metrics';
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { getIPAddress } from "../screens/IPAddress";
+import { Alert } from "react-native";
 
 const StopPopUp = () => {
   const navigation = useNavigation();
@@ -12,7 +14,8 @@ const StopPopUp = () => {
 
   const stopCharging = async () => {
     try {
-      const response = await fetch(`http://10.0.2.2:8000/api/chargers/${charger.id}/stop`, {
+      const url = getIPAddress();
+      const response = await fetch(url + "/chargers/" + charger.id + "/stop", {
         method: 'GET',
       });
 
@@ -98,11 +101,11 @@ const styles = StyleSheet.create({
   },
   confirm: {
     left: horizontalScale(98),
-    top: verticalScale(500),
+    top: verticalScale(418),
   },
   cancel: {
     left: horizontalScale(237),
-    top: verticalScale(500),
+    top: verticalScale(418),
   },
   closeIcon: {
     top: verticalScale(32),
