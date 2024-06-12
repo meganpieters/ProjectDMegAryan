@@ -3,6 +3,7 @@ import { Image, StyleSheet, View, Pressable, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
+import { getIPAddress } from './IPAddress';
 
 
 const Users = () => {
@@ -15,7 +16,8 @@ const Users = () => {
 
   const fetchUserData = async () => {
     try {
-      const response = await fetch("http://10.0.2.2:8000/api/users/1/");
+      const url = getIPAddress();
+      const response = await fetch(url + "/users/1/");
       console.log(response);
       const data = await response.json();
       if (data.ok) {

@@ -9,7 +9,7 @@ import { getIPAddress } from './IPAddress';
 const fetchChargers = async () => {
   const url = getIPAddress();
   try {
-    let response = await fetch(url);
+    let response = await fetch(url + "/chargers");
     let json = await response.json();
     return json.data;
   } catch (error) {
