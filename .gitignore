@@ -10,3 +10,4 @@
 *.d
 backend/target/.rustc_info.json
 *.db
+*.json
