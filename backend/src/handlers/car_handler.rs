@@ -1,11 +1,12 @@
 use crate::models::{Car, RouteRequests, Users};
 use std::error::Error;
+use serde_json::Value;
 
 
 const VOLTAGE: f32 = 230.0;
 const AMPERE: f32 = 16.3;
 
-pub fn calculate_charge(user_car: &Car, request_info: &RouteRequests) -> f32 {
+pub fn calculate_charge(_user_car: &Car, request_info: &RouteRequests) -> f32 {
     if request_info.is_done {
         return 0.0;
     }
@@ -79,8 +80,13 @@ async fn calculate_max_watt(user: &Users) -> Result<f32, Box<dyn Error>> {
 
 
 fn parse_car_max_watt(json_data: &str) -> Result<f32, Box<dyn Error>> {
-    let data: serde_json::Value = serde_json::from_str(json_data)?;
-    let max_watt: String = data[0]["nominaal_continu_maximumvermogen"].as_str().unwrap_or_default().to_string();
-    Ok(max_watt.parse::<f32>().unwrap())
-
+    let data: Value = serde_json::from_str(json_data)?;
+    if let Some(max_watt_str) = data[0]["nominaal_continu_maximumvermogen"].as_str() {
+        if !max_watt_str.is_empty() {
+            if let Ok(max_watt) = max_watt_str.parse::<f32>() {
+                return Ok(max_watt);
+            }
+        }
+    }
+    Ok(0.0)
 }

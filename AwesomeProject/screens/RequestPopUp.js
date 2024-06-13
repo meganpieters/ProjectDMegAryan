@@ -4,8 +4,8 @@ import { useNavigation } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 import { horizontalScale, verticalScale } from '../Metrics';
+import UserProfileData from "./UserProfileData";
 import { getIPAddress } from "./IPAddress";
-
 const RequestPopUp = () => {
   const navigation = useNavigation();
   const [selectedPercentage, setSelectedPercentage] = useState("");
@@ -43,14 +43,14 @@ const RequestPopUp = () => {
         distance: parseInt(distance),
         eta: date.getHours() * 60 + date.getMinutes(),
         timestamp: Math.floor(Date.now() / 1000),
-        user_id: 1, // Replace with actual user ID from your authentication method
+        user_id: UserProfileData.getUserID(), // Replace with actual user ID from your authentication method
         is_done: false // Changed to boolean false
       };
 
       // Log the form_data to the console
       console.log("Form data being sent:", form_data);
       const url = getIPAddress();
-      fetch(url + "/queue", {
+      fetch(url + '/queue', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -90,7 +90,7 @@ const RequestPopUp = () => {
           style={styles.input}
           onChangeText={setSelectedPercentage}
           value={selectedPercentage}
-          placeholder="Enter percentage"
+          placeholder="Enter percentage: e.g. 0.1 or 0.5"
           keyboardType="numeric"
         />
       </View>

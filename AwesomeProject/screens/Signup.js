@@ -3,11 +3,11 @@ import { StyleSheet, View, Text, Image, TextInput, TouchableOpacity, Pressable }
 import { useNavigation } from "@react-navigation/native";
 import { Color, Border, FontFamily, FontSize } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
-import { getIPAddress } from './IPAddress';
 
 const Signup = () => {
   const navigation = useNavigation();
-  const [username, setUsername] = React.useState('');
+  const [voornaam, setVoornaam] = React.useState('');
+  const [achternaam, setAchternaam] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
@@ -16,8 +16,12 @@ const Signup = () => {
 
   const handleSignup = () => {
     // Validate input fields
-    if (username === '') {
-      setError('Username is required');
+    if (voornaam === '') {
+      setError('First name is required');
+      return;
+    }
+    if (achternaam === '') {
+      setError('Last name is required');
       return;
     }
     if (password === '') {
@@ -43,16 +47,16 @@ const Signup = () => {
 
     // Form data
     const form_data = {
-      first_name: username,
-      last_name: username,
+      first_name: voornaam,
+      last_name: achternaam,
       email,
-      kenteken: licensePlate,
+      kenteken: licensePlate.replaceAll("-", ""),
       admin: 0,
+      password: password,
     };
 
     // Send data to the backend
-    const url = getIPAddress();
-    fetch(url + "/users", {
+    fetch('http://10.0.2.2:8000/api/users/', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -86,9 +90,19 @@ const Signup = () => {
         <Image style={styles.icon} source={require("../assets/male-user.png")} />
         <TextInput
           style={styles.input}
-          onChangeText={setUsername}
-          value={username}
-          placeholder="Username"
+          onChangeText={setVoornaam}
+          value={voornaam}
+          placeholder="First name"
+          placeholderTextColor={Color.colorDimgray}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Image style={styles.icon} source={require("../assets/male-user.png")} />
+        <TextInput
+          style={styles.input}
+          onChangeText={setAchternaam}
+          value={achternaam}
+          placeholder="Last name"
           placeholderTextColor={Color.colorDimgray}
         />
       </View>
@@ -99,6 +113,7 @@ const Signup = () => {
           onChangeText={setPassword}
           value={password}
           placeholder="Password"
+          autoCapitalize="none"
           placeholderTextColor={Color.colorDimgray}
           secureTextEntry
         />
@@ -111,6 +126,7 @@ const Signup = () => {
           onChangeText={setConfirmPassword}
           value={confirmPassword}
           placeholder="Confirm Password"
+          autoCapitalize="none"
           placeholderTextColor={Color.colorDimgray}
           secureTextEntry
         />
@@ -122,6 +138,7 @@ const Signup = () => {
           onChangeText={setEmail}
           value={email}
           placeholder="Email"
+          autoCapitalize="none"
           placeholderTextColor={Color.colorDimgray}
           keyboardType="email-address"
         />
@@ -133,6 +150,7 @@ const Signup = () => {
           onChangeText={setLicensePlate}
           value={licensePlate}
           placeholder="License Plate"
+          autoCapitalize="none"
           placeholderTextColor={Color.colorDimgray}
         />
       </View>

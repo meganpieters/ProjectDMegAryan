@@ -26,6 +26,13 @@ pub struct NewRouteRequest {
 
 impl Eq for RouteRequests {}
 
+/// Vergelijk waardes voor 2 floats.
+/// # Voorbeeld
+/// ```
+/// // vergelijk twee percentages van een batterij
+/// .then_with(|| compare_f32(self.percentage, other.percentage))
+/// ```
+/// Dit kan bijvoorbeeld gebruikt worden in Ord voor structs of iets dergelijke.
 fn compare_f32(x: f32, y: f32) -> std::cmp::Ordering {
     // vergelijk de twee floats
     x.partial_cmp(&x).unwrap_or_else(|| {
@@ -47,8 +54,11 @@ fn compare_f32(x: f32, y: f32) -> std::cmp::Ordering {
 
 impl Ord for RouteRequests {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        // eerst kijken naar de tijd dat iemand aankomt.
         self.eta.cmp(&other.eta)
+            // dan hoelang voor als de tijd van aankomst verschilt
             .then_with(|| self.distance.cmp(&other.distance))
+            // dan op batterij percentage
             .then_with(|| compare_f32(self.percentage, other.percentage))
     }
 }
@@ -59,11 +69,12 @@ impl PartialOrd for RouteRequests {
     }
 }
 
+/// Upload een aanvraging van een laadpaal van een gebruiker naar de database. Als er geen auto's
+/// in een laadpaal zitten, kan deze toegevoegd worden aan een laadpaal.
 pub fn upload_route(
     conn: &mut SqliteConnection,
     data: Json<NewRouteRequest>
 ) -> Result<(bool, String, i32), diesel::result::Error> {
-    // TODO: toevoegen dat er nog gekeken word naar het aantal laadpalen
     use crate::schema::RouteRequests;
     use crate::models::RouteRequests as RouteRequestsModel;
     use crate::schema::RouteRequests::dsl::*;
@@ -94,12 +105,17 @@ pub fn upload_route(
     }
 }
 
+/// Als er plek is in de laadpalen kan deze toegevoegd worden aan een laadpaal zodat die niet in de
+/// priority queue terecht komt. Wat ook betekent dat de auto gelijk kan opladen.
 pub fn add_route_to_charging_station(conn: &mut SqliteConnection, data: &RouteRequests) -> GetReturn<ChargingStations> {
     use crate::models::ChargingStations as ChargingStationsModel;
+    // zoek een laadpaal die vrij is om een auto aan toe te voegen
     let available_charger: Result<ChargingStationsModel, _> = ChargingStations
         .filter(status.eq("available"))
         .first::<ChargingStationsModel>(conn);
 
+    // voeg een auto toe als er een laadpaal vrij is, anders geef een error met dat
+    // er geen laadpaal vrij is.
     match available_charger {
         Ok(mut charging_station) => {
             charging_station.route_request_id = data.id;
@@ -116,6 +132,7 @@ pub fn add_route_to_charging_station(conn: &mut SqliteConnection, data: &RouteRe
     }
 }
 
+/// Haal alle aanvragen op van de gebruikers
 pub fn get_routes(conn: &mut SqliteConnection) -> GetReturn<Vec<RouteRequests>> {
     use crate::models::RouteRequests;
     use crate::schema::RouteRequests::dsl::*;
@@ -123,6 +140,7 @@ pub fn get_routes(conn: &mut SqliteConnection) -> GetReturn<Vec<RouteRequests>> 
     Ok((true, "Aanvragen successvol gevonden".to_string(), all_routes))
 }
 
+/// Haal een specifieke aanvraag op van een gebruiker
 pub fn get_route(conn: &mut SqliteConnection, id_to_find: i32) -> GetReturn<RouteRequests> {
     use crate::schema::RouteRequests::dsl::*;
     if let Some(found_route) = RouteRequests.filter(id.eq(id_to_find)).first(conn).optional()? {
@@ -132,11 +150,15 @@ pub fn get_route(conn: &mut SqliteConnection, id_to_find: i32) -> GetReturn<Rout
     }
 }
 
+/// Maak de priority queue van vandaag voor de autos die niet in een lader zitten.
 pub fn create_queue(conn: &mut SqliteConnection) -> GetReturn<Vec<Queue>> {
     use chrono::Local;
     use crate::schema::RouteRequests::dsl::*;
+    use crate::schema::ChargingStations::dsl::{ChargingStations as ChargingStationsDsl, route_request_id as cs_route_request_id};
     use crate::models::RouteRequests as RouteRequestsModel;
+    use diesel::prelude::*;
 
+    // Pak de timestamps van vandaag om alleen maar aanvragen van vandaag te hebben in de priority queue.
     let now = Local::now().naive_local();
     let start_of_today = now.date().and_hms_opt(0, 0, 0).unwrap();
     let end_of_today = now.date().and_hms_opt(23, 59, 59).unwrap();
@@ -144,14 +166,20 @@ pub fn create_queue(conn: &mut SqliteConnection) -> GetReturn<Vec<Queue>> {
     let today_timestamp: i32 = start_of_today.and_utc().timestamp() as i32;
     let end_of_today_timestamp: i32 = end_of_today.and_utc().timestamp() as i32;
 
+    // haal alle aanvragen op om in de queue te zetten
     let routes_result = RouteRequests
         .filter(timestamp.ge(today_timestamp))
         .filter(timestamp.le(end_of_today_timestamp))
         .filter(is_done.eq(false))
+        .left_join(ChargingStationsDsl.on(cs_route_request_id.eq(id)))
+        .filter(cs_route_request_id.is_null())
+        .select(RouteRequests::all_columns())
         .load::<RouteRequestsModel>(conn);
 
+    // gebruik een binary heap om de priority queue te maken
     let mut priority_queue: BinaryHeap<Reverse<RouteRequestsModel>> = BinaryHeap::new();
 
+    // als er aanvragen zijn gevonden kan je deze in de priority queue zetten
     if let Ok(routes) = routes_result {
         for route in routes {
             priority_queue.push(Reverse(route));
@@ -163,6 +191,7 @@ pub fn create_queue(conn: &mut SqliteConnection) -> GetReturn<Vec<Queue>> {
     let mut queue = Vec::new();
     let mut queue_id: i32 = 0;
 
+    // loop door de priority queue om die te gebruiken
     while let Some(Reverse(route)) = priority_queue.pop() {
         let new_queue_item = Queue {
             id: queue_id,
@@ -177,6 +206,7 @@ pub fn create_queue(conn: &mut SqliteConnection) -> GetReturn<Vec<Queue>> {
     Ok((true, "queue is gevonden met de correcte volgorde".to_string(), queue))
 }
 
+/// zoek de plek van een gebruiker in de queue
 pub fn get_item_on_place(conn: &mut SqliteConnection, id_to_find: i32) -> GetReturn<RouteRequests> {
     let queue: Vec<Queue> = create_queue(conn).ok().unwrap().2.into_iter().collect();
     let found_queue = queue.iter().find(|&item| { item.place == id_to_find }).unwrap();
@@ -187,6 +217,18 @@ pub fn get_item_on_place(conn: &mut SqliteConnection, id_to_find: i32) -> GetRet
     }
 }
 
+/// zoek de plek van een route vanuit een aanvraag id
+pub fn get_request_placement(conn: &mut SqliteConnection, id_to_find: i32) -> GetReturn<Queue> {
+    let queue: Vec<Queue> = create_queue(conn).ok().unwrap().2.into_iter().collect();
+    let found_queue = queue.iter().find(|&item| { item.route_request_id == id_to_find }).cloned().unwrap();
+    if found_queue.id > 0 {
+        return Ok((true, "Plaats in de queue gevonden".to_string(), found_queue));
+    } else {
+        Err(diesel::result::Error::NotFound)
+    }
+}
+
+/// zoek de laatste aanvraag van een gebruiker die niet aan een lader zit
 pub fn get_latest_route_request(conn: &mut SqliteConnection, id_to_find: i32) -> GetReturn<RouteRequests> {
     use chrono::{Local, Duration};
     use crate::schema::RouteRequests::dsl::*;
@@ -225,11 +267,12 @@ pub fn get_latest_route_request(conn: &mut SqliteConnection, id_to_find: i32) ->
     }
 }
 
+/// zoek de laatste aanvraag van een gebruiker die ook daadwerkelijk in een laadpaal zit
 pub fn get_latest_route_charged_request(conn: &mut SqliteConnection, id_to_find: i32) -> GetReturn<(RouteRequests, bool)> {
     use chrono::{Local, Duration};
     use crate::schema::RouteRequests::dsl::*;
     use crate::schema::ChargingStations::dsl as charging_dsl;
-    use crate::models::{RouteRequests as RouteRequestsModel, ChargingStations};
+    use crate::models::RouteRequests as RouteRequestsModel;
 
     let now = Local::now().naive_local();
     let start_of_today = now.date().and_hms_opt(0, 0, 0).unwrap();

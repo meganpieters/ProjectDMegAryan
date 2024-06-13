@@ -7,6 +7,7 @@ import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
 import UserProfileData from './UserProfileData';
 import { getIPAddress } from "./IPAddress";
+import { color } from "react-native-elements/dist/helpers";
 
 
 
@@ -14,40 +15,42 @@ const Home = () => {
   const navigation = useNavigation();
   const [userCarData, setUserCarData] = useState(null);
   const [latestRequestData, setLatestRequestData] = useState(null);
-  const [chargeRequest, setChargeRequest] = useState(null);
+  const [chargeRequest, setChargeRequest] = useState([]);
   const [userCarPercentage, setUserCarPercentage] = useState(0);
-  const [chargers, setChargers] = useState([]);
+  //  const [chargers, setChargers] = useState([]);
   const [isCharging, setIsCharging] = useState(false);
+  const [queuePlace, setQueuePlace] = useState(0);
+  const [hasRequest, setHasRequest] = useState(false);
+
+
+  // const fetchChargers = async () => {
+  //   try {
+  //     const url = getIPAddress();
+  //     const response = await fetch(url + "/chargers");
+  //     const data = await response.json();
+  //     setChargers(data.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
 
   useEffect(() => {
-    fetchChargers();
-    fetchLatestChargeRequest();
-  }, []);
+    const fetchData = () => {
+      fetchUserData();
+      fetchLatestRequest();
+      fetchLatestChargeRequest();
+      if (latestRequestData) {
+        fetchCarPercentage();
+        fetchQueuePlace();
+      }
+    };
 
+    fetchData(); // Fetch data initially
 
-  const fetchChargers = async () => {
-    try {
-      const url = getIPAddress();
-      const response = await fetch(url + "/chargers");
-      const data = await response.json();
-      setChargers(data.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    const interval = setInterval(fetchData, 30000); // Refresh data every 30 seconds
 
-  const handleStopChargingPress = () => {
-    chargers.map((charger) => (
-      navigation.navigate("StopPopUp", { charger })))
-  };
-
-  useEffect(() => {
-    fetchUserData(); // Roep de functie aan om gebruikersgegevens op te halen
-    fetchLatestRequest();
-    if (latestRequestData != null) {
-      fetchCarPercentage();
-    }
+    return () => clearInterval(interval); // Cleanup function to clear interval
   }, []);
 
   const fetchUserData = async () => {
@@ -57,7 +60,7 @@ const Home = () => {
       const response = await fetch(url + "/users/car/" + user_id + "/");
       const data = await response.json();
       if (data.ok) {
-        setUserCarData(data.data); // Stel de gebruikersgegevens in als de oproep succesvol is
+        setUserCarData(data.data);
       } else {
         console.error("Failed to fetch user data:", data.message);
         setUserCarData(null);
@@ -75,34 +78,44 @@ const Home = () => {
       const response = await fetch(url + "/queue/routes/users/" + user_id + "/latest/");
       const data = await response.json();
       if (data.ok) {
-        setLatestRequestData(data.data); // Stel de gebruikersgegevens in als de oproep succesvol is
+        setLatestRequestData(data.data);
+        setHasRequest(true); // Set hasRequest to true if there's a latest request
       } else {
-        console.error("Failed to fetch user data:", data.message);
-        setLatestRequestData(null);
+        console.log("Failed to fetch user data:", data.message);
+        setLatestRequestData([]);
+        setHasRequest(false); // Set hasRequest to false if there's no latest request
       }
     } catch (error) {
-      console.error("Error fetching user data:", error);
-      setLatestRequestData(null);
+      console.log("Error fetching user data:", error);
+      setLatestRequestData([]);
+      setHasRequest(false); // Set hasRequest to false if there's an error
     }
   };
+
   const fetchLatestChargeRequest = async () => {
     try {
       const url = getIPAddress();
       let user_id = UserProfileData.getUserID();
-      const response = await fetch(url + "queue/routes/users/" + user_id + "/latest/charged");
-      const chargeData = response.data;
-      if (chargeData.ok) {
+      const response = await fetch(url + "/queue/routes/users/" + user_id + "/latest/charged");
+      const chargeData = await response.json();
+      if (chargeData[4] == true) {
+        // console.log(chargeData);
+        console.log(chargeData.data[0].id);
         setChargeRequest(chargeData.data[0]);
-        setIsCharging(true); // set isCharging to true if ok is true
+        setIsCharging(true);
       } else {
         setChargeRequest(null);
-        setIsCharging(false); // set isCharging to false if ok is false
+        setIsCharging(false);
       }
     } catch (error) {
-      console.error(error);
+      setIsCharging(false);
     }
   };
 
+  const handleStopChargingPress = () => {
+
+    navigation.navigate("StopPopUp", { chargeRequest })
+  };
   const fetchCarPercentage = async () => {
     try {
       const url = getIPAddress();
@@ -110,7 +123,7 @@ const Home = () => {
       const response = await fetch(url + "/users/car/percentage/" + user_id);
       const data = await response.json();
       if (data.ok) {
-        setUserCarPercentage(parseFloat(data.data.toFixed(1))); // Stel de gebruikersgegevens in als de oproep succesvol is
+        setUserCarPercentage(parseFloat(data.data.toFixed(1)));
       } else {
         console.error("Failed to fetch user data:", data.message);
         setUserCarPercentage(0);
@@ -121,12 +134,30 @@ const Home = () => {
     }
   };
 
+  const fetchQueuePlace = async () => {
+    try {
+      const url = getIPAddress();
+      const response = await fetch(url + "/queue/routes/place/" + latestRequestData["id"]);
+      const data = await response.json();
+      const res = data.data;
+      if (data.ok) {
+        setQueuePlace(res["place"]);
+      } else {
+        console.error("Failed to fetch user data:", data.message);
+        setQueuePlace(0);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      setQueuePlace(0);
+    }
+  };
+
   return (
     <View style={styles.home}>
       <View style={[styles.homeChild, styles.homeShadowBox]} />
       <View style={[styles.homeItem, styles.homeShadowBox]} />
       <Text style={[styles.charger1Available, styles.teslaModelXFlexBox]}>
-        Charger 1 Available
+        Queue place: {queuePlace}
       </Text>
       <Image
         style={[styles.homeInner, styles.homeInnerPosition]}
@@ -145,7 +176,6 @@ const Home = () => {
       <Pressable
         style={[styles.framePressable, styles.frameLayout]}
         onPress={() => {
-
           navigation.navigate("RequestPopUp");
         }}
       >
@@ -163,20 +193,26 @@ const Home = () => {
           </View>
         </View>
       </Pressable>
-
-      <Pressable
-        onPress={() => handleStopChargingPress()}
-        style={[
-          styles.rectangleGroup,
-          styles.frameChildLayout,
-          !isCharging && styles.disabledButton
-        ]}
-        disabled={!isCharging}
-      >
-        <View style={[styles.frameItem, styles.framePosition]} />
-        <Text style={[styles.stopCharging, styles.requestTypo]}>Stop Charging</Text>
-        <View style={styles.frameInner} />
-      </Pressable>
+      {isCharging ? (
+        <Pressable
+          onPress={handleStopChargingPress}
+          style={[styles.rectangleGroup, styles.frameChildLayout]}
+        >
+          <View style={[styles.frameItem, styles.framePosition]} />
+          <Text style={[styles.stopCharging, styles.requestTypo]}>Stop Charging</Text>
+          <View style={styles.frameInner} />
+        </Pressable>
+      ) : (
+        <Pressable
+          onPress={handleStopChargingPress}
+          style={[styles.rectangleGroup, styles.frameChildLayout, styles.disabledButton]}
+          disabled={true} // Ensure button is not pressable when disabled
+        >
+          <View style={[styles.frameItem, styles.framePosition]} />
+          <Text style={[styles.stopCharging, styles.requestTypo]}>Stop Charging</Text>
+          <View style={styles.frameInner} />
+        </Pressable>
+      )}
       <Text style={[styles.text, styles.textFlexBox]}>{userCarPercentage}%</Text>
       <Text style={[styles.teslaModelX, styles.teslaModelXFlexBox]}>
         {userCarData != null ? `${userCarData.brand} ${userCarData.make}` : 'No data found'}
@@ -287,7 +323,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   disabledButton: {
-    backgroundColor: Color.gray_400, // Grijze achtergrond voor uitgeschakelde knop
+    opacity: 0.5, // Adjust opacity to make the button appear disabled
+    backgroundColor: Color.gray_200, // Example background color for disabled state
   },
   requestTypo: {
     fontSize: FontSize.size_base,
@@ -444,7 +481,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.inriaSansBold,
     fontWeight: "700",
     textAlign: "center",
-    fontSize: FontSize.size_5xl,
+    fontSize: FontSize.size_4xl,
   },
   iconCheck: {
     height: "2.58%",

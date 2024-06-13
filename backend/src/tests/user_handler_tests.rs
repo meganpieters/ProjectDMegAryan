@@ -18,6 +18,7 @@ fn setup_test_db() -> SqliteConnection {
             last_name TEXT NOT NULL,
             email TEXT NOT NULL,
             kenteken TEXT NOT NULL,
+            password TEXT NOT NULL,
             admin INTEGER NOT NULL
         );
     ").unwrap();
@@ -107,6 +108,7 @@ fn test_update_user() {
         last_name: "Builder".to_string(),
         email: "bob.builder@example.com".to_string(),
         kenteken: "123-BBB".to_string(),
+        password: "password".to_string(),
         admin: 0,
     };
     diesel::insert_into(Users)
@@ -125,6 +127,7 @@ fn test_update_user() {
         last_name: "Builder".to_string(),
         email: "robert.builder@example.com".to_string(),
         kenteken: "123-BBB".to_string(),
+        password: "new_password".to_string(),
         admin: 1,
     };
     let json_user = Json(updated_user);
@@ -149,6 +152,7 @@ fn test_delete_user() {
         last_name: "Chaplin".to_string(),
         email: "charlie.chaplin@example.com".to_string(),
         kenteken: "789-CCC".to_string(),
+        password: "password".to_string(),
         admin: 0,
     };
     diesel::insert_into(Users)

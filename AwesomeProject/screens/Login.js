@@ -3,25 +3,50 @@ import { StyleSheet, View, Text, Image, TextInput, TouchableOpacity } from "reac
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Color } from "../GlobalStyles";
 import { horizontalScale, verticalScale } from '../Metrics';
+import SHA256 from 'crypto-js/sha256';
+import UserProfileData from './UserProfileData';
+import { getIPAddress } from "./IPAddress";
 
 const Login = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const [username, setUsername] = React.useState('');
+  const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState('');
+  const [hash, setHash] = React.useState('');
 
-  const handleLogin = () => {
-    if (username === 'User' && password === 'Password') {
-      route.params.setIsLoggedIn(true);
-      navigation.navigate("Home");
-    }
-    if (username === 'admin' && password === 'password') {
-      route.params.setIsLoggedIn(true);
-      navigation.navigate("Admin");
-    }
-    else {
-      setError('Invalid username or password');
+  const handleLogin = async () => {
+    try {
+      console.log(email);
+      console.log(password);
+      const url = getIPAddress();
+      const response = await fetch(url + "/users/email/" + email);
+      const result = await response.json();
+      if (result.ok) {
+        let data = result.data;
+        setHash(SHA256(password).toString());
+        if (email == data.email && hash == data.password) {
+          route.params.setIsLoggedIn(true);
+          UserProfileData.setUserID(data.id);
+          UserProfileData.setFirstName(data.first_name);
+          UserProfileData.setLastName(data.last_name);
+          UserProfileData.setEmail(data.email);
+          UserProfileData.setLicensePlate(data.license_plate);
+          if (data.admin == true) {
+            UserProfileData.setIsAdmin(true);
+            navigation.navigate("Admin");
+          } else {
+            UserProfileData.setIsAdmin(false);
+            navigation.navigate("Home");
+          }
+        } else {
+          setError("Invalid username or password");
+        }
+      } else {
+        setError(result.message);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -38,9 +63,10 @@ const Login = () => {
         />
         <TextInput
           style={styles.input}
-          onChangeText={setUsername}
-          value={username}
-          placeholder="Username"
+          onChangeText={setEmail}
+          value={email}
+          autoCapitalize="none"
+          placeholder="Email"
           placeholderTextColor={Color.colorDimgray}
         />
       </View>
@@ -54,6 +80,7 @@ const Login = () => {
           onChangeText={setPassword}
           value={password}
           placeholder="Password"
+          autoCapitalize="none"
           placeholderTextColor={Color.colorDimgray}
           secureTextEntry
         />

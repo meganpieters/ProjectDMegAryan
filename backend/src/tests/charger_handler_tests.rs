@@ -1,6 +1,3 @@
-
-
-
 use diesel::prelude::*;
 use diesel::sqlite::SqliteConnection;
 use rocket::serde::json::Json;
@@ -11,6 +8,12 @@ use crate::db::establish_test_connection;
 use diesel::connection::SimpleConnection;
 use diesel::result::Error;
 
+
+// Bovenaan wordt een test database opgezet met twee tabellen:
+// - ChargingStations: voor het opslaan van laadstations
+// - RouteRequests: voor het opslaan van routeaanvragen
+// testen geven aan of deze succesfol is gegaan en geven 
+// de bijpassend output terug 
 fn setup_test_db() -> SqliteConnection {
     let mut conn = establish_test_connection();
     conn.batch_execute("
@@ -35,10 +38,10 @@ fn setup_test_db() -> SqliteConnection {
     conn
 }
 
+
 #[test]
 fn test_add_charger() {
     let conn = &mut setup_test_db();
-    // Ensure the id is an integer-convertible string
     let new_charger = ChargerModel {
         id: "1".to_string(), 
         status: "Available".to_string(),

@@ -27,7 +27,7 @@ pub struct RouteRequests {
     pub user_id: i32,
 }
 
-#[derive(Queryable, Insertable, Serialize, Deserialize)]
+#[derive(Queryable, Insertable, Serialize, Deserialize, Clone)]
 #[diesel(table_name = crate::schema::Queue)]
 pub struct Queue {
     pub id: i32,
