@@ -48,7 +48,7 @@ const Home = () => {
 
     fetchData(); // Fetch data initially
 
-    const interval = setInterval(fetchData, 20000); // Refresh data every 30 seconds
+    const interval = setInterval(fetchData, 10000); // Refresh data every 30 seconds
 
     return () => clearInterval(interval); // Cleanup function to clear interval
   }, []);
