@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
 import { getIPAddress } from './IPAddress';
-
+import UserProfileData from "./UserProfileData";
 
 const Users = () => {
   const navigation = useNavigation();
@@ -17,7 +17,8 @@ const Users = () => {
   const fetchUserData = async () => {
     try {
       const url = getIPAddress();
-      const response = await fetch(url + "/users/1/");
+      let user_id = UserProfileData.getUserID();
+      const response = await fetch(url + "/users/" + user_id);
       console.log(response);
       const data = await response.json();
       if (data.ok) {

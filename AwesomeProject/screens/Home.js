@@ -48,7 +48,7 @@ const Home = () => {
 
     fetchData(); // Fetch data initially
 
-    const interval = setInterval(fetchData, 30000); // Refresh data every 30 seconds
+    const interval = setInterval(fetchData, 20000); // Refresh data every 30 seconds
 
     return () => clearInterval(interval); // Cleanup function to clear interval
   }, []);
@@ -57,7 +57,7 @@ const Home = () => {
     try {
       const url = getIPAddress();
       let user_id = UserProfileData.getUserID();
-      const response = await fetch(url + "/users/car/" + user_id + "/");
+      const response = await fetch(url + "/users/car/" + user_id);
       const data = await response.json();
       if (data.ok) {
         setUserCarData(data.data);
@@ -98,7 +98,8 @@ const Home = () => {
       let user_id = UserProfileData.getUserID();
       const response = await fetch(url + "/queue/routes/users/" + user_id + "/latest/charged");
       const chargeData = await response.json();
-      if (chargeData[4] == true) {
+      console.log(chargeData.data[1])
+      if (chargeData.data[1] == true) {
         // console.log(chargeData);
         console.log(chargeData.data[0].id);
         setChargeRequest(chargeData.data[0]);

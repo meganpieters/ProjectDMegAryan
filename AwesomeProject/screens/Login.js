@@ -24,15 +24,15 @@ const Login = () => {
       const result = await response.json();
       if (result.ok) {
         let data = result.data;
-        setHash(SHA256(password).toString());
-        if (email == data.email && hash == data.password) {
+        const hashedPassword = SHA256(password).toString();
+        if (email === data.email && hashedPassword === data.password) {
           route.params.setIsLoggedIn(true);
           UserProfileData.setUserID(data.id);
           UserProfileData.setFirstName(data.first_name);
           UserProfileData.setLastName(data.last_name);
           UserProfileData.setEmail(data.email);
           UserProfileData.setLicensePlate(data.license_plate);
-          if (data.admin == true) {
+          if (data.admin === true) {
             UserProfileData.setIsAdmin(true);
             navigation.navigate("Admin");
           } else {
@@ -43,7 +43,7 @@ const Login = () => {
           setError("Invalid username or password");
         }
       } else {
-        setError(result.message);
+        setError("Invalid username or password");
       }
     } catch (error) {
       console.error(error);
