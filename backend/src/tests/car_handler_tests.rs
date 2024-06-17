@@ -31,11 +31,10 @@ mod tests {
             percentage: 0.0, 
             user_id: 1 };
     
-        let result = calculate_charge(&car, &request_info);
+        let result = calculate_charge(&car, &(request_info.clone(), false));
         assert!(result >= 0.0, "Charge should be greater than or equal to 0");
     
-        request_info.is_done = true;
-        let result = calculate_charge(&car, &request_info);
+        let result = calculate_charge(&car, &(request_info, true));
         assert_eq!(result, 0.0, "Charge should be 0 when request is done");
     }
     
@@ -59,7 +58,7 @@ mod tests {
             percentage: 0.5, 
             user_id: 1 };
     
-        let result = calculate_charge_percentage(&car, &request_info);
+        let result = calculate_charge_percentage(&car, &(request_info, false));
         assert!(result >= 50.0, "Charge percentage should be greater than or equal to 50");
     }
     

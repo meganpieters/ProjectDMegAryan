@@ -2,6 +2,8 @@ pub mod routing_handler;
 pub mod user_handler;
 pub mod car_handler;
 pub mod charger_handler;
+pub mod slack_handler;
+
 
 use diesel::sqlite::SqliteConnection;
 use crate::{db, routes::{DeleteReturn, GetReturn, PostReturn, UpdateReturn}};

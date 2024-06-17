@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Image, TextInput, TouchableOpacity, Pressable }
 import { useNavigation } from "@react-navigation/native";
 import { Color, Border, FontFamily, FontSize } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
+import {getIPAddress} from "./IPAddress";
 
 const Signup = () => {
   const navigation = useNavigation();
@@ -55,8 +56,9 @@ const Signup = () => {
       password: password,
     };
 
+	let url = getIPAddress();
     // Send data to the backend
-    fetch('http://10.0.2.2:8000/api/users/', {
+    fetch(`${url}/users`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'

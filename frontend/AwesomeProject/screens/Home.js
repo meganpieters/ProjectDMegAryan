@@ -8,6 +8,7 @@ import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
 import UserProfileData from './UserProfileData';
 import { getIPAddress } from "./IPAddress";
 import { color } from "react-native-elements/dist/helpers";
+import { Alert } from "react-native";
 
 
 
@@ -22,25 +23,13 @@ const Home = () => {
   const [queuePlace, setQueuePlace] = useState(0);
   const [hasRequest, setHasRequest] = useState(false);
 
-
-  // const fetchChargers = async () => {
-  //   try {
-  //     const url = getIPAddress();
-  //     const response = await fetch(url + "/chargers");
-  //     const data = await response.json();
-  //     setChargers(data.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-
   useEffect(() => {
     const fetchData = () => {
       fetchUserData();
       fetchLatestRequest();
       fetchLatestChargeRequest();
-      if (latestRequestData) {
+		console.log(latestRequestData);
+      if (latestRequestData == null) {
         fetchCarPercentage();
         fetchQueuePlace();
       }
@@ -62,11 +51,11 @@ const Home = () => {
       if (data.ok) {
         setUserCarData(data.data);
       } else {
-        console.error("Failed to fetch user data:", data.message);
+        console.log("Failed to fetch user data:", data.message);
         setUserCarData(null);
       }
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      console.log("Error fetching user data:", error);
       setUserCarData(null);
     }
   };
@@ -82,12 +71,12 @@ const Home = () => {
         setHasRequest(true); // Set hasRequest to true if there's a latest request
       } else {
         console.log("Failed to fetch user data:", data.message);
-        setLatestRequestData([]);
+        setLatestRequestData(null);
         setHasRequest(false); // Set hasRequest to false if there's no latest request
       }
     } catch (error) {
       console.log("Error fetching user data:", error);
-      setLatestRequestData([]);
+      setLatestRequestData(null);
       setHasRequest(false); // Set hasRequest to false if there's an error
     }
   };
@@ -113,9 +102,36 @@ const Home = () => {
     }
   };
 
-  const handleStopChargingPress = () => {
+  const handleStopChargingPress = async () => {
 
-    navigation.navigate("StopPopUp", { chargeRequest })
+    try {
+      const url = getIPAddress();
+      const response = await fetch(url + "/chargers/" + latestRequestData.id + "/stop", {
+        method: 'GET',
+      });
+
+      const text = await response.text(); // Read the response as text
+      console.log("Response text:", text);
+
+      try {
+        const data = JSON.parse(text); // Attempt to parse the text as JSON
+
+        if (response.ok) {
+          console.log("Charging stopped successfully:", data);
+          Alert.alert("Success", "Charging stopped successfully.");
+          navigation.navigate("Home");
+        } else {
+          console.log("Failed to stop charging:", data.message);
+          Alert.alert("Error", "Failed to stop charging. Please try again.");
+        }
+      } catch (jsonError) {
+        console.log("Error parsing JSON:", jsonError);
+        Alert.alert("Error", "Received unexpected response from the server.");
+      }
+    } catch (error) {
+      console.log("Error stopping request:", error);
+      Alert.alert("Error", "An error occurred while stopping the charging. Please try again.");
+    }
   };
   const fetchCarPercentage = async () => {
     try {
@@ -126,11 +142,11 @@ const Home = () => {
       if (data.ok) {
         setUserCarPercentage(parseFloat(data.data.toFixed(1)));
       } else {
-        console.error("Failed to fetch user data:", data.message);
+        console.log("Failed to fetch user data:", data.message);
         setUserCarPercentage(0);
       }
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      console.log("Error fetching user data:", error);
       setUserCarPercentage(0);
     }
   };
@@ -144,11 +160,11 @@ const Home = () => {
       if (data.ok) {
         setQueuePlace(res["place"]);
       } else {
-        console.error("Failed to fetch user data:", data.message);
+        console.log("Failed to fetch user data:", data.message);
         setQueuePlace(0);
       }
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      console.log("Error fetching user data:", error);
       setQueuePlace(0);
     }
   };
@@ -158,7 +174,7 @@ const Home = () => {
       <View style={[styles.homeChild, styles.homeShadowBox]} />
       <View style={[styles.homeItem, styles.homeShadowBox]} />
       <Text style={[styles.charger1Available, styles.teslaModelXFlexBox]}>
-        Queue place: {queuePlace}
+        Queue place: {latestRequestData != null ? queuePlace + 1 : 'None'}
       </Text>
       <Image
         style={[styles.homeInner, styles.homeInnerPosition]}
@@ -174,27 +190,51 @@ const Home = () => {
         position: "absolute",
         borderRadius: Border.br_11xl,
       }} />
-      <Pressable
-        style={[styles.framePressable, styles.frameLayout]}
-        onPress={() => {
-          navigation.navigate("RequestPopUp");
-        }}
-      >
-        <View style={[styles.frameWrapper, styles.framePosition]}>
-          <View style={[styles.frameWrapper, styles.framePosition]}>
-            <Pressable style={[styles.rectangleParent, styles.framePosition]}>
-              <View style={[styles.frameChild, styles.frameChildLayout]} />
-              <Image
-                style={[styles.iconShare, styles.iconLayout]}
-                resizeMode="cover"
-                source={require("../assets/-icon-share.png")}
-              />
-            </Pressable>
-            <Text style={[styles.request, styles.textFlexBox]}>Request</Text>
-          </View>
-        </View>
-      </Pressable>
-      {isCharging ? (
+	  {latestRequestData != null && latestRequestData.is_done != true ? (
+      	<Pressable
+      	  style={[styles.framePressable, styles.frameLayout, styles.disabledButton]}
+      	  onPress={() => {
+      	    navigation.navigate("RequestPopUp");
+      	  }}
+		  disabled={true}
+      	>
+      	  <View style={[styles.frameWrapper, styles.framePosition]}>
+      	    <View style={[styles.frameWrapper, styles.framePosition]}>
+      	      <Pressable style={[styles.rectangleParent, styles.framePosition]}>
+      	        <View style={[styles.frameChild, styles.frameChildLayout]} />
+      	        <Image
+      	          style={[styles.iconShare, styles.iconLayout]}
+      	          resizeMode="cover"
+      	          source={require("../assets/-icon-share.png")}
+      	        />
+      	      </Pressable>
+      	      <Text style={[styles.request, styles.textFlexBox]}>Request</Text>
+      	    </View>
+      	  </View>
+      	</Pressable>
+	  ) : (
+      	<Pressable
+      	  style={[styles.framePressable, styles.frameLayout]}
+      	  onPress={() => {
+      	    navigation.navigate("RequestPopUp");
+      	  }}
+      	>
+      	  <View style={[styles.frameWrapper, styles.framePosition]}>
+      	    <View style={[styles.frameWrapper, styles.framePosition]}>
+      	      <Pressable style={[styles.rectangleParent, styles.framePosition]}>
+      	        <View style={[styles.frameChild, styles.frameChildLayout]} />
+      	        <Image
+      	          style={[styles.iconShare, styles.iconLayout]}
+      	          resizeMode="cover"
+      	          source={require("../assets/-icon-share.png")}
+      	        />
+      	      </Pressable>
+      	      <Text style={[styles.request, styles.textFlexBox]}>Request</Text>
+      	    </View>
+      	  </View>
+      	</Pressable>
+	  )}
+      {latestRequestData == null || latestRequestData.is_done != true ? (
         <Pressable
           onPress={handleStopChargingPress}
           style={[styles.rectangleGroup, styles.frameChildLayout]}
@@ -337,7 +377,7 @@ const styles = StyleSheet.create({
     width: horizontalScale(45), // Use horizontalScale for width
   },
   homeChild1Position: {
-    width: horizontalScale(430), // Use horizontalScale for width
+    width: horizontalScale(400), // Use horizontalScale for width
     left: 0,
     position: "absolute",
   },
@@ -464,7 +504,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.inderRegular,
     width: horizontalScale(142), // Use horizontalScale for width
     height: verticalScale(25), // Use verticalScale for height
-    textShadowColor: "rgba(0, 0, 0, 0.25)",
+    textShadowColor: "rgba(20, 20, 20, 0.8)",
     textShadowOffset: {
       width: 0,
       height: verticalScale(4), // Use verticalScale for height
@@ -502,13 +542,13 @@ const styles = StyleSheet.create({
   homeChild1: {
     top: verticalScale(760), // Use verticalScale for top
     backgroundColor: Color.colorDodgerblue,
-    height: verticalScale(101), // Use verticalScale for height
+    height: verticalScale(200), // Use verticalScale for height
   },
   // gebruikers knop
   image25Icon: {
     width: horizontalScale(44), // Use horizontalScale for width
-    height: verticalScale(39), // Use verticalScale for height
-    left: horizontalScale(192), // Use horizontalScale for left
+    height: verticalScale(42), // Use verticalScale for height
+    left: horizontalScale(170), // Use horizontalScale for left
   },
   icon: {
     height: "100%",
@@ -516,16 +556,16 @@ const styles = StyleSheet.create({
   },
   // oplaad knop
   image26: {
-    left: horizontalScale(79), // Use horizontalScale for left
-    height: verticalScale(42), // Use verticalScale for height
+    left: horizontalScale(70), // Use horizontalScale for left
+    height: verticalScale(43), // Use verticalScale for height
     width: horizontalScale(45), // Use horizontalScale for width
   },
   // gebruikers knop in onderste balk
   image27: {
-    left: horizontalScale(300), // Use horizontalScale for left
+    left: horizontalScale(280), // Use horizontalScale for left
     top: verticalScale(778), // Use verticalScale for top
     width: horizontalScale(37), // Use horizontalScale for width
-    height: verticalScale(43), // Use verticalScale for height
+    height: verticalScale(45), // Use verticalScale for height
     position: "absolute",
   },
   // rechthoek boven

@@ -41,7 +41,7 @@ pub fn add_charger(conn: &mut SqliteConnection, data: &ChargingStations) -> Post
             Ok(_) => {
                 let last_id_str = ChargingStations.order(id.desc()).first::<ChargingStations>(conn).unwrap().id;
                 let last_id = last_id_str.parse::<i32>().unwrap_or(0); // Parse the id as an i32, default to 0 if parsing fails
-                Ok((true, "Charger succesvol toegevoegd.".to_string(), last_id))
+                Ok((true, "Charger successfully added.".to_string(), last_id))
             },
             Err(err) => Err(err.into()),
         }
@@ -61,7 +61,7 @@ pub fn add_route_to_charging_station(conn: &mut SqliteConnection, data: &RouteRe
                 .set((route_request_id.eq(data.id), status.eq("taken")))
                 .execute(conn) {
                     Ok(_) => {
-                        Ok((true, "Succesvol status veranderd van de charger".to_string(), charging_station))
+                        Ok((true, "Successfully changed the status of the charger".to_string(), charging_station))
                     },
                     Err(err) => Err(err.into()),
                 }
@@ -74,14 +74,14 @@ pub fn get_all_charging_stations(conn: &mut SqliteConnection) -> GetReturn<Vec<C
     use crate::models::ChargingStations;
     use crate::schema::ChargingStations::dsl::*;
     let all_chargers = ChargingStations.load::<ChargingStations>(conn)?;
-    Ok((true, "Alle chargers gevonden.".to_string(), all_chargers))
+    Ok((true, "All chargers found.".to_string(), all_chargers))
 }
 
 pub fn get_charger(conn: &mut SqliteConnection, id_to_find: String) -> GetReturn<ChargingStations> {
     use crate::schema::ChargingStations::dsl::*;
 
     if let Some(found_charger) = ChargingStations.filter(id.eq(id_to_find)).first(conn).optional()? {
-        Ok((true, "Charger found successfully".to_string(), found_charger))
+        Ok((true, "Charger found successfully.".to_string(), found_charger))
     } else {
         Err(diesel::result::Error::NotFound)
     }

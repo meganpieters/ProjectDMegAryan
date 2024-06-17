@@ -3,16 +3,18 @@ use std::error::Error;
 use serde_json::Value;
 
 
-const VOLTAGE: f32 = 230.0;
+const VOLTAGE: f32 = 12.0;
 const AMPERE: f32 = 16.3;
 
-pub fn calculate_charge(_user_car: &Car, request_info: &RouteRequests) -> f32 {
-    if request_info.is_done {
+pub fn calculate_charge(_user_car: &Car, request_info: &(RouteRequests, bool)) -> f32 {
+    let request = request_info.0;
+    let is_charging = request_info.1;
+    if request.is_done || !is_charging {
         return 0.0;
     }
 
     let now = chrono::Local::now();
-    let time_passed = (now.timestamp() - request_info.timestamp as i64) as f32 / 3600.0;
+    let time_passed = (now.timestamp() - request.timestamp as i64) as f32 / 3600.0;
     let charging_power = VOLTAGE * AMPERE;
     let energy_added = charging_power * time_passed;
     let charged_kwh = energy_added / 1000.0;
@@ -20,9 +22,10 @@ pub fn calculate_charge(_user_car: &Car, request_info: &RouteRequests) -> f32 {
     return charged_kwh;
 }
 
-pub fn calculate_charge_percentage(car: &Car, request_info: &RouteRequests) -> f32 {
+pub fn calculate_charge_percentage(car: &Car, request_info: &(RouteRequests, bool)) -> f32 {
+    let request = request_info.0;
     let energy_added = calculate_charge(car, request_info);
-    let initial_energy = request_info.percentage * car.max_watt;
+    let initial_energy = request.percentage * car.max_watt;
 
     let new_total_energy = initial_energy + energy_added;
     let new_percentage = (new_total_energy / car.max_watt) * 100.0;

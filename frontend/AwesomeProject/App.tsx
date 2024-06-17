@@ -69,6 +69,11 @@ const App = () => {
                             options={{ headerShown: false }}
                             initialParams={{ setIsLoggedIn }}
                         />
+                        <Stack.Screen
+                            name="SignupAdmin"
+                            component={Signup}
+                            options={{ headerShown: false }}
+                        />
                     </>
                 ) : (
                     <>

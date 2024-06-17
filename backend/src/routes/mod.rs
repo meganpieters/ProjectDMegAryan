@@ -2,6 +2,7 @@ mod user_routes;
 mod request_routes;
 mod car_routes;
 mod charger_routes;
+mod slack_routes;
 
 use rocket::Route;
 use rocket::serde::{Deserialize, Serialize};
@@ -10,6 +11,7 @@ pub use user_routes::routes as user_routes;
 pub use request_routes::routes as request_routes;
 pub use car_routes::routes as car_routes;
 pub use charger_routes::routes as charger_routes;
+pub use slack_routes::slack_routes;
 
 #[derive(Deserialize, Serialize)]
 #[serde(crate = "rocket::serde")]
@@ -76,5 +78,6 @@ pub fn all_routes() -> Vec<Route> {
     routes.extend(request_routes());
     routes.extend(car_routes());
     routes.extend(charger_routes());
+    routes.extend(slack_routes()); 
     routes
 }

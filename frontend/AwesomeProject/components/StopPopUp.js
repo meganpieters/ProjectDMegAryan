@@ -9,13 +9,14 @@ import { Alert } from "react-native";
 const StopPopUp = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { chargeRequest } = route.params;
+  const { charger } = route.params;
 
 
   const stopCharging = async () => {
     try {
       const url = getIPAddress();
-      const response = await fetch(url + "/chargers/" + chargeRequest.id + "/stop", {
+		console.log(charger);
+      const response = await fetch(url + "/chargers/" + charger.id + "/stop", {
         method: 'GET',
       });
 

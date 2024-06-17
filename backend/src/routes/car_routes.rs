@@ -1,7 +1,7 @@
 use rocket::Route;
 use rocket::serde::json::Json;
 use crate::handlers::car_handler::{calculate_charge_percentage, get_user_car_data};
-use crate::handlers::routing_handler::get_latest_route_request;
+use crate::handlers::routing_handler::get_latest_route_charged_request;
 use crate::handlers::user_handler::get_user;
 use crate::models::{Car, RouteRequests, Users};
 use crate::routes::GetStatus;
@@ -42,9 +42,14 @@ async fn get_user_car(id: i32) -> Json<GetStatus<Car>> {
 async fn get_user_car_percentage(id: i32) -> Json<GetStatus<f32>> {
     let user: GetReturn<Users> = handle_get_id::<Users>(&get_user, id);
     let car_data = get_user_car_data(&user.unwrap().2).await;
-    let latest_route: GetReturn<RouteRequests> = handle_get_id::<RouteRequests>(&get_latest_route_request, id);
+    let latest_route: GetReturn<(RouteRequests, bool)> = handle_get_id::<(RouteRequests, bool)>(&get_latest_route_charged_request, id);
     match car_data {
         Ok(car) => {
+            if latest_route.as_ref().unwrap().2.1 == false {
+                return Json(GetStatus {
+                    ok: false, message: "Request is not charging".to_string(), data: 0.0,
+                })
+            }
             let calculate_result = calculate_charge_percentage(&car, &latest_route.unwrap().2);
             Json(GetStatus {
                 ok: true, message: format!("Berekent hoeveel procent de auto is."), data: calculate_result, 

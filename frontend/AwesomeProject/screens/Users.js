@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Image, StyleSheet, View, Pressable, Text } from "react-native";
+import { Image, StyleSheet, View, Pressable, Text, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
@@ -9,9 +9,11 @@ import UserProfileData from "./UserProfileData";
 const Users = () => {
   const navigation = useNavigation();
   const [userData, setUserData] = useState(null);
+  const [editableData, setEditableData] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    fetchUserData(); // Roep de functie aan om gebruikersgegevens op te halen
+    fetchUserData();
   }, []);
 
   const fetchUserData = async () => {
@@ -19,15 +21,38 @@ const Users = () => {
       const url = getIPAddress();
       let user_id = UserProfileData.getUserID();
       const response = await fetch(url + "/users/" + user_id);
-      console.log(response);
       const data = await response.json();
       if (data.ok) {
-        setUserData(data.data); // Stel de gebruikersgegevens in als de oproep succesvol is
+        setUserData(data.data);
+        setEditableData(data.data);
       } else {
         console.error("Failed to fetch user data:", data.message);
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      const url = getIPAddress();
+      let user_id = UserProfileData.getUserID();
+      const response = await fetch(url + "/users/" + user_id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editableData),
+      });
+      const data = await response.json();
+      if (data.ok) {
+        setUserData(editableData);
+        setIsEditing(false);
+      } else {
+        console.error("Failed to update user data:", data.message);
+      }
+    } catch (error) {
+      console.error("Error updating user data:", error);
     }
   };
 
@@ -52,24 +77,49 @@ const Users = () => {
       <View style={styles.usersItem} />
       {userData && (
         <View style={styles.userDataContainer}>
-          <Text style={[styles.userDataText, styles.id]}>ID: {userData.id}</Text>
-          <Text style={[styles.userDataText, styles.firstName]}>First Name: {userData.first_name}</Text>
-          <Text style={[styles.userDataText, styles.lastName]}>Last Name: {userData.last_name}</Text>
-          <Text style={[styles.userDataText, styles.licensePlate]}>License Plate: {userData.kenteken}</Text>
-          <Text style={[styles.userDataText, styles.eMail]}>E-mail: {userData.email}</Text>
+          <TextInput
+            style={[styles.userDataText, styles.id]}
+            value={editableData.id}
+            editable={false}
+          />
+          <TextInput
+            style={[styles.userDataText, styles.firstName]}
+            value={editableData.first_name}
+            onChangeText={(text) => setEditableData({ ...editableData, first_name: text })}
+            editable={isEditing}
+          />
+          <TextInput
+            style={[styles.userDataText, styles.lastName]}
+            value={editableData.last_name}
+            onChangeText={(text) => setEditableData({ ...editableData, last_name: text })}
+            editable={isEditing}
+          />
+          <TextInput
+            style={[styles.userDataText, styles.licensePlate]}
+            value={editableData.kenteken}
+            onChangeText={(text) => setEditableData({ ...editableData, kenteken: text })}
+            editable={isEditing}
+          />
+          <TextInput
+            style={[styles.userDataText, styles.eMail]}
+            value={editableData.email}
+            onChangeText={(text) => setEditableData({ ...editableData, email: text })}
+            editable={isEditing}
+          />
         </View>
       )}
-      <Pressable style={[styles.rectangleParent, styles.rectangleLayout]}>
+      <Pressable style={[styles.rectangleParent, styles.rectangleLayout]} onPress={() => setIsEditing(true)}>
         <View style={[styles.frameChild, styles.frameLayout]} />
         <Text style={[styles.edit, styles.editTypo]}>Edit</Text>
       </Pressable>
-      <Pressable style={[styles.rectangleGroup, styles.rectangleLayout]}>
-        <View style={[styles.frameItem, styles.frameLayout]} />
-        <Text style={[styles.delete, styles.editTypo]}>Delete</Text>
-      </Pressable>
+      {isEditing && (
+        <Pressable style={[styles.rectangleGroup, styles.rectangleLayout]} onPress={handleSave}>
+          <View style={[styles.frameItem, styles.frameLayout]} />
+          <Text style={[styles.delete, styles.editTypo]}>Save</Text>
+        </Pressable>
+      )}
       <Pressable
         style={[styles.logoutButton]}
-
         onPress={() => navigation.navigate("Login")}
       >
         <View style={[styles.frameChild, styles.frameLayout]} />
@@ -109,7 +159,6 @@ const Users = () => {
         source={require("../assets/image-3.png")}
       />
     </View>
-
   );
 };
 
@@ -214,7 +263,6 @@ const styles = StyleSheet.create({
   image4: { //schurberg logo
     left: horizontalScale(143),
     top: verticalScale(20),
-    // height: verticalScale(10),
     width: horizontalScale(110),
   },
   usersItem: { // light blue box
@@ -239,6 +287,9 @@ const styles = StyleSheet.create({
     top: verticalScale(265),
   },
   eMail: {
+    top: verticalScale(246),
+  },
+  passWord: {
     top: verticalScale(246),
   },
   frameChild: {

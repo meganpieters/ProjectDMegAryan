@@ -13,12 +13,9 @@ const Login = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState('');
-  const [hash, setHash] = React.useState('');
 
   const handleLogin = async () => {
     try {
-      console.log(email);
-      console.log(password);
       const url = getIPAddress();
       const response = await fetch(url + "/users/email/" + email);
       const result = await response.json();
