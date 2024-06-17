@@ -14,7 +14,7 @@ pub struct Users {
     pub password: String,
 }
 
-#[derive(Queryable, Selectable, Serialize, Deserialize, PartialEq)]
+#[derive(Queryable, Selectable, Serialize, Deserialize, PartialEq, Clone, Copy)]
 #[diesel(table_name = crate::schema::RouteRequests)]
 #[serde(crate = "rocket::serde")]
 pub struct RouteRequests {

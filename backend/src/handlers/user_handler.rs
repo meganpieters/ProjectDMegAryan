@@ -43,7 +43,7 @@ pub fn get_all_users(conn: &mut SqliteConnection) -> GetReturn<Vec<Users>> {
     use crate::schema::Users::dsl::*;
 
     let all_users = Users.load::<UsersModel>(conn)?;
-    Ok((true, "Users successvol gevonden".to_string(), all_users))
+    Ok((true, "Users successfully found".to_string(), all_users))
 }
 
 pub fn get_user(conn: &mut SqliteConnection, id_to_find: i32) -> GetReturn<Users> {
@@ -67,15 +67,9 @@ pub fn get_user_by_email(conn: &mut SqliteConnection, email_to_find: String) -> 
 }
 
 pub fn update_user(conn: &mut SqliteConnection, id_to_update: i32, data: Json<Users>) -> UpdateReturn<i32> {
-    use sha256::digest;
     use crate::schema::Users::dsl::*;
 
-    // moet dit hier helaas ook nog een keer hashen
-    // maak een mutable kopie van de user om de password te hashen
-    let mut new_user = data.into_inner();
-    new_user.password = digest(new_user.password);
-
-    match diesel::update(Users.filter(id.eq(id_to_update))).set(new_user).execute(conn) {
+    match diesel::update(Users.filter(id.eq(id_to_update))).set(data.into_inner()).execute(conn) {
         Ok(updated_user) => {
             Ok((true, "User updated successfully".to_string(), updated_user.try_into().unwrap()))
         }

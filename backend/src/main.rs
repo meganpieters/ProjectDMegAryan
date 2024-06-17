@@ -35,5 +35,6 @@ mod tests {
     mod user_handler_tests;
     mod charger_handler_tests;
     mod car_handler_tests;
+    mod routing_handler_tests;
 }
 

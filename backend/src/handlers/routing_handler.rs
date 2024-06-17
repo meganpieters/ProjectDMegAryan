@@ -90,10 +90,10 @@ pub fn upload_route(
             let res_message;
             match res {
                 Ok(_) => {
-                    res_message = "Route is toegevoegd om gelijk aan de lader te zetten".to_string();
+                    res_message = "Request added to the charger immediately".to_string();
                 },
                 Err(_) => {
-                    res_message = "Route moet verwerkt worden in de queue".to_string();
+                    res_message = "Request needs to be processed in the queue".to_string();
                 },
             }
             Ok((true, res_message, last_route.id))
@@ -123,7 +123,7 @@ pub fn add_route_to_charging_station(conn: &mut SqliteConnection, data: &RouteRe
                 .set(route_request_id.eq(data.id))
                 .execute(conn) {
                     Ok(_) => {
-                        Ok((true, "Succesvol status veranderd van de charger".to_string(), charging_station))
+                        Ok((true, "Successfully changed charger status".to_string(), charging_station))
                     },
                     Err(err) => Err(err.into()),
                 }
@@ -137,14 +137,14 @@ pub fn get_routes(conn: &mut SqliteConnection) -> GetReturn<Vec<RouteRequests>> 
     use crate::models::RouteRequests;
     use crate::schema::RouteRequests::dsl::*;
     let all_routes = RouteRequests.load::<RouteRequests>(conn)?;
-    Ok((true, "Aanvragen successvol gevonden".to_string(), all_routes))
+    Ok((true, "Requests successfully found".to_string(), all_routes))
 }
 
 /// Haal een specifieke aanvraag op van een gebruiker
 pub fn get_route(conn: &mut SqliteConnection, id_to_find: i32) -> GetReturn<RouteRequests> {
     use crate::schema::RouteRequests::dsl::*;
     if let Some(found_route) = RouteRequests.filter(id.eq(id_to_find)).first(conn).optional()? {
-        Ok((true, format!("Aanvraag gevonden met het id: {}", id_to_find), found_route))
+        Ok((true, format!("Request found with id: {}", id_to_find), found_route))
     } else {
         Err(diesel::result::Error::NotFound)
     }
@@ -203,7 +203,7 @@ pub fn create_queue(conn: &mut SqliteConnection) -> GetReturn<Vec<Queue>> {
         queue_id += 1;
     }
 
-    Ok((true, "queue is gevonden met de correcte volgorde".to_string(), queue))
+    Ok((true, "Queue found with correct order".to_string(), queue))
 }
 
 /// zoek de plek van een gebruiker in de queue
@@ -222,7 +222,7 @@ pub fn get_request_placement(conn: &mut SqliteConnection, id_to_find: i32) -> Ge
     let queue: Vec<Queue> = create_queue(conn).ok().unwrap().2.into_iter().collect();
     let found_queue = queue.iter().find(|&item| { item.route_request_id == id_to_find }).cloned().unwrap();
     if found_queue.id > 0 {
-        return Ok((true, "Plaats in de queue gevonden".to_string(), found_queue));
+        return Ok((true, "Request placement found in the queue".to_string(), found_queue));
     } else {
         Err(diesel::result::Error::NotFound)
     }
@@ -251,10 +251,10 @@ pub fn get_latest_route_request(conn: &mut SqliteConnection, id_to_find: i32) ->
 
     match found_route {
         Some(route) => {
-            Ok((true, "Opgevraagde aanvraag van de gebruiker gevonden".to_string(), route))
+            Ok((true, "Requested request from the user found".to_string(), route))
         },
         None => {
-            Ok((false, "Geen aanvragingen gevonden van de gebruiker vandaag".to_string(), RouteRequestsModel {
+            Ok((false, "No requests found from the user today".to_string(), RouteRequestsModel {
                 id: 0,
                 percentage: 0.0,
                 distance: 0,
@@ -267,7 +267,8 @@ pub fn get_latest_route_request(conn: &mut SqliteConnection, id_to_find: i32) ->
     }
 }
 
-/// zoek de laatste aanvraag van een gebruiker die ook daadwerkelijk in een laadpaal zit
+/// zoek de laatste aanvraag van een gebruiker die ook daadwerkelijk in een laadpaal zit, mocht er
+/// een laadpaal vrij zijn en staat ie op plek 1 kan die gelijk aan de lader gezet worden
 pub fn get_latest_route_charged_request(conn: &mut SqliteConnection, id_to_find: i32) -> GetReturn<(RouteRequests, bool)> {
     use chrono::{Local, Duration};
     use crate::schema::RouteRequests::dsl::*;
@@ -295,10 +296,52 @@ pub fn get_latest_route_charged_request(conn: &mut SqliteConnection, id_to_find:
                 charging_dsl::ChargingStations.filter(charging_dsl::route_request_id.eq(route.id))
             )).get_result::<bool>(conn)?;
 
-            Ok((true, "Opgevraagde aanvraag van de gebruiker gevonden die in een laadpaal zit".to_string(), (route, in_charger)))
+            if !in_charger {
+                let (queue_success, _, queue) = create_queue(conn)?;
+
+                // creeert een beetje vieze nesting maar het werkt wel :P
+                if queue_success {
+                    if let Some(first_in_queue) = queue.first() {
+                        if first_in_queue.route_request_id == route.id {
+                            match add_route_to_charging_station(conn, &route) {
+                                Ok((true, _, _)) => {
+                                    return Ok(
+                                        (true,
+                                         "Requested request from the user found and successfully added to a charger"
+                                            .to_string(),
+                                        (route, true))
+                                    );
+                                },
+                                Ok((false, msg, _)) => {
+                                    return Ok(
+                                        (true,
+                                         format!("Requested request from the user found but not added to a charger: {}", msg),
+                                         (route, false))
+                                    );
+                                },
+                                Err(err) => {
+                                    return Err(err.into());
+                                }
+                            }
+                        } else {
+                            return Ok(
+                                (true,
+                                 "Requested request from the user found, but not first in the queue".to_string(),
+                                 (route, false))
+                            );
+                        }
+                    } else {
+                        return Ok((true, "No requests found in the queue".to_string(), (route, false)));
+                    }
+                } else {
+                    return Err(diesel::result::Error::NotFound.into());
+                }
+            } else {
+                return Ok((true, "Requested request from the user found and is at a charger".to_string(), (route, in_charger)));
+            }
         },
         None => {
-            Ok((false, "Geen aanvragingen gevonden van de gebruiker vandaag".to_string(), (
+            return Ok((false, "No requests found from the user today".to_string(), (
                 RouteRequestsModel {
                     id: 0,
                     percentage: 0.0,
@@ -308,7 +351,7 @@ pub fn get_latest_route_charged_request(conn: &mut SqliteConnection, id_to_find:
                     is_done: false,
                     user_id: 0,
                 }, false
-            )))
+            )));
         }
     }
 }
