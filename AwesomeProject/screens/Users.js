@@ -3,7 +3,8 @@ import { Image, StyleSheet, View, Pressable, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
-
+import { getIPAddress } from './IPAddress';
+import UserProfileData from "./UserProfileData";
 
 const Users = () => {
   const navigation = useNavigation();
@@ -15,7 +16,9 @@ const Users = () => {
 
   const fetchUserData = async () => {
     try {
-      const response = await fetch("http://10.0.2.2:8000/api/users/1/");
+      const url = getIPAddress();
+      let user_id = UserProfileData.getUserID();
+      const response = await fetch(url + "/users/" + user_id);
       console.log(response);
       const data = await response.json();
       if (data.ok) {
@@ -66,6 +69,7 @@ const Users = () => {
       </Pressable>
       <Pressable
         style={[styles.logoutButton]}
+
         onPress={() => navigation.navigate("Login")}
       >
         <View style={[styles.frameChild, styles.frameLayout]} />

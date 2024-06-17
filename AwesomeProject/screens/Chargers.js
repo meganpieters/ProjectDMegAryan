@@ -1,96 +1,96 @@
 import * as React from "react";
-import { StyleSheet, View, Image, Text, Pressable } from "react-native";
+import { StyleSheet, View, Image, Text, Pressable, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
-import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
+import { horizontalScale, verticalScale } from '../Metrics';
+import { getIPAddress } from './IPAddress';
+
+// Function to fetch charger data from the backend
+const fetchChargers = async () => {
+  const url = getIPAddress();
+  try {
+    let response = await fetch(url + "/chargers");
+    let json = await response.json();
+    return json.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
 
 const Chargers = () => {
+  const [chargers, setChargers] = React.useState([]);
   const navigation = useNavigation();
+
+  React.useEffect(() => {
+    const getChargers = async () => {
+      const data = await fetchChargers();
+      setChargers(data);
+    };
+    getChargers();
+  }, []);
+
+  // Function to handle button press based on charger availability
+  const handleChargerPress = (isAvailable) => {
+    if (isAvailable) {
+      Alert.alert(
+        "Charging Pole Requested!",
+        "You have requested a charging pole! Please wait for confirmation!",
+        [{ text: "OK" }]
+      );
+      navigation.navigate("RequestPopUp");
+    } else {
+      Alert.alert(
+        "Charging Pole Occupied!",
+        "This charging pole is already occupied! Please choose another one!",
+        [{ text: "OK" }]
+      );
+    }
+  };
 
   return (
     <View style={styles.chargers}>
+      {/* Upper dark blue box */}
       <View style={[styles.chargersChild, styles.chargersLayout1]} />
+      {/* Lower dark blue box */}
       <View style={[styles.chargersItem, styles.chargersLayout1]} />
+      {/* Middle light blue box */}
       <View style={[styles.chargersInner, styles.chargersLayout]} />
+      {/* Image of a charging pole */}
       <Image
         style={[styles.image15Icon, styles.imageIconLayout]}
         resizeMode="cover"
         source={require("../assets/image-2.png")}
       />
-      <Text style={[styles.charger5, styles.chargerTypo1]}>Charger 5</Text>
-      <Pressable style={[styles.rectangleParent, styles.rectangleLayout]}>
-        <View style={[styles.frameChild, styles.frameChildLayout,]} />
-        <Text style={[styles.taken, styles.availableTypo]}>Taken</Text>
-      </Pressable>
+      {/* Text for available chargers */}
       <Text style={[styles.availableChargers, styles.chargerTypo1]}>
         Available chargers
       </Text>
+      {/* Text for non-available chargers */}
       <Text style={[styles.nonAvailableChargers, styles.chargerTypo1]}>
         Non-available chargers
       </Text>
+
+      {/* Dynamically generated chargers */}
+      {chargers.map((charger, index) => (
+        <View key={charger.id} style={[styles.chargerContainer, { top: verticalScale(480 + index * 60) }]}>
+          <Text style={[styles.chargerText, styles.chargerTypo1]}>Charger {index + 1}</Text>
+          <Pressable
+            style={[styles.chargerButton, charger.status === "taken" ? styles.takenButton : styles.availableButton]}
+            onPress={() => handleChargerPress(charger.status !== "taken")}
+          >
+            <Text style={styles.buttonText}>{charger.status === "taken" ? "Taken" : "Available"}</Text>
+          </Pressable>
+        </View>
+      ))}
+
+      {/* Lower left light blue box */}
       <View style={[styles.rectangleView, styles.chargersLayout]} />
-      <Image
-        style={[styles.image9Icon, styles.imageIconLayout]}
-        resizeMode="cover"
-        source={require("../assets/image-2.png")}
-      />
-      <Text style={[styles.charger4, styles.chargerTypo1]}>Charger 4</Text>
-      <Pressable style={[styles.rectangleGroup, styles.rectangleLayout]}>
-        <View style={[styles.frameChild, styles.frameChildLayout]} />
-        <Text style={[styles.taken, styles.availableTypo]}>Taken</Text>
-      </Pressable>
-      <View style={[styles.chargersChild1, styles.chargersLayout]} />
-      <Image
-        style={[styles.image20Icon, styles.imageIconLayout]}
-        resizeMode="cover"
-        source={require("../assets/image-2.png")}
-      />
-      <Text style={[styles.charger6, styles.chargerTypo1]}>Charger 6</Text>
-      <Pressable
-        style={[styles.rectangleContainer, styles.framePressablePosition]}
-      >
-        <View style={[styles.frameChild, styles.frameChildLayout]} />
-        <Text style={[styles.taken, styles.availableTypo]}>Taken</Text>
-      </Pressable>
-      <View style={[styles.chargersChild2, styles.chargersChildLayout]} />
-      <Image
-        style={[styles.image19Icon, styles.iconPosition]}
-        resizeMode="cover"
-        source={require("../assets/image-2.png")}
-      />
-      <Text style={[styles.charger3, styles.chargerTypo]}>Charger 3</Text>
-      <Pressable style={[styles.framePressable, styles.framePressablePosition]}>
-        <View style={[styles.frameChild1, styles.frameChildLayout]} />
-        <Text style={[styles.available, styles.availableTypo]}>Available</Text>
-      </Pressable>
-      <View style={[styles.chargersChild3, styles.chargersChildLayout]} />
-      <Image
-        style={[styles.image18Icon, styles.iconPosition]}
-        resizeMode="cover"
-        source={require("../assets/image-2.png")}
-      />
-      <Text style={[styles.charger2, styles.chargerTypo]}>Charger 2</Text>
-      <Pressable
-        style={[styles.rectangleParent1, styles.rectangleParentPosition]}
-      >
-        <View style={[styles.frameChild1, styles.frameChildLayout]} />
-        <Text style={[styles.available1, styles.availableTypo]}>Available</Text>
-      </Pressable>
-      <View style={[styles.chargersChild4, styles.chargersChildLayout]} />
-      <Image
-        style={[styles.image17Icon, styles.iconPosition]}
-        resizeMode="cover"
-        source={require("../assets/image-2.png")}
-      />
-      <Text style={[styles.charger1, styles.chargerTypo]}>Charger 1</Text>
-      <Pressable
-        style={[styles.rectangleParent2, styles.rectangleParentPosition]}
-      >
-        <View style={[styles.frameChild1, styles.frameChildLayout]} />
-        <Text style={[styles.available1, styles.availableTypo]}>Available</Text>
-      </Pressable>
+      {/* Image at the bottom */}
       <View style={[styles.image24, styles.imageIconLayout]} />
+      {/* Lower bar */}
       <View style={[styles.chargersChild5, styles.rectangleIconPosition, { height: verticalScale(1000) }]} />
+      {/* Button to navigate to home */}
       <Pressable
         style={styles.image25}
         onPress={() => navigation.navigate("Home")}
@@ -101,11 +101,13 @@ const Chargers = () => {
           source={require("../assets/image-1.png")}
         />
       </Pressable>
+      {/* Image at the bottom */}
       <Image
         style={[styles.image24, styles.imageIconLayout]}
         resizeMode="cover"
         source={require("../assets/image-2.png")}
       />
+      {/* Button to navigate to users */}
       <Pressable
         style={styles.image27}
         onPress={() => navigation.navigate("Users")}
@@ -116,11 +118,13 @@ const Chargers = () => {
           source={require("../assets/image-3.png")}
         />
       </Pressable>
+      {/* Image at the bottom */}
       <Image
         style={[styles.rectangleIcon, styles.rectangleIconPosition]}
         resizeMode="cover"
         source={require("../assets/rectangle-55.png")}
       />
+      {/* Button to navigate to home */}
       <Pressable
         style={[styles.image241, styles.imageIconLayout]}
         onPress={() => navigation.navigate("Home")}
@@ -136,7 +140,7 @@ const Chargers = () => {
 };
 
 const styles = StyleSheet.create({
-  chargersLayout1: { //bovenste dnkerblauw box
+  chargersLayout1: {
     height: verticalScale(211),
     width: horizontalScale(345),
     borderRadius: Border.br_11xl,
@@ -144,229 +148,60 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorDarkslateblue,
     position: "absolute",
   },
-  chargersLayout: { // onderste lichtblauwe vakjes
+  chargersLayout: {
     height: verticalScale(130),
     width: horizontalScale(82),
     backgroundColor: Color.colorDodgerblue,
     borderRadius: Border.br_smi,
-    top: verticalScale(480), //change
+    top: verticalScale(480), // change
     position: "absolute",
   },
-  imageIconLayout: { // bottum charge icons
+  imageIconLayout: {
     height: verticalScale(42),
     position: "absolute",
   },
   chargerTypo1: {
-    // textAlign: "left",
     color: Color.colorWhite,
     fontFamily: FontFamily.inriaSansBold,
     fontWeight: "700",
     fontSize: FontSize.size_base,
     position: "absolute",
   },
-  rectangleLayout: { //bottom left and middle button
-    height: verticalScale(28),
-    width: horizontalScale(89),
-    top: verticalScale(574),
-    position: "absolute",
-  },
-  frameChildLayout: { //avaiable and taken boxes
-    borderRadius: Border.br_16xl,
-    left: horizontalScale(1),
-    top: verticalScale(1),
-    height: verticalScale(28),
-    width: horizontalScale(75),
-    position: "absolute",
-  },
-  availableTypo: { //available text
-    top: verticalScale(3),
-    textAlign: "left",
-    color: Color.colorWhite,
-    fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700",
-    fontSize: FontSize.size_base,
-    position: "absolute",
-  },
-  framePressablePosition: { // meeste rechter buttons
-    left: horizontalScale(260),
-    height: verticalScale(28),
-    width: horizontalScale(82),
-    position: "absolute",
-  },
-  chargersChildLayout: { //bovenste lichtablauwe boxes
-    top: verticalScale(200),
-    height: verticalScale(130),
-    width: horizontalScale(85),
-    backgroundColor: Color.colorDodgerblue,
-    borderRadius: Border.br_smi,
-    position: "absolute",
-  },
-  iconPosition: { // upper charger icons
-    top: verticalScale(240),
-    height: verticalScale(39),
-    width: horizontalScale(40),
-    position: "absolute",
-  },
-  chargerTypo: { // upper charger text
-    top: verticalScale(210),
-    textAlign: "left",
-    color: Color.colorWhite,
-    fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700", //change
-    fontSize: FontSize.size_base,
-    position: "absolute",
-  },
-  rectangleParentPosition: { // secondupper available buttons
-    top: verticalScale(295),
-    height: verticalScale(28),
-    width: horizontalScale(82),
-    //  left: horizontalScale(0),
-    position: "absolute",
-  },
-  rectangleIconPosition: { // balken layour
-    height: verticalScale(90),
-    width: horizontalScale(600),
-    left: 0,
-    position: "absolute",
-  },
-  chargersChild: { // upper blue boxs
+  chargersChild: {
     top: verticalScale(148),
   },
-  chargersItem: { //bottom blue box
+  chargersItem: {
     top: verticalScale(430),
   },
-  chargersInner: { // middel bottom lichtblauwe box
+  chargersInner: {
     left: horizontalScale(155),
     position: "absolute",
   },
-  image15Icon: { // bottom middle charger icon
+  image15Icon: {
     width: horizontalScale(43),
     height: verticalScale(42),
     left: horizontalScale(177),
     top: verticalScale(520),
   },
-  charger5: { //text
-    left: horizontalScale(165),
-    top: verticalScale(488),
-    color: Color.colorWhite,
-    fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700", //change
-    fontSize: FontSize.size_base,
-  },
-  frameChild: {
-    backgroundColor: Color.colorFirebrick,
-  },
-  taken: {
-    left: horizontalScale(19),
-  },
-  rectangleParent: { //middle taken button
-    left: horizontalScale(159),
-
-
-
-  },
-  availableChargers: { //text
+  availableChargers: {
     top: verticalScale(169),
     left: horizontalScale(128),
   },
-  nonAvailableChargers: { //text
+  nonAvailableChargers: {
     top: verticalScale(447),
     left: horizontalScale(128),
   },
-  rectangleView: { //bottom left light blue box
+  rectangleView: {
     left: horizontalScale(48),
     width: 90,
   },
-  image9Icon: { //bottum left charger icon
-    left: horizontalScale(70),
-    width: horizontalScale(43),
-    height: verticalScale(42),
-    top: verticalScale(520),
-  },
-  charger4: {
-    left: horizontalScale(55),
-    top: verticalScale(490),
-    color: Color.colorWhite,
-    fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700", //change
-    fontSize: FontSize.size_base,
-  },
-  rectangleGroup: {
-    left: horizontalScale(50),
-  },
-  chargersChild1: { // BOTTOM RIGHT LIGHT BLUE BOX
-    left: horizontalScale(257),
-  },
-  image20Icon: { // bottom right icon
-    left: horizontalScale(280),
-    width: horizontalScale(43),
-    height: verticalScale(42),
-    top: verticalScale(520),
-  },
-  charger6: {
-    left: horizontalScale(265),
-    top: verticalScale(490),
-    color: Color.colorWhite,
-    fontFamily: FontFamily.inriaSansBold,
-    fontWeight: "700", //chNGE
-    fontSize: FontSize.size_base,
-  },
-  rectangleContainer: { // bottom right taken button psoition
-    top: verticalScale(573),
-    //left: horizontalScale(30),
-  },
-  chargersChild2: { //upper right light blue box
-    left: horizontalScale(257),
-  },
-  image19Icon: { //upper right chaRGEE ICON
-    left: horizontalScale(282),
-  },
-  charger3: {
-    left: horizontalScale(269),
-  },
-  frameChild1: {
-    backgroundColor: Color.colorLimegreen,
-  },
-  available: {
-    left: horizontalScale(10),
-  },
-  framePressable: { // upper right available button
-    top: verticalScale(295),
-  },
-  chargersChild3: { //upper middle light blue box
-    left: horizontalScale(150),
-  },
-  image18Icon: { //middle upper chqrging icon
-    left: horizontalScale(180),
-  },
-  charger2: {
-    left: horizontalScale(163),
-  },
-  available1: {
-    left: horizontalScale(9),
-  },
-  rectangleParent1: { //avalable upper middle button
-    left: horizontalScale(155),
-  },
-  chargersChild4: { // upper left light blue box
-    left: horizontalScale(46),
-  },
-  image17Icon: {
-    left: horizontalScale(70),
-  },
-  charger1: {
-    left: horizontalScale(58),
-  },
-  rectangleParent2: { //left upper available button
-    left: horizontalScale(50),
-  },
-  image24: { // buttom charger icon
+  image24: {
     top: verticalScale(760),
     left: horizontalScale(70),
     width: horizontalScale(45),
     height: verticalScale(60),
   },
-  chargersChild5: { // bottom bar
+  chargersChild5: {
     top: verticalScale(732),
     width: horizontalScale(431),
     height: verticalScale(90),
@@ -376,36 +211,67 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
   },
-  image25: { // home button
+  image25: {
     top: verticalScale(757),
     left: horizontalScale(180),
     width: verticalScale(50),
     height: verticalScale(48),
     position: "absolute",
   },
-  image27: { //user icon
+  image27: {
     left: horizontalScale(286),
     top: verticalScale(757),
     width: horizontalScale(36),
     height: verticalScale(48),
   },
-  rectangleIcon: { //idk
+  rectangleIcon: {
     width: horizontalScale(430),
     top: 0,
     height: verticalScale(90),
   },
-  image241: { //schuberg philis logo
+  image241: {
     left: horizontalScale(20),
     top: verticalScale(20),
     width: horizontalScale(111),
   },
-  chargers: { //idk
+  chargers: {
     backgroundColor: Color.colorWhite,
     flex: 1,
     height: verticalScale(932),
     overflow: "hidden",
     width: "100%",
   },
+  chargerContainer: {
+    left: horizontalScale(50),
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  chargerText: {
+    marginRight: horizontalScale(10),
+  },
+  chargerButton: {
+    height: verticalScale(28),
+    width: horizontalScale(89),
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: Border.br_16xl,
+  },
+  takenButton: {
+    backgroundColor: Color.colorFirebrick,
+  },
+  availableButton: {
+    backgroundColor: Color.colorLimegreen,
+  },
+  buttonText: {
+    color: Color.colorWhite,
+    fontFamily: FontFamily.inriaSansBold,
+    fontWeight: "700",
+    fontSize: FontSize.size_base,
+  },
+  rectangleIconPosition: {
+    position: "absolute",
+  },
 });
 
 export default Chargers;
+

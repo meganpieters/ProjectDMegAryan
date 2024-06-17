@@ -1,9 +1,8 @@
-use diesel::dsl::Update;
 use rocket::Route;
 use rocket::serde::json::Json;
 use crate::models::Users;
 use crate::routes::{PostStatus, PostReturn, GetStatus};
-use crate::handlers::{handle_get, handle_get_id, handle_post, handle_update, handle_delete};
+use crate::handlers::{handle_get, handle_get_id, handle_get_gen_id, handle_post, handle_update, handle_delete};
 use crate::handlers::user_handler::{self, NewUser};
 use super::{GetReturn, UpdateReturn};
 
@@ -40,6 +39,7 @@ fn get_user(id: i32) -> Json<GetStatus<Users>> {
             last_name: "".to_string(),
             email: "".to_string(),
             kenteken: "".to_string(),
+            password: "".to_string(),
             admin: 0
         }},
         Err(err) => GetStatus { ok: false, message: format!("Error: {}", err), data: Users {
@@ -48,6 +48,34 @@ fn get_user(id: i32) -> Json<GetStatus<Users>> {
             last_name: "".to_string(),
             email: "".to_string(),
             kenteken: "".to_string(),
+            password: "".to_string(),
+            admin: 0
+        }}
+    };
+    Json(get_status)
+}
+
+#[get("/users/email/<email>")]
+fn get_user_by_email(email: String) -> Json<GetStatus<Users>> {
+    let res: GetReturn<Users> = handle_get_gen_id::<Users, String>(&user_handler::get_user_by_email, email);
+    let get_status = match res {
+        Ok((true, message, data)) => GetStatus { ok: true, message, data },
+        Ok((false, message, _)) => GetStatus { ok: false, message, data: Users {
+            id: 0,
+            first_name: "".to_string(),
+            last_name: "".to_string(),
+            email: "".to_string(),
+            kenteken: "".to_string(),
+            password: "".to_string(),
+            admin: 0
+        }},
+        Err(err) => GetStatus { ok: false, message: format!("Error: {}", err), data: Users {
+            id: 0,
+            first_name: "".to_string(),
+            last_name: "".to_string(),
+            email: "".to_string(),
+            kenteken: "".to_string(),
+            password: "".to_string(),
             admin: 0
         }}
     };
@@ -81,6 +109,7 @@ pub fn routes() -> Vec<Route> {
         create_user,
         get_all_users,
         get_user,
+        get_user_by_email,
         update_user,
         delete_user,
     ]

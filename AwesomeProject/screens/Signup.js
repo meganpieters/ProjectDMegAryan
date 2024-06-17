@@ -6,22 +6,79 @@ import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
 
 const Signup = () => {
   const navigation = useNavigation();
-  const [username, setUsername] = React.useState('');
+  const [voornaam, setVoornaam] = React.useState('');
+  const [achternaam, setAchternaam] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [licensePlate, setLicensePlate] = React.useState('');
   const [error, setError] = React.useState('');
 
   const handleSignup = () => {
     // Validate input fields
-    if (!username || !password || !email || !confirmPassword) {
-      setError('All fields are required');
-    } else if (password !== confirmPassword) {
-      setError('Passwords do not match');
-    } else {
-      // Implement your signup logic here
+    if (voornaam === '') {
+      setError('First name is required');
+      return;
     }
+    if (achternaam === '') {
+      setError('Last name is required');
+      return;
+    }
+    if (password === '') {
+      setError('Password is required');
+      return;
+    }
+    if (confirmPassword === '') {
+      setError('Confirm password is required');
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    if (email === '') {
+      setError('Email is required');
+      return;
+    }
+    if (licensePlate === '') {
+      setError('License plate is required');
+      return;
+    }
+
+    // Form data
+    const form_data = {
+      first_name: voornaam,
+      last_name: achternaam,
+      email,
+      kenteken: licensePlate.replaceAll("-", ""),
+      admin: 0,
+      password: password,
+    };
+
+    // Send data to the backend
+    fetch('http://10.0.2.2:8000/api/users/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(form_data)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        if (data.ok && data.last_id > 0) {
+          navigation.navigate("Login");
+        } else {
+          setError(data.message || 'An error occurred');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        setError('An error occurred');
+      });
   };
+
+
 
   return (
     <View style={styles.container}>
@@ -33,9 +90,19 @@ const Signup = () => {
         <Image style={styles.icon} source={require("../assets/male-user.png")} />
         <TextInput
           style={styles.input}
-          onChangeText={setUsername}
-          value={username}
-          placeholder="Username"
+          onChangeText={setVoornaam}
+          value={voornaam}
+          placeholder="First name"
+          placeholderTextColor={Color.colorDimgray}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Image style={styles.icon} source={require("../assets/male-user.png")} />
+        <TextInput
+          style={styles.input}
+          onChangeText={setAchternaam}
+          value={achternaam}
+          placeholder="Last name"
           placeholderTextColor={Color.colorDimgray}
         />
       </View>
@@ -46,6 +113,7 @@ const Signup = () => {
           onChangeText={setPassword}
           value={password}
           placeholder="Password"
+          autoCapitalize="none"
           placeholderTextColor={Color.colorDimgray}
           secureTextEntry
         />
@@ -58,6 +126,7 @@ const Signup = () => {
           onChangeText={setConfirmPassword}
           value={confirmPassword}
           placeholder="Confirm Password"
+          autoCapitalize="none"
           placeholderTextColor={Color.colorDimgray}
           secureTextEntry
         />
@@ -69,8 +138,20 @@ const Signup = () => {
           onChangeText={setEmail}
           value={email}
           placeholder="Email"
+          autoCapitalize="none"
           placeholderTextColor={Color.colorDimgray}
           keyboardType="email-address"
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Image style={styles.icon} source={require("../assets/license.png")} />
+        <TextInput
+          style={styles.input}
+          onChangeText={setLicensePlate}
+          value={licensePlate}
+          placeholder="License Plate"
+          autoCapitalize="none"
+          placeholderTextColor={Color.colorDimgray}
         />
       </View>
       {error !== '' && <Text style={styles.errorText}>{error}</Text>}

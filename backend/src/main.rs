@@ -3,6 +3,8 @@ extern crate rocket;
 extern crate diesel;
 extern crate dotenvy;
 
+use rocket::http::Method;
+use rocket_cors::{AllowedOrigins, CorsOptions};
 use dotenvy::dotenv;
 
 mod db;
@@ -15,5 +17,23 @@ mod handlers;
 fn rocket() -> _ {
     dotenv().ok();
 
-    rocket::build().mount("/api", routes::all_routes())
+    let cors = CorsOptions::default()
+        .allowed_origins(AllowedOrigins::all())
+        .allowed_methods(
+            vec![Method::Get, Method::Post, Method::Patch, Method::Delete, Method::Put]
+                .into_iter()
+                .map(From::from)
+                .collect(),
+        )
+        .allow_credentials(true);
+
+    rocket::build().attach(cors.to_cors().unwrap()).mount("/api", routes::all_routes())
 }
+
+#[cfg(test)]
+mod tests {
+    mod user_handler_tests;
+    mod charger_handler_tests;
+    mod car_handler_tests;
+}
+
