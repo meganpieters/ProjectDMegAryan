@@ -4,7 +4,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation, ParamListBase } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize } from "../GlobalStyles";
 import { horizontalScale, verticalScale, moderateScale } from '../Metrics';
-import {getIPAddress} from "./IPAddress";
+import { getIPAddress } from "./IPAddress";
 
 interface Charger {
   id: string;
@@ -93,7 +93,7 @@ const ChargerOverview = () => {
       <View style={styles.footer}>
         <Pressable
           style={styles.addChargerButton}
-          onPress={() => navigation.navigate("AddCharger")}
+          onPress={() => navigation.navigate("AddChargerPopUp")}
         >
           <Image
             style={styles.addChargerIcon}
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     width: horizontalScale(321),
     height: verticalScale(120),
     borderRadius: Border.br_11xl,
-    position: "relative", 
+    position: "relative",
     marginBottom: 20,
     backgroundColor: Color.colorLimegreen,
     padding: 20,

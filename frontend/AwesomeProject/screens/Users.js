@@ -109,8 +109,10 @@ const Users = () => {
         </View>
       )}
       <Pressable style={[styles.rectangleParent, styles.rectangleLayout]} onPress={() => setIsEditing(true)}>
-        <View style={[styles.frameChild, styles.frameLayout]} />
-        <Text style={[styles.edit, styles.editTypo]}>Edit</Text>
+        <View style={styles.buttonContainer}>
+          <View style={[styles.frameChild, styles.frameLayout]} />
+          <Text style={[styles.edit, styles.editTypo]}>Edit</Text>
+        </View>
       </Pressable>
       {isEditing && (
         <Pressable style={[styles.rectangleGroup, styles.rectangleLayout]} onPress={handleSave}>
@@ -296,10 +298,17 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorLimegreen,
   },
   edit: {
-    left: horizontalScale(23),
+    left: horizontalScale(22),
+    height: verticalScale(20),
   },
-  rectangleParent: { // edit knop
-    left: horizontalScale(159),
+  rectangleParent: {
+    left: horizontalScale(220),
+    height: verticalScale(23),
+  },
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   frameItem: {
     backgroundColor: Color.colorFirebrick,

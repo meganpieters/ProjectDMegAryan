@@ -12,6 +12,7 @@ import Admin from './screens/Admin';
 import ChargerOverview from './screens/ChargerOverview';
 import Signup from './screens/Signup';
 import StopPopUp from './components/StopPopUp';
+import AddChargerPopUp from './components/AddChargerPopUp';
 
 const Stack = createStackNavigator();
 
@@ -64,14 +65,8 @@ const App = () => {
                             options={{ headerShown: false }}
                         />
                         <Stack.Screen
-                            name="Login"
-                            component={Login}
-                            options={{ headerShown: false }}
-                            initialParams={{ setIsLoggedIn }}
-                        />
-                        <Stack.Screen
-                            name="SignupAdmin"
-                            component={Signup}
+                            name="AddChargerPopUp"
+                            component={AddChargerPopUp}
                             options={{ headerShown: false }}
                         />
                     </>
@@ -99,7 +94,11 @@ const App = () => {
                             component={Admin}
                             options={{ headerShown: false }}
                         />
-
+                        <Stack.Screen
+                            name="AddChargerPopUp"
+                            component={AddChargerPopUp}
+                            options={{ headerShown: false }}
+                        />
                     </>
                 )}
             </Stack.Navigator>
